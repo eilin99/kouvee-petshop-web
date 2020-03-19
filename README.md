@@ -1,5 +1,7 @@
 # web-p3l
 
+Bisa pake npm atau yarn
+
 ## Project setup
 ```
 yarn install

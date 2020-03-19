@@ -1,0 +1,256 @@
+<template>
+  <div id="admin">
+
+    <div class="columns is-fullheight">
+      <div class="column is-2 has-background-grey-lighter" style="overflow-y: scroll">
+        <div id="sidebar">
+          <template>
+            <b-menu class="is-sidebar-menu">
+              <b-menu-list label="Menu">
+
+                <!-- Dashboard -->
+                <b-menu-item
+                    icon="view-dashboard"
+                    label="Dashboard"
+                    tag="router-link"
+                    to="/admin/dashboard"
+                    :active="isActive"
+                    @click="namaData = 'Dashboard'">
+                </b-menu-item>
+
+                <!-- Data Master -->
+                <b-menu-item
+                    icon="database">
+                  <template slot="label" slot-scope="props">
+                    Data Master
+                    <b-icon
+                        class="is-pulled-right"
+                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
+                    </b-icon>
+                  </template>
+                    <b-menu-item 
+                        v-for="dataMaster in dataMasters"
+                        :key="dataMaster.label"
+                        :icon="dataMaster.icon" 
+                        :label="dataMaster.label"
+                        tag="router-link"
+                        :to="dataMaster.to"
+                        @click="namaData = dataMaster.title;">
+                    </b-menu-item>
+                </b-menu-item>
+
+                <!-- Data Transaksi -->
+                <b-menu-item
+                    icon="cash-multiple">
+                  <template slot="label" slot-scope="props">
+                    Transaksi
+                    <b-icon
+                        class="is-pulled-right"
+                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
+                    </b-icon>
+                  </template>
+                    <b-menu-item
+                        v-for="dataTransaksi in dataTransaksis"
+                        :key="dataTransaksi.label"
+                        :icon="dataTransaksi.icon"
+                        :label="dataTransaksi.label"
+                        tag="router-link"
+                        :to="dataTransaksi.to">
+                    </b-menu-item>
+
+                </b-menu-item>
+
+                <!-- Laporan-laporan -->
+                <b-menu-item
+                    icon="book">
+                  <template slot="label" slot-scope="props">
+                    Laporan
+                    <b-icon
+                        class="is-pulled-right"
+                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
+                    </b-icon>
+                  </template>
+                    <b-menu-item
+                        v-for="laporan in laporans"
+                        :key="laporan.label"
+                        :icon="laporan.icon"
+                        :label="laporan.label"
+                        tag="router-link"
+                        :to="laporan.to">
+                    </b-menu-item>
+
+                </b-menu-item>
+
+              </b-menu-list>
+              <b-menu-list>
+                <b-menu-item
+                  label="Landing Page"
+                  icon="link"
+                  tag="router-link"
+                  target="_blank"
+                  to="/expo">
+                </b-menu-item>
+              </b-menu-list>
+
+              <!-- <b-menu-list label="Actions">
+                <b-menu-item label="Logout"></b-menu-item>
+              </b-menu-list> -->
+            </b-menu>
+          </template>
+        </div>
+      </div>
+
+      <div class="column has-background-white-ter is-fullheight" style="overflow-y: scroll">
+        <div id="navbar">
+          <template>
+            <b-navbar class="has-background-white-ter">
+              <template slot="brand">
+                <h1 class="title-nama-data title is-3">{{ namaData }}</h1>
+              </template>
+              <!-- <template slot="start">
+                <b-navbar-item href="#">
+                  Home
+                </b-navbar-item>
+                <b-navbar-item href="#">
+                  Documentation
+                </b-navbar-item>
+                <b-navbar-dropdown label="Info">
+                  <b-navbar-item href="#">
+                    About
+                  </b-navbar-item>
+                  <b-navbar-item href="#">
+                    Contact
+                  </b-navbar-item>
+                </b-navbar-dropdown>
+              </template> -->
+
+              <template slot="end">
+
+                <b-dropdown                    
+                    v-model="navigation"
+                    position="is-bottom-left"
+                    aria-role="menu">
+                    <a
+                        class="navbar-item"
+                        slot="trigger"
+                        role="button">
+                        <span>Profile</span>
+                        <b-icon icon="account"></b-icon>
+                    </a>
+
+                    <b-dropdown-item custom aria-role="menuitem">
+                      Halo, <b>johnDoe69</b>
+                      <br/>
+                      <i>John bin Doe</i>
+                    </b-dropdown-item>
+
+                    <hr class="dropdown-divider">
+                    
+                    <b-dropdown-item custom aria-role="menuitem">
+                      <b-icon icon="worker"></b-icon>
+                      Kasir
+                    </b-dropdown-item>
+                    <b-dropdown-item custom aria-role="menuitem">
+                      <b-icon icon="home"></b-icon>
+                      Barbarsari Tambak Bayan yeayy
+                    </b-dropdown-item>
+                    <b-dropdown-item custom aria-role="menuitem">
+                      <b-icon icon="phone"></b-icon>
+                      089123456789
+                    </b-dropdown-item>
+                    <b-dropdown-item custom aria-role="menuitem">
+                      <b-icon icon="calendar"></b-icon>
+                      05/12/1999
+                    </b-dropdown-item>
+
+                    <hr class="dropdown-divider" aria-role="menuitem">
+                    
+                    <b-dropdown-item
+                        value="logout"
+                        aria-role="menuitem"
+                        tag="router-link"
+                        to="/login">
+                        <b-icon icon="logout"></b-icon>
+                        Keluar
+                    </b-dropdown-item>
+                </b-dropdown>                
+
+                <!-- <b-navbar-item tag="div">
+                  <a class="buttonis-danger"
+                      tag="router-link"
+                      to="/login">
+                      Log out
+                  </a>
+                </b-navbar-item> -->
+              </template>
+            </b-navbar>
+          </template>
+        </div>
+        <div id="content">
+          <div class="box">
+            <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias nemo, soluta numquam doloribus id unde harum facere natus libero officiis, explicabo ipsam rem odio minima dolorem aperiam omnis ea vel.</p> -->
+            <router-view />
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    const dataMasters = [
+      { 'label': "Produk", 'icon':"gift", 'to':"/admin/produk", 'title': "Data Produk" },
+      { 'label': "Layanan", 'icon':"wrench", 'to':"/admin/layanan", 'title': "Data Layanan" },
+      { 'label': "Pegawai", 'icon':"worker", 'to':"/admin/pegawai", 'title': "Data Pegawai" },
+      { 'label': "Ukuran Hewan", 'icon':"file", 'to':"/admin/ukuran-hewan", 'title': "Data Ukuran Hewan" },
+      { 'label': "Jenis Hewan", 'icon':"file", 'to':"/admin/jenis-hewan", 'title': "Data Jenis Hewan" },
+      { 'label': "Supplier", 'icon':"truck", 'to':"/admin/supplier", 'title': "Data Supplier" },
+      { 'label': "Pelanggan", 'icon':"face", 'to':"/admin/pelanggan", 'title': "Data Pelanggan" },
+      { 'label': "Hewan", 'icon':"paw", 'to':"/admin/hewan", 'title': "Data Hewan" },
+    ]
+
+    const dataTransaksis = [
+      { 'label': "Penjualan Produk", 'icon':"cash", 'to':"/penjualan-produk", 'title': "Penjualan Produk" },
+      { 'label': "Penjualan Layanan", 'icon':"cash", 'to':"/penjualan-layanan", 'title': "Penjualan Layanan" },
+      { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
+    ]
+
+    const laporans = [
+      { 'label': "Laporan Layanan Terlaris", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Layanan Terlaris" },
+      { 'label': "Laporan Produk Terlaris", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Produk Terlaris" },
+      { 'label': "Laporan Pendapatan Tahunan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pendapatan Tahunan" },
+      { 'label': "Laporan Pendapatan Bulanan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pendapatan Bulanan" },
+      { 'label': "Laporan Pengadaan Produk Tahunan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
+      { 'label': "Laporan Pengadaan Produk Bulanan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
+    ]
+
+    return {
+      namaData: 'Data Pegawai',
+      dataMasters,
+      dataTransaksis,
+      laporans,
+      isActive: true
+    }
+  }
+}
+</script>
+
+<style scoped>
+.is-fullheight.columns {
+    height: calc(100vh - ( 0rem - .75rem ) );
+    /* height: 100%; */
+    overflow-y: scroll;
+}
+
+.title-nama-data {
+  margin: 20px 10px;
+}
+
+.is-sidebar-menu {
+  margin: 10px 0 0 10px;
+}
+</style>
