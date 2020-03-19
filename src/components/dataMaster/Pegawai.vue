@@ -190,8 +190,9 @@ export default {
     confirmDelete(deleteId) {
       this.$buefy.dialog.confirm({
         title: 'Hapus Data Pegawai',
-        message: 'Apa anda yakin untuk <b>menghapus</b> pegawai?',
+        message: 'Apa anda yakin ingin <b>menghapus</b> pegawai?',
         confirmText: 'Hapus',
+        cancelText: 'Batal',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => this.deleteData(deleteId)
