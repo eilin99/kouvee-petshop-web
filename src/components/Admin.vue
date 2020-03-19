@@ -126,7 +126,7 @@
 
               <template slot="end">
 
-                <b-dropdown                    
+                <b-dropdown
                     v-model="navigation"
                     position="is-bottom-left"
                     aria-role="menu">
@@ -252,5 +252,9 @@ export default {
 
 .is-sidebar-menu {
   margin: 10px 0 0 10px;
+}
+
+.profile-dropdown {
+  width: 300px;
 }
 </style>

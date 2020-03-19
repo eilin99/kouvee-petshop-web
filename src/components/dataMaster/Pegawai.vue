@@ -65,7 +65,7 @@
             <b-button 
                 type="is-danger" 
                 class="btn-action" 
-                @click="deleteData(props.row.id_pegawai)" 
+                @click="confirmDelete(props.row.id_pegawai)" 
                 rounded>
                   <b-icon icon="delete" size="is-small"></b-icon>
             </b-button>
@@ -166,9 +166,9 @@ export default {
       var uri = this.$api_baseUrl + "pegawai/delete/" + deleteId;
       var pic = { pic: 1 }
       this.$http.put(uri, pic).then(response => {
-        this.snackbarMsg = response.data.message
         this.getData();
-        this.snackbar(this.snackbarMsg, 'is-success')
+        this.snackbarMsg = response
+        this.snackbar('Data terhapus!', 'is-success')
       })
       .catch(error => {
         this.errors = error
@@ -185,6 +185,16 @@ export default {
         position: 'is-bottom-left',
         actionText: 'OK',
         queue: false,
+      })
+    },
+    confirmDelete(deleteId) {
+      this.$buefy.dialog.confirm({
+        title: 'Hapus Data Pegawai',
+        message: 'Apa anda yakin untuk <b>menghapus</b> pegawai?',
+        confirmText: 'Hapus',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.deleteData(deleteId)
       })
     }
   },
