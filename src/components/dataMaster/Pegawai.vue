@@ -10,8 +10,9 @@
       per-page="10"
       ref="table"
       detailed
-      detail-key="id"
-      :show-detail-icon="showDetailIcon"
+      detail-key="no_telp"
+      show-detail-icon="true"
+      :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
       aria-next-label="Next page"
       aria-page-label="Page"
@@ -36,6 +37,12 @@
         <b-table-column field="noTelp" label="No. Telp" centered>
           <span>
             {{ props.row.no_telp }}
+          </span>
+        </b-table-column>
+
+        <b-table-column field="username" label="Username" centered>
+          <span>
+            {{ props.row.username }}
           </span>
         </b-table-column>
 
@@ -68,22 +75,34 @@
 
       <template slot="detail" slot-scope="props">
         <article class="media">
-          <figure class="media-left">
-            <p class="image is-64x64">
-              <img src="/static/img/placeholder-128x128.png">
-            </p>
-          </figure>
           <div class="media-content">
             <div class="content">
-              <p>
-                <strong>{{ props.row.first_name }} {{ props.row.last_name }}</strong>
-                <small>@{{ props.row.first_name }}</small>
-                <small>31m</small>
-                <br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
-                Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-              </p>
+              <div class="columns">
+                <div class="column">
+                  <p>
+                    <strong>Created At : </strong>
+                    <small>{{ props.row.created_at }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>Updated At : </strong>
+                    <small>{{ props.row.created_at }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>Deleted At : </strong>
+                    <small>{{ props.row.deleted_at }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>PIC : </strong>
+                    <small>{{ props.row.pic }}</small>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
       </article>
@@ -127,9 +146,8 @@ export default {
   data() {
     return {
       datas: [],
+      detailOpened: [],
       namaData: "Data Pegawai",
-      showDetailIcon: true,
-      isEmpty: false,
       isLoading: true,
       snackbarMsg: '',
     }
