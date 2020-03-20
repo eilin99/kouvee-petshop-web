@@ -170,7 +170,6 @@ export default {
     return {
       datas: [],
       detailOpened: [],
-      namaData: "Data Pegawai",
       isLoading: true,
       snackbarMsg: '',
     }
