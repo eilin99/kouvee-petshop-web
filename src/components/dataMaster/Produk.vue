@@ -1,58 +1,94 @@
 <template>
-  <section id="pegawai">
+  <section id="produk">
 
     <b-table
-      :data="isEmpty ? [] : data"
-      hoverable="true"
+      :data="datas"
+      :columns="columns"
+      :hoverable="true"
       :loading="isLoading" 
-      mobile-cards="true"
+      :mobile-cards="true"
       paginated
       per-page="5"
       ref="table"
       detailed
-      detail-key="id"
-      @details-open="(row, index) => $buefy.toast.open(`Expanded ${row.data.first_name}`)"
-      :show-detail-icon="showDetailIcon"
+      detail-key="nama_produk"
+      :show-detail-icon="true"
+      :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
       aria-next-label="Next page"
       aria-page-label="Page"
       aria-current-label="Current page">
 
       <template slot-scope="props">
-        <b-table-column field="id" label="ID" width="40" numeric>
-          {{ props.row.id }}
+
+        <b-table-column 
+            field="nama_produk" 
+            label="Nama Produk" 
+            :searchable="true" 
+            sortable>
+          {{ props.row.nama_produk }}
         </b-table-column>
 
-        <b-table-column field="first_name" label="First Name" sortable>
-          {{ props.row.first_name }}
+        <b-table-column 
+            field="satuan" 
+            label="Satuan"
+            width="50px"
+            :searchable="true">
+          {{ props.row.satuan }}
         </b-table-column>
 
-        <b-table-column field="last_name" label="Last Name">
-          {{ props.row.last_name }}
+        <b-table-column 
+            field="stok_minimum" 
+            label="Stok min."
+            width="70px">
+          {{ props.row.stok_minimum }}
         </b-table-column>
 
-        <b-table-column field="date" label="Date" centered>
-          <span class="tag is-success">
-            {{ new Date(props.row.date).toLocaleDateString() }}
-          </span>
+        <b-table-column 
+            field="stok" 
+            label="Stok"
+            width="70px"
+            sortable>
+              <div v-if="props.row.stok < props.row.stok_minimum ">
+                <span class="tag is-danger">
+                  {{ props.row.stok }}
+                </span>
+              </div>
+              <div v-else>
+                {{ props.row.stok }}
+              </div>
         </b-table-column>
 
-        <b-table-column label="Gender">
-          <span>
-            <b-icon pack="fas"
-              :icon="props.row.gender === 'Male' ? 'mars' : 'venus'">
-            </b-icon>
-            {{ props.row.gender }}
-          </span>
+        <b-table-column 
+            field="harga_beli" 
+            label="Harga beli"
+            sortable>
+          {{ 'Rp.' + props.row.harga_beli }}
+        </b-table-column>
+
+        <b-table-column 
+            field="harga_jual" 
+            label="Harga jual"
+            sortable>
+          {{ 'Rp.' + props.row.harga_jual }}
         </b-table-column>
 
         <b-table-column label="Action">
           <span>
-            <b-button type="is-primary" class="btn-action" rounded>
-              <b-icon icon="pencil" size="is-small"></b-icon>
+            <b-button 
+                type="is-primary" 
+                class="btn-action" 
+                tag="router-link"
+                :to="'/admin/form-produk/' + props.row.produk"
+                rounded>
+                  <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
-            <b-button type="is-danger" class="btn-action" rounded>
-              <b-icon icon="delete" size="is-small"></b-icon>
+            <b-button 
+                type="is-danger" 
+                class="btn-action" 
+                @click="confirmDelete(props.row.id_produk)" 
+                rounded>
+                  <b-icon icon="delete" size="is-small"></b-icon>
             </b-button>
           </span>
         </b-table-column>
@@ -60,22 +96,34 @@
 
       <template slot="detail" slot-scope="props">
         <article class="media">
-          <figure class="media-left">
-            <p class="image is-64x64">
-              <img src="/static/img/placeholder-128x128.png">
-            </p>
-          </figure>
           <div class="media-content">
             <div class="content">
-              <p>
-                <strong>{{ props.row.first_name }} {{ props.row.last_name }}</strong>
-                <small>@{{ props.row.first_name }}</small>
-                <small>31m</small>
-                <br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
-                Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-              </p>
+              <div class="columns">
+                <div class="column">
+                  <p>
+                    <strong>Created At : </strong>
+                    <small>{{ props.row.created_at }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>Updated At : </strong>
+                    <small>{{ props.row.created_at }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>Deleted At : </strong>
+                    <small>{{ props.row.deleted_at }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>PIC : </strong>
+                    <small>{{ props.row.nama_pegawai }}</small>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
       </article>
@@ -86,18 +134,24 @@
         <div class="content has-text-grey has-text-centered">
           <p>
             <b-icon
-              icon="emoticon-sad"
+              :icon="tableLoadingIcon"
               size="is-large">
             </b-icon>
           </p>
-          <p>Tidak ada Data</p>
+          <p>{{ tableMessage }}</p>
         </div>
       </section>
     </template>
 
     <template slot="footer">
       <div class="has-text-centered">
-        <b-button size="is-medium" type="is-light" icon-left="plus" tag="router-link" to="/admin/form-produk" expanded>
+        <b-button size="is-medium" 
+            type="is-light" 
+            icon-left="plus" 
+            tag="router-link" 
+            to="/admin/form-produk" 
+            @click="addData()"
+            expanded>
           Tambah
         </b-button>
       </div>
@@ -111,30 +165,73 @@
 <script>
 export default {
   data() {
-    const data = [
-      { 'id': 1, 'first_name': 'Jesse', 'last_name': 'Simmons', 'date': '2016/10/15 13:43:27', 'gender': 'Male' },
-      { 'id': 2, 'first_name': 'John', 'last_name': 'Jacobs', 'date': '2016/12/15 06:00:53', 'gender': 'Male' },
-      { 'id': 3, 'first_name': 'Tina', 'last_name': 'Gilbert', 'date': '2016/04/26 06:26:28', 'gender': 'Female' },
-      { 'id': 4, 'first_name': 'Clarence', 'last_name': 'Flores', 'date': '2016/04/10 10:28:46', 'gender': 'Male' },
-      { 'id': 5, 'first_name': 'Anne', 'last_name': 'Lee', 'date': '2016/12/06 14:38:38', 'gender': 'Female' },
-      { 'id': 1, 'first_name': 'GIlber', 'last_name': 'Aurel', 'date': '2016/10/15 13:43:27', 'gender': 'Male' },
-      { 'id': 2, 'first_name': 'Miroku', 'last_name': 'Bone', 'date': '2016/12/15 06:00:53', 'gender': 'Male' },
-      { 'id': 3, 'first_name': 'ahaha', 'last_name': 'Gilbert', 'date': '2016/04/26 06:26:28', 'gender': 'Female' },
-      { 'id': 4, 'first_name': 'hahaha', 'last_name': 'Flores', 'date': '2016/04/10 10:28:46', 'gender': 'Male' },
-      { 'id': 5, 'first_name': 'Anne', 'last_name': 'Lee', 'date': '2016/12/06 14:38:38', 'gender': 'Female' }
-    ]
-
     return {
-      data,
-      namaData: "Data Pegawai",
-      showDetailIcon: true,
-      isEmpty: false,
-      isLoading: false
+      datas: [  ],
+      tableLoadingIcon: 'clock',
+      tableMessage: 'Memuat Data',
+      detailOpened: [],
+      isLoading: true,
+      snackbarMsg: '',
     }
   },
   methods: {
+    getData() {
+      this.isLoading = true
+      var uri = this.$api_baseUrl + "produk"
 
-  }
+      this.$http.get(uri).then(response => {
+        this.datas = response.data.value
+        this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+        this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
+        this.isLoading = false
+      })
+      .catch(error => {
+        this.errors = error
+        this.tableLoadingIcon = "emoticon-sad"  // Tampilan kalo
+        this.tableMessage = 'Tidak ada data'    // ga ada data
+        this.isLoading = false
+      })
+    },
+    deleteData(deleteId) {
+      var uri = this.$api_baseUrl + "produk/delete/" + deleteId;
+      var pic = { pic: 3 }
+      this.$http.post(uri, pic).then(response => {
+        this.getData();
+        this.snackbarMsg = response
+        this.snackbar('Data terhapus!', 'is-success')
+      })
+      .catch(error => {
+        this.errors = error
+        this.snackbarMsg = this.errors
+        this.snackbar(this.snackbarMsg, 'is-danger')
+        console.log('error : ' + this.errors)
+      })
+    },
+    snackbar(message, type) {
+      this.$buefy.snackbar.open({
+        duration: 5000,
+        message: message,
+        type: type,
+        position: 'is-bottom-left',
+        actionText: 'OK',
+        queue: false,
+      })
+    },
+    confirmDelete(deleteId) {
+      this.$buefy.dialog.confirm({
+        title: 'Hapus Data Produk',
+        message: 'Apa anda yakin ingin <b>menghapus</b> produk?',
+        confirmText: 'Hapus',
+        cancelText: 'Batal',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.deleteData(deleteId)
+      })
+    }
+  },
+  mounted() {
+    this.getData()
+  },
 }
 </script>
 

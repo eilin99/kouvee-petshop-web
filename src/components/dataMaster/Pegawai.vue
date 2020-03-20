@@ -136,11 +136,11 @@
         <div class="content has-text-grey has-text-centered">
           <p>
             <b-icon
-              icon="emoticon-sad"
+              :icon="tableLoadingIcon"
               size="is-large">
             </b-icon>
           </p>
-          <p>Belum ada Data</p>
+          <p>{{ tableMessage }}</p>
         </div>
       </section>
     </template>
@@ -168,7 +168,9 @@
 export default {
   data() {
     return {
-      datas: [],
+      datas: [  ],
+      tableLoadingIcon: 'clock',
+      tableMessage: 'Memuat Data',
       detailOpened: [],
       isLoading: true,
       snackbarMsg: '',
@@ -182,6 +184,13 @@ export default {
       this.$http.get(uri).then(response => {
         this.datas = response.data.value
         this.isLoading = false
+      })
+      .catch(error => {
+        this.errors = error
+        this.tableLoadingIcon = "emoticon-sad"
+          this.tableMessage = 'Tidak ada Data'
+          this.isLoading = false
+          console.log('reached this')
       })
     },
     deleteData(deleteId) {
