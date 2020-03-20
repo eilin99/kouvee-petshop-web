@@ -49,10 +49,10 @@
             label="Stok"
             width="70px"
             sortable>
-              <div v-if="props.row.stok < props.row.stok_minimum ">
-                <span class="tag is-danger">
+              <div v-if="parseInt(props.row.stok) < parseInt(props.row.stok_minimum)">
+                <b-tag type="is-danger" size="is-medium" rounded>
                   {{ props.row.stok }}
-                </span>
+                  </b-tag>
               </div>
               <div v-else>
                 {{ props.row.stok }}
@@ -100,26 +100,33 @@
             <div class="content">
               <div class="columns">
                 <div class="column">
+                  <figure class="media-left">
+                    <p class="image is-128x128">
+                      <img :src="props.row.gambar">
+                    </p>
+                  </figure>
+                </div>
+                <div class="column">
                   <p>
-                    <strong>Created At : </strong>
+                    <strong>Created At : </strong><br/>
                     <small>{{ props.row.created_at }}</small>
                   </p>
                 </div>
                 <div class="column">
                   <p>
-                    <strong>Updated At : </strong>
+                    <strong>Updated At : </strong><br/>
                     <small>{{ props.row.created_at }}</small>
                   </p>
                 </div>
                 <div class="column">
                   <p>
-                    <strong>Deleted At : </strong>
+                    <strong>Deleted At : </strong><br/>
                     <small>{{ props.row.deleted_at }}</small>
                   </p>
                 </div>
                 <div class="column">
                   <p>
-                    <strong>PIC : </strong>
+                    <strong>PIC : </strong><br/>
                     <small>{{ props.row.nama_pegawai }}</small>
                   </p>
                 </div>
@@ -166,7 +173,7 @@
 export default {
   data() {
     return {
-      datas: [  ],
+      datas: [ ],
       tableLoadingIcon: 'clock',
       tableMessage: 'Memuat Data',
       detailOpened: [],
@@ -184,6 +191,7 @@ export default {
         this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
         this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
         this.isLoading = false
+        console.log(this.datas)
       })
       .catch(error => {
         this.errors = error
