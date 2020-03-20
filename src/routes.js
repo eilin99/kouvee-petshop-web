@@ -38,6 +38,11 @@ export default [
                 component: formPegawai
             },
             {
+                name: 'formEditPegawai',
+                path: '/admin/form-pegawai/:id',
+                component: formPegawai
+            },
+            {
                 name: 'Produk',
                 path: '/admin/produk',
                 component: Produk

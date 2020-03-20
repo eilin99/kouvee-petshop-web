@@ -1,6 +1,6 @@
 <template>
   <section id="form-pegawai">
-    <h4 class="title is-5">Tambah Data Pegawai</h4>
+    <h4 class="title is-5">{{ actionTitle }} Data Pegawai</h4>
     <hr>
     <div class="columns">
       <div class="column is-8">
@@ -63,10 +63,12 @@
             <b-input v-model="form.username.value" maxlength="30"></b-input>
         </b-field>
 
-        <b-field label="Password" horizontal>
-          <b-input type="password"
+        <b-field label="Password" :message="form.password.message" horizontal>
+          <b-input id="password"
+              type="password"
               v-model="form.password.value"
-              password-reveal>
+              password-reveal
+              disabled>
           </b-input>
         </b-field>
 
@@ -82,7 +84,7 @@
           <b-button size="is-medium" 
               class="btn-form" 
               type="is-success" 
-              @click="addData()"
+              @click="confirm()"
               rounded>
             Konfirmasi
           </b-button>
@@ -96,8 +98,17 @@
 <script>
 export default {
   data() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
     return {
+      config,
+      actionTitle: '',
+      editId: 0,
       dataPegawai: new FormData(),
+      editDataPegawai: {},
       form: {
         nama_pegawai: { value: '', type: '', message: '' },
         alamat: { value: '', type: '', message: '' },
@@ -111,8 +122,27 @@ export default {
     }
   },
   methods: {
-    addData() {
-      var formDate = this.form.tgl_lahir.value // Mengambil FULL date dari datepicker
+    getData(editId) {
+      var uri = this.$api_baseUrl + "pegawai/" + editId
+
+      this.$http.get(uri).then(response => {
+        this.editDataPegawai = response.data.value
+        this.formEditHandler(this.editDataPegawai)
+      })
+    },
+    formEditHandler(dataPegawai) {
+
+      this.form.nama_pegawai.value = dataPegawai.nama_pegawai
+      this.form.alamat.value = dataPegawai.alamat
+      this.form.no_telp.value = dataPegawai.no_telp
+      this.form.tgl_lahir.value = new Date(dataPegawai.tgl_lahir)
+      this.form.jabatan.value = dataPegawai.jabatan
+      this.form.username.value = dataPegawai.username
+      this.form.password.message = 'Data tidak dapat diubah'
+      // this.form.password.type = 'disabled'
+    },
+    convertTgl(tglLahir) {
+      var formDate = tglLahir // Mengambil FULL date dari datepicker
       var year = formDate.getFullYear()        // Mengambil tahun
       var month = formDate.getMonth() + 1      // Mengambil bulan
       var date = formDate.getDate()            // Mengambil tanggal
@@ -125,9 +155,13 @@ export default {
 
       var fixedDate = year + '-' + month + '-' + date
 
+      return fixedDate
+    },
+    addData() {
+      console.log('adding')
       this.dataPegawai.append("nama_pegawai", this.form.nama_pegawai.value)
       this.dataPegawai.append("alamat", this.form.alamat.value)
-      this.dataPegawai.append("tgl_lahir", fixedDate)
+      this.dataPegawai.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
       this.dataPegawai.append("no_telp", this.form.no_telp.value)
       this.dataPegawai.append("jabatan", this.form.jabatan.value)
       this.dataPegawai.append("username", this.form.username.value)
@@ -146,6 +180,33 @@ export default {
         this.snackbar(this.errors, 'is-danger')
       });
     },
+    editData(editId) {
+      this.editDataPegawai.nama_pegawai = this.form.nama_pegawai.value
+      this.editDataPegawai.alamat = this.form.alamat.value
+      this.editDataPegawai.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
+      this.editDataPegawai.no_telp = this.form.no_telp.value
+      this.editDataPegawai.jabatan = this.form.jabatan.value
+      this.editDataPegawai.username = this.form.username.value
+      // this.dataPegawai.append("password", this.form.password.value)
+      this.editDataPegawai.pic = 3
+
+      var uri = this.$api_baseUrl + "pegawai/" + editId;
+
+      this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
+        this.router.push( { name: 'Pegawai' } )
+        this.snackbarMsg = response.message
+        this.snackbar(this.snackbarMsg, 'is-success')
+      })
+      .catch(error => {
+      console.log(this.editDataPegawai)
+
+        this.errors = error;
+        this.snackbar(this.errors, 'is-danger')
+      });
+    },
+    confirm() {
+      this.editId == 0 ? this.addData() : this.editData(this.editId)
+    },
     snackbar(snackbarMessage, type) {
       this.$buefy.snackbar.open({
         duration: 5000,
@@ -158,7 +219,15 @@ export default {
     },
   },
   mounted() {
-
+    if(this.$route.params.id) {
+      this.editId = this.$route.params.id
+      this.actionTitle = 'Ubah'
+      this.getData(this.editId)
+      this.form.password.message = 'Tidak dapat mengubah password pegawai'
+    } else {
+      this.actionTitle = 'Tambah'
+      document.getElementById('password').disabled = false;
+    }
   }
 }
 </script>

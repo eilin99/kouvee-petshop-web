@@ -57,8 +57,8 @@
             <b-button 
                 type="is-primary" 
                 class="btn-action" 
-                @click="editData(props.row.id_pegawai)" 
-                to="/admin/form-pegawai"
+                tag="router-link"
+                :to="'/admin/form-pegawai/' + props.row.id_pegawai"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
