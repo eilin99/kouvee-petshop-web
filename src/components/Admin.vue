@@ -127,7 +127,7 @@
               <template slot="end">
 
                 <b-dropdown
-                    v-model="navigation"
+                    v-model="profileDropdown"
                     position="is-bottom-left"
                     aria-role="menu">
                     <a

@@ -3,15 +3,16 @@
 
     <b-table
       :data="datas"
-      hoverable="true"
+      :columns="columns"
+      :hoverable="true"
       :loading="isLoading" 
-      mobile-cards="true"
+      :mobile-cards="true"
       paginated
-      per-page="10"
+      per-page="5"
       ref="table"
       detailed
       detail-key="no_telp"
-      show-detail-icon="true"
+      :show-detail-icon="true"
       :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
       aria-next-label="Next page"
@@ -20,33 +21,55 @@
 
       <template slot-scope="props">
 
-        <b-table-column field="namaLengkap" label="Nama Lengkap" sortable>
+        <b-table-column 
+            field="nama_pegawai" 
+            label="Nama Lengkap" 
+            :searchable="true" 
+            sortable>
           {{ props.row.nama_pegawai }}
         </b-table-column>
 
-        <b-table-column field="alamat" label="Alamat">
+        <b-table-column 
+            field="alamat" 
+            label="Alamat"
+            :searchable="true">
           {{ props.row.alamat }}
         </b-table-column>
 
-        <b-table-column field="tglLahir" label="Tgl Lahir" centered>
+        <b-table-column 
+            field="tgl_lahir" 
+            label="Tgl Lahir">
           <span class="tag is-success">
             {{ new Date(props.row.tgl_lahir).toLocaleDateString() }}
           </span>
         </b-table-column>
 
-        <b-table-column field="noTelp" label="No. Telp" centered>
+        <b-table-column 
+            field="no_telp" 
+            label="No. Telp" 
+            width="150px"
+            :searchable="true">
           <span>
             {{ props.row.no_telp }}
           </span>
         </b-table-column>
 
-        <b-table-column field="username" label="Username" centered>
+        <b-table-column 
+            field="username" 
+            label="Username"
+            width="100px"
+            :searchable="true">
           <span>
             {{ props.row.username }}
           </span>
         </b-table-column>
 
-        <b-table-column field="Jabatan" label="Jabatan" centered>
+        <b-table-column 
+            field="jabatan" 
+            label="Jabatan" 
+            :searchable="true"
+            width="50px"
+            sortable>
           <span>
             {{ props.row.jabatan }}
           </span>
@@ -98,8 +121,8 @@
                 </div>
                 <div class="column">
                   <p>
-                    <strong>PIC : </strong>
-                    <small>{{ props.row.pic }}</small>
+                    <strong>Edited By : </strong>
+                    <small>{{ props.row.edited_by }}</small>
                   </p>
                 </div>
               </div>
