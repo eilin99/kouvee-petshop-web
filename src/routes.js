@@ -22,11 +22,13 @@ export default [
         path: '/Admin',
         component: Admin,
         children: [
+            // ===== DASHBOARD =====
             {
                 name: 'Dashboard',
                 path: '/admin/dashboard',
                 component: Dashboard
             },
+            // ===== PEGAWAI =====
             {
                 name: 'Pegawai',
                 path: '/admin/pegawai',
@@ -42,6 +44,7 @@ export default [
                 path: '/admin/form-pegawai/:id',
                 component: formPegawai
             },
+            // ===== PRODUK =====
             {
                 name: 'Produk',
                 path: '/admin/produk',
@@ -50,6 +53,11 @@ export default [
             {
                 name: 'formProduk',
                 path: '/admin/form-produk',
+                component: formProduk
+            },
+            {
+                name: 'formEditProduk',
+                path: '/admin/form-produk/:id',
                 component: formProduk
             },
         ]

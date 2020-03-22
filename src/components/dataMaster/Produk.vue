@@ -79,7 +79,7 @@
                 type="is-primary" 
                 class="btn-action" 
                 tag="router-link"
-                :to="'/admin/form-produk/' + props.row.produk"
+                :to="'/admin/form-produk/' + props.row.id_produk"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
@@ -191,7 +191,6 @@ export default {
         this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
         this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
         this.isLoading = false
-        console.log(this.datas)
       })
       .catch(error => {
         this.errors = error

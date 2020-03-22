@@ -9,7 +9,7 @@
             :type="form.nama_produk.type"
             :message="form.nama_produk.message"
             horizontal>
-          <b-input v-model="form.nama_produk.value"></b-input>
+              <b-input v-model="form.nama_produk.value"></b-input>
         </b-field>
 
         <b-field 
@@ -17,23 +17,20 @@
             :type="form.satuan.type"
             :message="form.satuan.message"
             horizontal>
-          <b-input v-model="form.satuan.value"></b-input>
+              <b-input v-model="form.satuan.value"></b-input>
         </b-field>
 
         <b-field 
             label="Foto Produk" 
             :type="form.gambar.type"
             :message="form.gambar.message"
+            v-model="form.gambar.value"
             horizontal>
-          <b-upload v-model="form.gambar.value"
-              drag-drop>
+          <b-upload drag-drop>
               <section class="section">
                 <div class="content has-text-centered">
                   <p>
-                    <b-icon
-                        icon="upload"
-                        size="is-large">
-                    </b-icon>
+                    <b-icon icon="upload" size="is-large"></b-icon>
                   </p>
                   <p>Seret gambar untuk mengunggah</p>
                 </div>
@@ -45,20 +42,24 @@
             label="Stok Minimum" 
             :type="form.stok_minimum.type"
             :message="form.stok_minimum.message"
+            v-model="form.stok_minimum.value" 
             horizontal>
-          <b-numberinput v-model="form.stok_minimum.value" controls-position="compact"
-              controls-rounded>
-          </b-numberinput>
+              <b-numberinput 
+                  controls-position="compact"
+                  controls-rounded>
+              </b-numberinput>
         </b-field>
 
         <b-field 
             label="Stok" 
             :type="form.stok.type"
             :message="form.stok.message"
+            v-model="form.stok.value"
             horizontal>
-          <b-numberinput v-model="form.stok.value" controls-position="compact"
-              controls-rounded>
-          </b-numberinput>
+              <b-numberinput 
+                  controls-position="compact"
+                  controls-rounded>
+              </b-numberinput>
         </b-field>
 
         <b-field 
@@ -68,11 +69,11 @@
             expanded 
             horizontal
             numeric>
-          <b-field>
-            <b-select placeholder="Rp" disabled>
-            </b-select>
-            <b-input v-model="form.harga_beli.value" type="number" placeholder="0,00" expanded></b-input>
-          </b-field>
+              <b-field>
+                <b-select placeholder="Rp" disabled>
+                </b-select>
+                <b-input v-model="form.harga_beli.value" type="number" placeholder="0,00" expanded></b-input>
+              </b-field>
         </b-field>
 
         <b-field 
@@ -82,22 +83,22 @@
             expanded 
             horizontal
             numeric>
-          <b-field>
-            <b-select placeholder="Rp" disabled>
-            </b-select>
-            <b-input v-model="form.harga_jual.value" type="number" placeholder="0,00" expanded></b-input>
-          </b-field>
+              <b-field>
+                <b-select placeholder="Rp" disabled>
+                </b-select>
+                <b-input v-model="form.harga_jual.value" type="number" placeholder="0,00" expanded></b-input>
+              </b-field>
         </b-field>
 
         <div class="tags">
           <span v-for="(file, index) in dropFiles"
               :key="index"
               class="tag is-primary" >
-              {{file.name}}
-              <button class="delete is-small"
-                  type="button"
-                  @click="deleteDropFile(index)">
-              </button>
+                {{file.name}}
+                <button class="delete is-small"
+                    type="button"
+                    @click="deleteDropFile(index)">
+                </button>
           </span>
         </div>
 
@@ -109,7 +110,7 @@
               tag="router-link" 
               to="/admin/produk" 
               rounded>
-            Batal
+                Batal
           </b-button>
           <b-button 
               size="is-medium" 
@@ -117,7 +118,7 @@
               type="is-success" 
               @click="confirm()"
               rounded>
-            Konfirmasi
+                Konfirmasi
           </b-button>
         </div>
 
@@ -129,13 +130,7 @@
 <script>
 export default {
   data() {
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    };
     return {
-      config,
       actionTitle: '',
       editId: 0,
       dataProduk: new FormData(),

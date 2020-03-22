@@ -183,6 +183,8 @@ export default {
 
       this.$http.get(uri).then(response => {
         this.datas = response.data.value
+        this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+        this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
         this.isLoading = false
       })
       .catch(error => {
@@ -190,7 +192,6 @@ export default {
         this.tableLoadingIcon = "emoticon-sad"
           this.tableMessage = 'Tidak ada Data'
           this.isLoading = false
-          console.log('reached this')
       })
     },
     deleteData(deleteId) {

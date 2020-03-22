@@ -9,7 +9,7 @@
             :type="form.nama_pegawai.type"
             :message="form.nama_pegawai.message"
             horizontal>
-          <b-input v-model="form.nama_pegawai.value"></b-input>
+              <b-input v-model="form.nama_pegawai.value"></b-input>
         </b-field>
 
         <b-field 
@@ -17,7 +17,7 @@
             :type="form.alamat.type"
             :message="form.alamat.message"
             horizontal>
-          <b-input v-model="form.alamat.value"></b-input>
+              <b-input v-model="form.alamat.value"></b-input>
         </b-field>
 
         <b-field 
@@ -25,7 +25,7 @@
             :type="form.no_telp.type"
             :message="form.no_telp.message"
             horizontal>
-          <b-input v-model="form.no_telp.value"></b-input>
+              <b-input v-model="form.no_telp.value"></b-input>
         </b-field>
 
         <b-field 
@@ -47,20 +47,20 @@
         </b-field>
 
         <b-field label="Jabatan" horizontal>
-            <b-select v-model="form.jabatan.value"
-                placeholder="Pilih jabatan">
-                  <option value="Kasir">Kasir</option>
-                  <option value="CS">CS</option>
-            </b-select>
+          <b-select v-model="form.jabatan.value" placeholder="Pilih jabatan">
+            <option value="Kasir">Kasir</option>
+            <option value="CS">CS</option>
+          </b-select>
         </b-field>
 
         <hr>
 
-        <b-field label="Username"
+        <b-field 
+            label="Username"
             :type="form.username.type"
             :message="form.username.message"
             horizontal>
-            <b-input v-model="form.username.value" maxlength="30"></b-input>
+              <b-input v-model="form.username.value" maxlength="30"></b-input>
         </b-field>
 
         <b-field label="Password" :message="form.password.message" horizontal>
@@ -79,14 +79,14 @@
               tag="router-link" 
               to="/admin/pegawai" 
               rounded>
-            Kembali
+                Kembali
           </b-button>
           <b-button size="is-medium" 
               class="btn-form" 
               type="is-success" 
               @click="confirm()"
               rounded>
-            Konfirmasi
+                Konfirmasi
           </b-button>
         </div>
 
@@ -98,13 +98,7 @@
 <script>
 export default {
   data() {
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    };
     return {
-      config,
       actionTitle: '',
       editId: 0,
       dataPegawai: new FormData(),
@@ -144,7 +138,7 @@ export default {
     convertTgl(tglLahir) {
       var formDate = tglLahir // Mengambil FULL date dari datepicker
       var year = formDate.getFullYear()        // Mengambil tahun
-      var month = formDate.getMonth() + 1      // Mengambil bulan
+      var month = formDate.getMonth() + 1      // Mengambil bulan (ditambah 1 karena getMonth() itu returnnya array)
       var date = formDate.getDate()            // Mengambil tanggal
 
       // Yang tanda tanya (?) itu TERNARY. Konsepnya sama dengan if-else
@@ -187,7 +181,6 @@ export default {
       this.editDataPegawai.no_telp = this.form.no_telp.value
       this.editDataPegawai.jabatan = this.form.jabatan.value
       this.editDataPegawai.username = this.form.username.value
-      // this.dataPegawai.append("password", this.form.password.value)
       this.editDataPegawai.pic = 3
 
       var uri = this.$api_baseUrl + "pegawai/" + editId;
