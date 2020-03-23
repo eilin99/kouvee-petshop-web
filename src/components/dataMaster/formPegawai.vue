@@ -92,6 +92,14 @@
 
       </div>
     </div>
+    
+    <!-- Buat loading page waktu awal load sama submit data -->
+    <b-loading 
+        :is-full-page="true" 
+        :active.sync="isLoading" 
+        :can-cancel="false">
+    </b-loading>
+
   </section>
 </template>
 
@@ -99,6 +107,7 @@
 export default {
   data() {
     return {
+      isLoading: true,
       actionTitle: '',
       editId: 0,
       dataPegawai: new FormData(),
@@ -152,7 +161,8 @@ export default {
       return fixedDate
     },
     addData() {
-      console.log('adding')
+      this.isLoading = true // Biar dia loading dulu
+
       this.dataPegawai.append("nama_pegawai", this.form.nama_pegawai.value)
       this.dataPegawai.append("alamat", this.form.alamat.value)
       this.dataPegawai.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
@@ -165,16 +175,20 @@ export default {
       var uri = this.$api_baseUrl + "pegawai";
 
       this.$http.post(uri, this.dataPegawai).then(response => {
+        this.isLoading = false // Biar berhenti loading
         this.router.push( { name: 'Pegawai' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
       .catch(error => {
         this.errors = error;
+        this.isLoading = false // Biar berhenti loading
         this.snackbar(this.errors, 'is-danger')
       });
     },
     editData(editId) {
+      this.isLoading = true // Biar dia loading dulu
+
       this.editDataPegawai.nama_pegawai = this.form.nama_pegawai.value
       this.editDataPegawai.alamat = this.form.alamat.value
       this.editDataPegawai.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
@@ -186,14 +200,14 @@ export default {
       var uri = this.$api_baseUrl + "pegawai/" + editId;
 
       this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
+        this.isLoading = false // Biar berhenti loading
         this.router.push( { name: 'Pegawai' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
       .catch(error => {
-      console.log(this.editDataPegawai)
-
         this.errors = error;
+        this.isLoading = false // Biar berhenti loading
         this.snackbar(this.errors, 'is-danger')
       });
     },
@@ -221,6 +235,7 @@ export default {
       this.actionTitle = 'Tambah'
       document.getElementById('password').disabled = false;
     }
+    this.isLoading = false // Page udah ter-load dan berhenti loading
   }
 }
 </script>

@@ -21,22 +21,25 @@
         </b-field>
 
         <b-field 
+            class="file"
             label="Foto Produk" 
             :type="form.gambar.type"
             :message="form.gambar.message"
-            v-model="form.gambar.value"
             horizontal>
-          <b-upload drag-drop>
-              <section class="section">
-                <div class="content has-text-centered">
-                  <p>
-                    <b-icon icon="upload" size="is-large"></b-icon>
-                  </p>
-                  <p>Seret gambar untuk mengunggah</p>
-                </div>
-              </section>
-          </b-upload>
+              <b-upload v-model="form.gambar.value" @change="previewImage" accept="image/*">
+                <a class="button is-primary">
+                  <b-icon icon="upload"></b-icon>
+                  <span>Unggah gambar</span>
+                </a>
+              </b-upload>
+              <span class="file-name" v-if="form.gambar.value">
+                {{ form.gambar.value.name }}
+              </span>
+              
         </b-field>
+        <div class="image-preview" v-if="form.gambar.value.length > 0">
+          <img class="preview" :src="form.gambar.value">
+        </div>
 
         <b-field 
             label="Stok Minimum" 
@@ -45,6 +48,8 @@
             v-model="form.stok_minimum.value" 
             horizontal>
               <b-numberinput 
+                  min="0" 
+                  v-model="form.stok_minimum.value" 
                   controls-position="compact"
                   controls-rounded>
               </b-numberinput>
@@ -57,6 +62,8 @@
             v-model="form.stok.value"
             horizontal>
               <b-numberinput 
+                  min="0" 
+                  v-model="form.stok.value"
                   controls-position="compact"
                   controls-rounded>
               </b-numberinput>
@@ -90,18 +97,6 @@
               </b-field>
         </b-field>
 
-        <div class="tags">
-          <span v-for="(file, index) in dropFiles"
-              :key="index"
-              class="tag is-primary" >
-                {{file.name}}
-                <button class="delete is-small"
-                    type="button"
-                    @click="deleteDropFile(index)">
-                </button>
-          </span>
-        </div>
-
         <div class="has-text-right">
           <b-button 
               size="is-medium" 
@@ -124,6 +119,14 @@
 
       </div>
     </div>
+
+    <!-- Buat loading page waktu awal load sama submit data -->
+    <b-loading 
+        :is-full-page="true" 
+        :active.sync="isLoading" 
+        :can-cancel="false">
+    </b-loading>
+  
   </section>
 </template>
 
@@ -131,6 +134,8 @@
 export default {
   data() {
     return {
+      isLoading: true,
+      imageData: '',
       actionTitle: '',
       editId: 0,
       dataProduk: new FormData(),
@@ -148,6 +153,23 @@ export default {
     }
   },
   methods: {
+    previewImage: function(event) {
+      // Reference to the DOM input element
+      var input = event.target;
+      // Ensure that you have a file before attempting to read it
+      if (input.files && input.files[0]) {
+        // create a new FileReader to read this image and convert to base64 format
+        var reader = new FileReader();
+        // Define a callback function to run, when FileReader finishes its job
+        reader.onload = (e) => {
+          // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+          // Read image as base64 and set to imageData
+          this.imageData = e.target.result;
+        }
+        // Start the reader job - read file as a data url (base64 format)
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
     getData(editId) {
       var uri = this.$api_baseUrl + "produk/" + editId
 
@@ -157,17 +179,17 @@ export default {
       })
     },
     formEditHandler(dataProduk) {
-
       this.form.nama_produk.value = dataProduk.nama_produk
       this.form.satuan.value = dataProduk.satuan
       this.form.harga_jual.value = dataProduk.harga_jual
-      this.form.harga_beli.value = dataProduk.stok_minimum
+      this.form.harga_beli.value = dataProduk.harga_beli
       this.form.stok.value = dataProduk.stok
       this.form.stok_minimum.value = dataProduk.stok_minimum
-      this.form.gambar.message = dataProduk.gambar
+      this.form.gambar.value = dataProduk.gambar
     },
     addData() {
-      console.log('adding')
+      this.isLoading = true // Biar dia loading dulu
+
       this.dataProduk.append("nama_produk", this.form.nama_produk.value)
       this.dataProduk.append("satuan", this.form.satuan.value)
       this.dataProduk.append("harga_jual", this.form.harga_jual.value)
@@ -180,16 +202,20 @@ export default {
       var uri = this.$api_baseUrl + "produk";
 
       this.$http.post(uri, this.dataProduk).then(response => {
+        this.isLoading = false // Biar berhenti loading
         this.router.push( { name: 'Produk' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
       .catch(error => {
         this.errors = error;
+        this.isLoading = false // Biar berhenti loading
         this.snackbar(this.errors, 'is-danger')
-      });
+      })
     },
     editData(editId) {
+      this.isLoading = true // Biar dia loading dulu
+
       this.editDataProduk.nama_produk = this.form.nama_produk.value
       this.editDataProduk.satuan = this.form.satuan.value
       this.editDataProduk.harga_jual = this.form.harga_jual.value
@@ -202,16 +228,16 @@ export default {
       var uri = this.$api_baseUrl + "produk/" + editId;
 
       this.$http.post(uri, this.editDataProduk, this.config).then(response => {
+        this.isLoading = false // Biar berhenti loading
         this.router.push( { name: 'Produk' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
       .catch(error => {
-      console.log(this.editDataProduk)
-
         this.errors = error;
+        this.isLoading = false // Biar berhenti loading
         this.snackbar(this.errors, 'is-danger')
-      });
+      })
     },
     confirm() {
       this.editId == 0 ? this.addData() : this.editData(this.editId)
@@ -227,6 +253,14 @@ export default {
       })
     },
   },
+  watch: {
+    gambar: function(o) {
+      var reader = new FileReader();
+      reader.onload = e => this.$emit("load", e.target.result);
+      reader.readAsText(o[0]);
+      alert();
+    }
+  },
   mounted() {
     if(this.$route.params.id) {
       this.editId = this.$route.params.id
@@ -235,6 +269,21 @@ export default {
     } else {
       this.actionTitle = 'Tambah'
     }
+    this.isLoading = false // page udah ter-load dan berhenti loading
   }
 }
 </script>
+
+<style scoped>
+  .image-preview {
+    margin-left: 112.7px;
+    padding: 20px;
+  }
+  img.preview {
+    width: 200px;
+    background-color: white;
+    border: 1px solid #DDD;
+    padding: 5px;
+  }
+
+</style>
