@@ -5,9 +5,16 @@ import 'buefy/dist/buefy.css'
 import VueRouter from 'vue-router'
 import Routes from './routes'
 import Axios from 'axios'
+import VueSession from 'vue-session'
 
 Vue.use(Buefy)
 Vue.use(VueRouter)
+
+var options = {
+  persist: true
+}
+
+Vue.use(VueSession, options)
 
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios

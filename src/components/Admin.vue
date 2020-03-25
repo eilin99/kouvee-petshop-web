@@ -107,27 +107,11 @@
               <template slot="brand">
                 <h1 class="title-nama-data title is-3">{{ namaData }}</h1>
               </template>
-              <!-- <template slot="start">
-                <b-navbar-item href="#">
-                  Home
-                </b-navbar-item>
-                <b-navbar-item href="#">
-                  Documentation
-                </b-navbar-item>
-                <b-navbar-dropdown label="Info">
-                  <b-navbar-item href="#">
-                    About
-                  </b-navbar-item>
-                  <b-navbar-item href="#">
-                    Contact
-                  </b-navbar-item>
-                </b-navbar-dropdown>
-              </template> -->
 
               <template slot="end">
 
                 <b-dropdown
-                    v-model="profileDropdown"
+                    v-model="activeUser"
                     position="is-bottom-left"
                     aria-role="menu">
                     <a
@@ -139,37 +123,44 @@
                     </a>
 
                     <b-dropdown-item custom aria-role="menuitem">
-                      Halo, <b>johnDoe69</b>
+                      Halo, <b>{{ activeUser.username }}</b>
                       <br/>
-                      <i>John bin Doe</i>
+                      <i>{{ activeUser.nama_pegawai }}</i>
                     </b-dropdown-item>
 
                     <hr class="dropdown-divider">
                     
                     <b-dropdown-item custom aria-role="menuitem">
                       <b-icon icon="worker"></b-icon>
-                      Kasir
+                      {{ activeUser.jabatan }}
                     </b-dropdown-item>
                     <b-dropdown-item custom aria-role="menuitem">
                       <b-icon icon="home"></b-icon>
-                      Barbarsari Tambak Bayan yeayy
+                      {{ activeUser.alamat }}
                     </b-dropdown-item>
                     <b-dropdown-item custom aria-role="menuitem">
                       <b-icon icon="phone"></b-icon>
-                      089123456789
+                      {{ activeUser.no_telp }}
                     </b-dropdown-item>
                     <b-dropdown-item custom aria-role="menuitem">
                       <b-icon icon="calendar"></b-icon>
-                      05/12/1999
+                      {{ activeUser.tgl_lahir }}
                     </b-dropdown-item>
 
                     <hr class="dropdown-divider" aria-role="menuitem">
+
+                    <b-dropdown-item
+                        value="logout"
+                        aria-role="menuitem"
+                        @click="logout">
+                        <b-icon icon="settings"></b-icon>
+                        Pengaturan
+                    </b-dropdown-item>
                     
                     <b-dropdown-item
                         value="logout"
                         aria-role="menuitem"
-                        tag="router-link"
-                        to="/login">
+                        @click="logout">
                         <b-icon icon="logout"></b-icon>
                         Keluar
                     </b-dropdown-item>
@@ -193,6 +184,12 @@
             
           </div>
         </div>
+
+        <footer class="footer has-background-white-ter">
+          <div class="content has-text-centered">
+            <p class="has-text-grey-light">Made with ❤️ Kelompok 1 P3L C</p>
+          </div>
+        </footer>
       </div>
     </div>
 
@@ -233,8 +230,23 @@ export default {
       dataMasters,
       dataTransaksis,
       laporans,
+      activeUser: Object,
       isActive: true
     }
+  },
+  methods: {
+    logout() {
+      this.$session.destroy()
+      this.$router.push('/login')
+    },
+  },
+  beforeCreate() {
+    if (!this.$session.exists()) {
+      this.$router.push('/login')
+    }
+  },
+  mounted() {
+    this.activeUser = this.$session.get('pegawai')
   }
 }
 </script>
