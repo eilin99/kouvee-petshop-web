@@ -22,6 +22,16 @@
       <template slot-scope="props">
 
         <b-table-column 
+            field="id_pegawai" 
+            label="ID" 
+            :searchable="true" 
+            width="50px"
+            centered
+            sortable>
+          {{ props.row.id_pegawai }}
+        </b-table-column>
+
+        <b-table-column 
             field="nama_pegawai" 
             label="Nama Lengkap" 
             :searchable="true" 
@@ -168,10 +178,10 @@
 export default {
   data() {
     return {
-      datas: [  ],
+      datas: [],
       tableLoadingIcon: 'clock',
       tableMessage: 'Memuat Data',
-      detailOpened: [],
+      detailOpened: [], // Buat nampung index dari detail yang kebuka di tabel
       isLoading: true,
       snackbarMsg: '',
     }
@@ -196,7 +206,8 @@ export default {
     },
     deleteData(deleteId) {
       var uri = this.$api_baseUrl + "pegawai/delete/" + deleteId;
-      var pic = { pic: 1 }
+      var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
+      
       this.$http.put(uri, pic).then(response => {
         this.getData();
         this.snackbarMsg = response
@@ -209,17 +220,17 @@ export default {
         console.log('error : ' + this.errors)
       })
     },
-    snackbar(message, type) {
+    snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak
       this.$buefy.snackbar.open({
-        duration: 5000,
-        message: message,
-        type: type,
-        position: 'is-bottom-left',
+        duration: 5000, // 5 detik
+        message: message, // pesannya
+        type: type, // tipe dapetnya dari parameter. Dia bisa 'is-danger' kalo gagal dan 'is-success' kalo berhasil
+        position: 'is-bottom-left', // posisi munculnya
         actionText: 'OK',
         queue: false,
       })
     },
-    confirmDelete(deleteId) {
+    confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
       this.$buefy.dialog.confirm({
         title: 'Hapus Data Pegawai',
         message: 'Apa anda yakin ingin <b>menghapus</b> pegawai?',

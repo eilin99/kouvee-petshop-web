@@ -180,7 +180,7 @@
         <div id="content">
           <div class="box">
             <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias nemo, soluta numquam doloribus id unde harum facere natus libero officiis, explicabo ipsam rem odio minima dolorem aperiam omnis ea vel.</p> -->
-            <router-view />
+            <router-view activeUser="activeUser" />
             
           </div>
         </div>

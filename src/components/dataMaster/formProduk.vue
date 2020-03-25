@@ -137,9 +137,9 @@ export default {
       isLoading: true,
       imageData: '',
       actionTitle: '',
-      editId: 0,
-      dataProduk: new FormData(),
-      editDataProduk: {},
+      editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
+      dataProduk: new FormData(), // Buat nampung isi form
+      editDataProduk: {}, // Buat nampung data yg mau diedit kalo ada
       form: {
         nama_produk: { value: '', type: '', message: '' },
         satuan: { value: '', type: '', message: '' },
@@ -197,7 +197,7 @@ export default {
       this.dataProduk.append("stok", this.form.stok.value)
       this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
       this.dataProduk.append("gambar", this.form.gambar.value)
-      this.dataProduk.append("pic", 1)
+      this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
       
       var uri = this.$api_baseUrl + "produk";
 
@@ -223,7 +223,7 @@ export default {
       this.editDataProduk.stok = this.form.stok.value
       this.editDataProduk.stok_minimum = this.form.stok_minimum.value
       this.editDataProduk.gambar = this.form.gambar.value
-      this.editDataProduk.pic = 3
+      this.editDataProduk.pic = this.$session.get('pegawai').id_pegawai
 
       var uri = this.$api_baseUrl + "produk/" + editId;
 
@@ -262,12 +262,12 @@ export default {
     }
   },
   mounted() {
-    if(this.$route.params.id) {
-      this.editId = this.$route.params.id
-      this.actionTitle = 'Ubah'
-      this.getData(this.editId)
-    } else {
-      this.actionTitle = 'Tambah'
+    if(this.$route.params.id) {           // Kalo di URL ada angka ID-nya,
+      this.editId = this.$route.params.id // berarti ID-nya akan dimasukin ke editId
+      this.actionTitle = 'Ubah'           // Title di atas jadi 'Ubah Data
+      this.getData(this.editId)           // Ngambil data lama sesuai ID
+    } else {                      // Ini kalo gak ada param ID di URL
+      this.actionTitle = 'Tambah' // berarti dia nambah data
     }
     this.isLoading = false // page udah ter-load dan berhenti loading
   }

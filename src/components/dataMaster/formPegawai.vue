@@ -109,9 +109,9 @@ export default {
     return {
       isLoading: true,
       actionTitle: '',
-      editId: 0,
-      dataPegawai: new FormData(),
-      editDataPegawai: {},
+      editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
+      dataPegawai: new FormData(), // Buat nampung isi form
+      editDataPegawai: {}, // Buat nampung data yg mau diedit kalo ada
       form: {
         nama_pegawai: { value: '', type: '', message: '' },
         alamat: { value: '', type: '', message: '' },
@@ -134,7 +134,6 @@ export default {
       })
     },
     formEditHandler(dataPegawai) {
-
       this.form.nama_pegawai.value = dataPegawai.nama_pegawai
       this.form.alamat.value = dataPegawai.alamat
       this.form.no_telp.value = dataPegawai.no_telp
@@ -142,7 +141,6 @@ export default {
       this.form.jabatan.value = dataPegawai.jabatan
       this.form.username.value = dataPegawai.username
       this.form.password.message = 'Data tidak dapat diubah'
-      // this.form.password.type = 'disabled'
     },
     convertTgl(tglLahir) {
       var formDate = tglLahir // Mengambil FULL date dari datepicker
@@ -170,13 +168,13 @@ export default {
       this.dataPegawai.append("jabatan", this.form.jabatan.value)
       this.dataPegawai.append("username", this.form.username.value)
       this.dataPegawai.append("password", this.form.password.value)
-      this.dataPegawai.append("pic", 1)
+      this.dataPegawai.append("pic", this.$session.get('pegawai').id_pegawai)
       
       var uri = this.$api_baseUrl + "pegawai";
 
       this.$http.post(uri, this.dataPegawai).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.router.push( { name: 'Pegawai' } )
+        this.router.push( { to: 'admin/pegawai' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
@@ -195,13 +193,13 @@ export default {
       this.editDataPegawai.no_telp = this.form.no_telp.value
       this.editDataPegawai.jabatan = this.form.jabatan.value
       this.editDataPegawai.username = this.form.username.value
-      this.editDataPegawai.pic = 3
+      this.editDataPegawai.pic = this.$session.get('pegawai').id_pegawai
 
       var uri = this.$api_baseUrl + "pegawai/" + editId;
 
       this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.router.push( { name: 'Pegawai' } )
+        this.router.push( { to: 'admin/pegawai' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
@@ -212,6 +210,8 @@ export default {
       });
     },
     confirm() {
+      // Kalo editId masih default (0) berarti dia bakal addData.
+      // Kalo nggak 0, berarti dia editData
       this.editId == 0 ? this.addData() : this.editData(this.editId)
     },
     snackbar(snackbarMessage, type) {
@@ -226,14 +226,14 @@ export default {
     },
   },
   mounted() {
-    if(this.$route.params.id) {
-      this.editId = this.$route.params.id
-      this.actionTitle = 'Ubah'
-      this.getData(this.editId)
-      this.form.password.message = 'Tidak dapat mengubah password pegawai'
-    } else {
-      this.actionTitle = 'Tambah'
-      document.getElementById('password').disabled = false;
+    if(this.$route.params.id) {           // Kalo di URL ada angka ID-nya,
+      this.editId = this.$route.params.id // berarti ID-nya akan dimasukin ke editId
+      this.actionTitle = 'Ubah'           // Title di atas jadi 'Ubah Data
+      this.getData(this.editId)           // Ngambil data lama sesuai ID
+      this.form.password.message = 'Tidak dapat mengubah password pegawai' // Nampilin pesan kalo edit pass itu gabisa isi inputan password
+    } else {                      // Ini kalo gak ada param ID di URL
+      this.actionTitle = 'Tambah' // berarti dia nambah data
+      document.getElementById('password').disabled = false; // Terus bagian input passwordnya bisa diisi
     }
     this.isLoading = false // Page udah ter-load dan berhenti loading
   }

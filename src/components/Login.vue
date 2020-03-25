@@ -44,6 +44,14 @@
 
       </div>
     </div>
+
+    <!-- Buat loading page waktu awal load sama submit data -->
+    <b-loading 
+        :is-full-page="true" 
+        :active.sync="isLoading" 
+        :can-cancel="false">
+    </b-loading>
+
   </section>
 </template>
 
@@ -52,6 +60,7 @@ export default {
   name: 'LoginForm',
   data() {
     return {
+      isLoading: false,
       userLogin: new FormData(),
       loginForm : 
       {
@@ -62,6 +71,8 @@ export default {
   },
   methods: {
     login: function() {
+      this.isLoading = true
+
       var self = this // Biar bisa nge-cache yang didapet dari http request
 
       this.userLogin.append("username", this.loginForm.username.value)
@@ -82,6 +93,7 @@ export default {
         this.loginForm.password.type = 'is-danger'
         this.loginForm.password.message = 'Username dan password tidak sesuai'
       })
+      this.isLoading = false
     },
     netralize(loginForm) { // biar warning ilang waktu isi formnya diubah
       loginForm.type = ''
