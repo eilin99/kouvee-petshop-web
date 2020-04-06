@@ -77,7 +77,7 @@
               class="btn-form" 
               type="is-dark" 
               tag="router-link" 
-              to="/admin/pegawai" 
+              to="/owner/pegawai" 
               rounded>
                 Kembali
           </b-button>
@@ -174,7 +174,7 @@ export default {
 
       this.$http.post(uri, this.dataPegawai).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.router.push( { to: 'admin/pegawai' } )
+        this.router.push( { to: 'owner/pegawai' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
@@ -199,7 +199,7 @@ export default {
 
       this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.router.push( { to: 'admin/pegawai' } )
+        this.router.push( { to: 'owner/pegawai' } )
         this.snackbarMsg = response.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })

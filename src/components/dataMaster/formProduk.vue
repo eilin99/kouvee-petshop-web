@@ -103,7 +103,7 @@
               class="btn-form" 
               type="is-dark" 
               tag="router-link" 
-              to="/admin/produk" 
+              to="/owner/produk" 
               rounded>
                 Batal
           </b-button>

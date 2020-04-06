@@ -89,7 +89,7 @@
                 type="is-primary" 
                 class="btn-action" 
                 tag="router-link"
-                :to="'/admin/form-produk/' + props.row.id_produk"
+                :to="'/owner/form-produk/' + props.row.id_produk"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
@@ -166,7 +166,7 @@
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/admin/form-produk" 
+            to="/owner/form-produk" 
             @click="addData()"
             expanded>
           Tambah

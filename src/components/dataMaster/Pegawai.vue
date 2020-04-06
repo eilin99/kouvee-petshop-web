@@ -11,7 +11,7 @@
       per-page="5"
       ref="table"
       detailed
-      detail-key="no_telp"
+      detail-key="id_pegawai"
       :show-detail-icon="true"
       :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
@@ -25,6 +25,7 @@
             field="id_pegawai" 
             label="ID" 
             :searchable="true" 
+            :visible="false"
             width="50px"
             centered
             sortable>
@@ -91,7 +92,7 @@
                 type="is-primary" 
                 class="btn-action" 
                 tag="router-link"
-                :to="'/admin/form-pegawai/' + props.row.id_pegawai"
+                :to="'/owner/form-pegawai/' + props.row.id_pegawai"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
@@ -161,7 +162,7 @@
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/admin/form-pegawai" 
+            to="/owner/form-pegawai" 
             @click="addData()"
             expanded>
           Tambah
