@@ -8,6 +8,8 @@ import Pegawai from './components/dataMaster/Pegawai.vue'
 import formPegawai from './components/dataMaster/formPegawai.vue'
 import Produk from './components/dataMaster/Produk.vue'
 import formProduk from './components/dataMaster/formProduk.vue'
+import Layanan from './components/dataMaster/Layanan.vue'
+import formLayanan from './components/dataMaster/formLayanan.vue'
 
 export default [
     {
@@ -60,6 +62,22 @@ export default [
                 path: '/admin/form-produk/:id',
                 component: formProduk
             },
+            // ===== LAYANAN =====
+            {
+                name: 'Layanan',
+                path: '/admin/layanan',
+                component: Layanan
+            },
+            {
+                name: 'formLayanan',
+                path: '/admin/form-layanan',
+                component: formLayanan
+            },
+            {
+                name: 'formEditLayanan',
+                path: '/admin/form-layanan/:id',
+                component: formLayanan
+            }
         ]
             
     }
