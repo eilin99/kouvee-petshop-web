@@ -1,6 +1,8 @@
 import LandingPage from './components/LandingPage.vue'
 import Login from './components/Login.vue'
-import Admin from './components/Admin.vue'
+import Owner from './components/OwnerView.vue'
+import Kasir from './components/KasirView.vue'
+import CS from './components/CSView.vue'
 import Dashboard from './components/Dashboard.vue'
 
 // Data Master
@@ -20,46 +22,47 @@ export default [
         path: '/login',
         component: Login
     },
+    // Routes untuk OWNER
     {
-        path: '/Admin',
-        component: Admin,
+        path: '/Owner',
+        component: Owner,
         children: [
             // ===== DASHBOARD =====
             {
-                name: 'Dashboard',
-                path: '/admin/dashboard',
+                name: 'OwnerDashboard',
+                path: '/owner/dashboard',
                 component: Dashboard
             },
             // ===== PEGAWAI =====
             {
                 name: 'Pegawai',
-                path: '/admin/pegawai',
+                path: '/owner/pegawai',
                 component: Pegawai
             },
             {
                 name: 'formPegawai',
-                path: '/admin/form-pegawai',
+                path: '/owner/form-pegawai',
                 component: formPegawai
             },
             {
                 name: 'formEditPegawai',
-                path: '/admin/form-pegawai/:id',
+                path: '/owner/form-pegawai/:id',
                 component: formPegawai
             },
             // ===== PRODUK =====
             {
                 name: 'Produk',
-                path: '/admin/produk',
+                path: '/owner/produk',
                 component: Produk
             },
             {
                 name: 'formProduk',
-                path: '/admin/form-produk',
+                path: '/owner/form-produk',
                 component: formProduk
             },
             {
                 name: 'formEditProduk',
-                path: '/admin/form-produk/:id',
+                path: '/owner/form-produk/:id',
                 component: formProduk
             },
             // ===== LAYANAN =====
@@ -80,5 +83,32 @@ export default [
             }
         ]
             
-    }
+    },
+    // Routes untuk KASIR
+    {
+        path: '/Kasir',
+        component: Kasir,
+        children: [
+            // ===== DASHBOARD =====
+            {
+                name: 'KasirDashboard',
+                path: '/kasir/dashboard',
+                component: Dashboard
+            },
+        ]
+            
+    },
+    {
+        path: '/CS',
+        component: CS,
+        children: [
+            // ===== DASHBOARD =====
+            {
+                name: 'CSDashboard',
+                path: '/cs/dashboard',
+                component: Dashboard
+            },
+        ]
+            
+    },
 ]

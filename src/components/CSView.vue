@@ -1,5 +1,5 @@
 <template>
-  <div id="admin">
+  <div id="cs">
 
     <div class="columns is-fullheight">
       <div class="column is-2 has-background-grey-lighter" style="overflow-y: scroll">
@@ -105,7 +105,7 @@
           <template>
             <b-navbar class="has-background-white-ter">
               <template slot="brand">
-                <h1 class="title-nama-data title is-3">{{ namaData }}</h1>
+                <h1 class="title-nama-data title is-3">CS</h1>
               </template>
 
               <template slot="end">
@@ -200,14 +200,11 @@
 export default {
   data() {
     const dataMasters = [
-      { 'label': "Produk", 'icon':"gift", 'to':"/admin/produk", 'title': "Data Produk" },
-      { 'label': "Layanan", 'icon':"wrench", 'to':"/admin/layanan", 'title': "Data Layanan" },
-      { 'label': "Pegawai", 'icon':"worker", 'to':"/admin/pegawai", 'title': "Data Pegawai" },
-      { 'label': "Ukuran Hewan", 'icon':"file", 'to':"/admin/ukuran-hewan", 'title': "Data Ukuran Hewan" },
-      { 'label': "Jenis Hewan", 'icon':"file", 'to':"/admin/jenis-hewan", 'title': "Data Jenis Hewan" },
-      { 'label': "Supplier", 'icon':"truck", 'to':"/admin/supplier", 'title': "Data Supplier" },
-      { 'label': "Pelanggan", 'icon':"face", 'to':"/admin/pelanggan", 'title': "Data Pelanggan" },
-      { 'label': "Hewan", 'icon':"paw", 'to':"/admin/hewan", 'title': "Data Hewan" },
+      { 'label': "Produk", 'icon':"gift", 'to':"/owner/produk", 'title': "Data Produk" },
+      { 'label': "Layanan", 'icon':"wrench", 'to':"/owner/layanan", 'title': "Data Layanan" },
+      { 'label': "Pegawai", 'icon':"worker", 'to':"/owner/pegawai", 'title': "Data Pegawai" },
+      { 'label': "Pelanggan", 'icon':"face", 'to':"/owner/pelanggan", 'title': "Data Pelanggan" },
+      { 'label': "Hewan", 'icon':"paw", 'to':"/owner/hewan", 'title': "Data Hewan" },
     ]
 
     const dataTransaksis = [
@@ -216,20 +213,10 @@ export default {
       { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
-    const laporans = [
-      { 'label': "Laporan Layanan Terlaris", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Layanan Terlaris" },
-      { 'label': "Laporan Produk Terlaris", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Produk Terlaris" },
-      { 'label': "Laporan Pendapatan Tahunan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pendapatan Tahunan" },
-      { 'label': "Laporan Pendapatan Bulanan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pendapatan Bulanan" },
-      { 'label': "Laporan Pengadaan Produk Tahunan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
-      { 'label': "Laporan Pengadaan Produk Bulanan", 'icon':"file", 'to':"/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
-    ]
-
     return {
       namaData: 'Data Pegawai',
       dataMasters,
       dataTransaksis,
-      laporans,
       activeUser: Object,
       isActive: true
     }

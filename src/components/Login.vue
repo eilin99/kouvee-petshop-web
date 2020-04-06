@@ -84,7 +84,16 @@ export default {
         if (response.status === 200) {
           self.$session.start()
           self.$session.set('pegawai', response.data.value)
-          this.$router.push({ name: "Dashboard" })
+
+          if (this.$session.get('pegawai').jabatan === "Owner") {
+            this.$router.push({ name: "OwnerDashboard" })
+          }
+          else if (this.$session.get('pegawai').jabatan === "Kasir") {
+            this.$router.push({ name: "KasirDashboard" })
+          }
+          else if (this.$session.get('pegawai').jabatan === "CS") {
+            this.$router.push({ name: "CSDashboard" })
+          }
         }
       })
       .catch(error => {
