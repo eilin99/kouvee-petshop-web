@@ -68,17 +68,17 @@ export default [
             // ===== LAYANAN =====
             {
                 name: 'Layanan',
-                path: '/admin/layanan',
+                path: '/owner/layanan',
                 component: Layanan
             },
             {
                 name: 'formLayanan',
-                path: '/admin/form-layanan',
+                path: '/owner/form-layanan',
                 component: formLayanan
             },
             {
                 name: 'formEditLayanan',
-                path: '/admin/form-layanan/:id',
+                path: '/owner/form-layanan/:id',
                 component: formLayanan
             }
         ]
