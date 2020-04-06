@@ -153,7 +153,7 @@ export default {
     }
   },
   methods: {
-    previewImage: function(event) {
+    previewImage: function(event){
       // Reference to the DOM input element
       var input = event.target;
       // Ensure that you have a file before attempting to read it
