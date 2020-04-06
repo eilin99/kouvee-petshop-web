@@ -1,6 +1,8 @@
 import LandingPage from './components/LandingPage.vue'
 import Login from './components/Login.vue'
 import Owner from './components/OwnerView.vue'
+import Kasir from './components/KasirView.vue'
+import CS from './components/CSView.vue'
 import Dashboard from './components/Dashboard.vue'
 
 // Data Master
@@ -18,13 +20,14 @@ export default [
         path: '/login',
         component: Login
     },
+    // Routes untuk OWNER
     {
         path: '/Owner',
         component: Owner,
         children: [
             // ===== DASHBOARD =====
             {
-                name: 'Dashboard',
+                name: 'OwnerDashboard',
                 path: '/owner/dashboard',
                 component: Dashboard
             },
@@ -62,5 +65,32 @@ export default [
             },
         ]
             
-    }
+    },
+    // Routes untuk KASIR
+    {
+        path: '/Kasir',
+        component: Kasir,
+        children: [
+            // ===== DASHBOARD =====
+            {
+                name: 'KasirDashboard',
+                path: '/kasir/dashboard',
+                component: Dashboard
+            },
+        ]
+            
+    },
+    {
+        path: '/CS',
+        component: CS,
+        children: [
+            // ===== DASHBOARD =====
+            {
+                name: 'CSDashboard',
+                path: '/cs/dashboard',
+                component: Dashboard
+            },
+        ]
+            
+    },
 ]
