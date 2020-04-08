@@ -40,7 +40,7 @@
                 </b-menu-item>
 
                 <!-- Data Transaksi -->
-                <b-menu-item
+                <!-- <b-menu-item
                     icon="cash-multiple">
                   <template slot="label" slot-scope="props">
                     Transaksi
@@ -58,7 +58,7 @@
                         :to="dataTransaksi.to">
                     </b-menu-item>
 
-                </b-menu-item>
+                </b-menu-item> -->
 
                 <!-- Laporan-laporan -->
                 <b-menu-item
@@ -206,8 +206,6 @@ export default {
       { 'label': "Ukuran Hewan", 'icon':"file", 'to':"/owner/ukuran-hewan", 'title': "Data Ukuran Hewan" },
       { 'label': "Jenis Hewan", 'icon':"file", 'to':"/owner/jenis-hewan", 'title': "Data Jenis Hewan" },
       { 'label': "Supplier", 'icon':"truck", 'to':"/owner/supplier", 'title': "Data Supplier" },
-      { 'label': "Pelanggan", 'icon':"face", 'to':"/owner/pelanggan", 'title': "Data Pelanggan" },
-      { 'label': "Hewan", 'icon':"paw", 'to':"/owner/hewan", 'title': "Data Hewan" },
     ]
 
     const dataTransaksis = [
