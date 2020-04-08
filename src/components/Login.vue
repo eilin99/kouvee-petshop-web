@@ -108,6 +108,12 @@ export default {
       loginForm.type = ''
       loginForm.message = ''
     }
+  },
+  mounted() {
+    if (this.$session.exists()) {
+      console.log("huhu")
+      this.$router.push('/cs/dashboard')
+    }
   }
 }
 </script>

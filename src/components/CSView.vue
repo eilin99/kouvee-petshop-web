@@ -200,11 +200,8 @@
 export default {
   data() {
     const dataMasters = [
-      { 'label': "Produk", 'icon':"gift", 'to':"/owner/produk", 'title': "Data Produk" },
-      { 'label': "Layanan", 'icon':"wrench", 'to':"/owner/layanan", 'title': "Data Layanan" },
-      { 'label': "Pegawai", 'icon':"worker", 'to':"/owner/pegawai", 'title': "Data Pegawai" },
-      { 'label': "Pelanggan", 'icon':"face", 'to':"/owner/pelanggan", 'title': "Data Pelanggan" },
-      { 'label': "Hewan", 'icon':"paw", 'to':"/owner/hewan", 'title': "Data Hewan" },
+      { 'label': "Pelanggan", 'icon':"face", 'to':"/cs/pelanggan", 'title': "Data Pelanggan" },
+      { 'label': "Hewan", 'icon':"paw", 'to':"/cs/hewan", 'title': "Data Hewan" },
     ]
 
     const dataTransaksis = [

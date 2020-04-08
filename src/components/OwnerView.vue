@@ -247,6 +247,10 @@ export default {
   },
   mounted() {
     this.activeUser = this.$session.get('pegawai')
+
+    if (!this.$session.exists()) {
+      this.$router.push('/login')
+    }
   }
 }
 </script>
@@ -255,7 +259,7 @@ export default {
 .is-fullheight.columns {
     height: calc(100vh - ( 0rem - .75rem ) );
     /* height: 100%; */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .title-nama-data {
