@@ -1,15 +1,33 @@
 <template>
-  <section id="form-layanan">
-    <h4 class="title is-5">{{ actionTitle }} Data Layanan</h4>
+  <section id="form-hewan">
+    <h4 class="title is-5">{{ actionTitle }} Data Hewan</h4>
     <hr>
     <div class="columns">
       <div class="column is-8">
         <b-field 
-            label="Nama Layanan" 
-            :type="form.nama_layanan.type"
-            :message="form.nama_layanan.message"
+            label="Nama Hewan" 
+            :type="form.nama_hewan.type"
+            :message="form.nama_hewan.message"
             horizontal>
-              <b-input v-model="form.nama_layanan.value"></b-input>
+              <b-input v-model="form.nama_hewan.value"></b-input>
+        </b-field>
+
+        <b-field 
+            label="Tanggal Lahir" 
+            :type="form.tgl_lahir.type"
+            :message="form.tgl_lahir.message"
+            horizontal>
+          <b-datepicker
+              ref="datepicker"
+              expanded
+              placeholder="Pilih Tanggal Lahir"
+              v-model="form.tgl_lahir.value">
+          </b-datepicker>
+          <b-button
+              @click="$refs.datepicker.toggle()"
+              type="is-primary">
+              <b-icon icon="calendar" size="is-small"></b-icon>
+          </b-button>
         </b-field>
 
         <b-field 
@@ -41,15 +59,17 @@
         </b-field>
 
         <b-field 
-            label="Harga" 
-            :type="form.harga.type"
-            :message="form.harga.message"
+            label="Customer"
+            :type="form.customer.type"
+            :message="form.customer.message"
             horizontal>
-              <b-input v-model="form.harga.value"
-                required
-                validation-message="Only number is allowed"
-                pattern="[0-9]*">
-              </b-input>
+          <b-select v-model="form.customer.value" placeholder="Pilih customer">
+            <option v-for="(item) in customer" 
+                :key="item.id_customer"
+                :value="item.id_customer">
+                {{ item.nama_customer }}
+            </option>
+          </b-select>
         </b-field>
 
         <div class="has-text-right">
@@ -57,7 +77,7 @@
               class="btn-form" 
               type="is-dark" 
               tag="router-link" 
-              to="/owner/layanan" 
+              to="/cs/hewan" 
               rounded>
                 Kembali
           </b-button>
@@ -90,17 +110,19 @@ export default {
       isLoading: true,
       actionTitle: '',
       editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
-      dataLayanan: new FormData(), // Buat nampung isi form
-      editDataLayanan: {}, // Buat nampung data yg mau diedit kalo ada
+      dataHewan: new FormData(), // Buat nampung isi form
+      editDataHewan: {}, // Buat nampung data yg mau diedit kalo ada
       form: {
-        nama_layanan: { value: '', type: '', message: '' },
+        nama_hewan: { value: '', type: '', message: '' },
+        tgl_lahir: { value: '', type: '', message: '' },
         jenis: { value: '', type: '', message: '' },
         ukuran: { value: '', type: '', message: '' },
-        harga: { value: '', type: '', message: '' },
+        customer: { value: '', type: '', message: '' },
       },
       snackbarMsg: '',
       jenis_hewan: [],
       ukuran_hewan: [],
+      customer: [],
     }
   },
   methods: {
@@ -118,34 +140,59 @@ export default {
         this.ukuran_hewan = response.data.value
       })
     },
-    getData(editId) {
-      var uri = this.$api_baseUrl + "layanan/" + editId
+    getCustomer(){
+      var uri = this.$api_baseUrl + "customer"
 
       this.$http.get(uri).then(response => {
-        this.editDataLayanan = response.data.value
-        this.formEditHandler(this.editDataLayanan)
+        this.customer = response.data.value
       })
     },
-    formEditHandler(dataLayanan) {
-      this.form.nama_layanan.value = dataLayanan.nama_layanan
-      this.form.jenis.value = dataLayanan.id_jenis
-      this.form.ukuran.value = dataLayanan.id_ukuran
-      this.form.harga.value = dataLayanan.harga
+    getData(editId) {
+      var uri = this.$api_baseUrl + "hewan/" + editId
+
+      this.$http.get(uri).then(response => {
+        this.editDataHewan = response.data.value
+        this.formEditHandler(this.editDataHewan)
+      })
+    },
+    formEditHandler(dataHewan) {
+      this.form.nama_hewan.value = dataHewan.nama_hewan
+      this.form.tgl_lahir.value = new Date(dataHewan.tgl_lahir)
+      this.form.jenis.value = dataHewan.id_jenis
+      this.form.ukuran.value = dataHewan.id_ukuran
+      this.form.customer.value = dataHewan.id_customer
+    },
+    convertTgl(tglLahir) {
+      var formDate = tglLahir // Mengambil FULL date dari datepicker
+      var year = formDate.getFullYear()        // Mengambil tahun
+      var month = formDate.getMonth() + 1      // Mengambil bulan (ditambah 1 karena getMonth() itu returnnya array)
+      var date = formDate.getDate()            // Mengambil tanggal
+
+      // Yang tanda tanya (?) itu TERNARY. Konsepnya sama dengan if-else
+      // Jika month/date kurang dari 10, nanti stringnya
+      // ditambah 0 di depannya. Kalo enggak, ya biasa
+      month = (month < 10) ? '0' + month : month
+      date = (date < 10) ? '0' + date : date
+
+      var fixedDate = year + '-' + month + '-' + date
+
+      return fixedDate
     },
     addData() {
       this.isLoading = true // Biar dia loading dulu
 
-      this.dataLayanan.append("nama_layanan", this.form.nama_layanan.value)
-      this.dataLayanan.append("id_jenis", this.form.jenis.value)
-      this.dataLayanan.append("id_ukuran", this.form.ukuran.value)
-      this.dataLayanan.append("harga", this.form.harga.value)
-      this.dataLayanan.append("pic", this.$session.get('pegawai').id_pegawai)
+      this.dataHewan.append("nama_hewan", this.form.nama_hewan.value)
+      this.dataHewan.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
+      this.dataHewan.append("id_jenis", this.form.jenis.value)
+      this.dataHewan.append("id_ukuran", this.form.ukuran.value)
+      this.dataHewan.append("id_customer", this.form.customer.value)
+      this.dataHewan.append("pic", this.$session.get('pegawai').id_pegawai)
       
-      var uri = this.$api_baseUrl + "layanan";
+      var uri = this.$api_baseUrl + "hewan";
 
-      this.$http.post(uri, this.dataLayanan).then(response => {
+      this.$http.post(uri, this.dataHewan).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: "Layanan" } )
+        this.$router.push( { name: "Hewan" } )
         this.snackbarMsg = response.data.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
@@ -159,17 +206,18 @@ export default {
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
 
-      this.editDataLayanan.nama_layanan = this.form.nama_layanan.value
-      this.editDataLayanan.id_jenis = this.form.jenis.value
-      this.editDataLayanan.id_ukuran = this.form.ukuran.value
-      this.editDataLayanan.harga = this.form.harga.value
-      this.editDataLayanan.pic = this.$session.get('pegawai').id_pegawai
+      this.editDataHewan.nama_hewan = this.form.nama_hewan.value
+      this.editDataHewan.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
+      this.editDataHewan.id_jenis = this.form.jenis.value
+      this.editDataHewan.id_ukuran = this.form.ukuran.value
+      this.editDataHewan.id_customer = this.form.customer.value
+      this.editDataHewan.pic = this.$session.get('pegawai').id_pegawai
 
-      var uri = this.$api_baseUrl + "layanan/" + editId;
+      var uri = this.$api_baseUrl + "hewan/" + editId;
 
-      this.$http.put(uri, this.editDataLayanan).then(response => {
+      this.$http.put(uri, this.editDataHewan).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: "Layanan" } )
+        this.$router.push( { name: "Hewan" } )
         this.snackbarMsg = response.data.message
         this.snackbar(this.snackbarMsg, 'is-success')
       })
@@ -198,6 +246,7 @@ export default {
   mounted() {
     this.getJenis()
     this.getUkuran()
+    this.getCustomer()
     if(this.$route.params.id) {           // Kalo di URL ada angka ID-nya,
       this.editId = this.$route.params.id // berarti ID-nya akan dimasukin ke editId
       this.actionTitle = 'Ubah'           // Title di atas jadi 'Ubah Data

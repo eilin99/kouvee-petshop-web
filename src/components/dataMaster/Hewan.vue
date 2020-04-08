@@ -1,5 +1,5 @@
 <template>
-  <section id="layanan">
+  <section id="hewan">
 
     <b-table
       :data="datas"
@@ -10,7 +10,7 @@
       per-page="5"
       ref="table"
       detailed
-      detail-key="nama_layanan"
+      detail-key="nama_hewan"
       :show-detail-icon="true"
       :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
@@ -20,9 +20,9 @@
 
       <template slot-scope="props">
 
-         <b-table-column 
+        <b-table-column 
             field="index" 
-            label="No." 
+            label="No. " 
             :searchable="true" 
             width="50px"
             centered
@@ -31,29 +31,59 @@
         </b-table-column>
 
         <b-table-column 
-            field="id_layanan" 
+            field="id_hewan" 
             label="ID" 
             :searchable="true" 
             width="50px"
             centered
             sortable
             :visible="false">
-          {{ props.row.id_layanan }}
+          {{ props.row.id_hewan }}
         </b-table-column>
 
         <b-table-column 
-            field="nama_layanan"
-            label="Nama Layanan" 
+            field="nama_hewan" 
+            label="Nama Hewan" 
             :searchable="true" 
             sortable>
-          {{ props.row.nama_layanan }}
+          {{ props.row.nama_hewan }}
         </b-table-column>
 
         <b-table-column 
-            field="harga" 
-            label="Harga Layanan"
+            field="tgl_lahir" 
+            label="Tgl Lahir"
             :searchable="true">
-          {{ 'Rp.' + props.row.harga }}
+          <span class="tag is-success">
+            {{ new Date(props.row.tgl_lahir).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'}) }}
+          </span>
+        </b-table-column>
+
+        <b-table-column 
+            field="jenis" 
+            label="Jenis Hewan" 
+            :searchable="true">
+          <span>
+            {{ props.row.jenis }}
+          </span>
+        </b-table-column>
+
+        <b-table-column 
+            field="ukuran" 
+            label="Ukuran Hewan"
+            :searchable="true">
+          <span>
+            {{ props.row.ukuran }}
+          </span>
+        </b-table-column>
+
+        <b-table-column 
+            field="nama_customer" 
+            label="Nama Customer" 
+            :searchable="true"
+            sortable>
+          <span>
+            {{ props.row.nama_customer }}
+          </span>
         </b-table-column>
 
         <b-table-column label="Action">
@@ -62,14 +92,14 @@
                 type="is-primary" 
                 class="btn-action" 
                 tag="router-link"
-                :to="'/owner/form-layanan/' + props.row.id_layanan"
+                :to="'/cs/form-hewan/' + props.row.id_hewan"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
             <b-button 
                 type="is-danger" 
                 class="btn-action" 
-                @click="confirmDelete(props.row.id_layanan)" 
+                @click="confirmDelete(props.row.id_hewan)" 
                 rounded>
                   <b-icon icon="delete" size="is-small"></b-icon>
             </b-button>
@@ -103,7 +133,7 @@
                 <div class="column">
                   <p>
                     <strong>Edited By : </strong>
-                    <small>{{ props.row.nama_pegawai }}</small>
+                    <small>{{ props.row.edited_by }}</small>
                   </p>
                 </div>
               </div>
@@ -132,7 +162,7 @@
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/owner/form-layanan"
+            to="/cs/form-hewan"
             expanded>
           Tambah
         </b-button>
@@ -159,13 +189,12 @@ export default {
   methods: {
     getData() {
       this.isLoading = true
-      var uri = this.$api_baseUrl + "layanan"
+      var uri = this.$api_baseUrl + "hewan"
 
       this.$http.get(uri).then(response => {
         this.datas = response.data.value
         for(var i=0; i<this.datas.length; i++){ 
           this.datas[i].index = i+1
-          this.datas[i].nama_layanan = this.datas[i].nama_layanan + " " + this.datas[i].jenis + " " + this.datas[i].ukuran
         }
         this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
         this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
@@ -174,12 +203,12 @@ export default {
       .catch(error => {
         this.errors = error
         this.tableLoadingIcon = "emoticon-sad"
-        this.tableMessage = 'Tidak ada Data'
-        this.isLoading = false
+          this.tableMessage = 'Tidak ada Data'
+          this.isLoading = false
       })
     },
     deleteData(deleteId) {
-      var uri = this.$api_baseUrl + "layanan/delete/" + deleteId;
+      var uri = this.$api_baseUrl + "hewan/delete/" + deleteId;
       var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
       
       this.$http.put(uri, pic).then(response => {
@@ -206,8 +235,8 @@ export default {
     },
     confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
       this.$buefy.dialog.confirm({
-        title: 'Hapus Data Layanan',
-        message: 'Apa anda yakin ingin <b>menghapus</b> layanan?',
+        title: 'Hapus Data Hewan',
+        message: 'Apa anda yakin ingin <b>menghapus</b> hewan?',
         confirmText: 'Hapus',
         cancelText: 'Batal',
         type: 'is-danger',
