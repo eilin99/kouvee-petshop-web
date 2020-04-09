@@ -13,6 +13,10 @@ import formProduk from './components/dataMaster/formProduk.vue'
 import Layanan from './components/dataMaster/Layanan.vue'
 import formLayanan from './components/dataMaster/formLayanan.vue'
 
+// CS
+import Hewan from './components/dataMaster/Hewan.vue'
+import formHewan from './components/dataMaster/formHewan'
+
 export default [
     {
         path: '/',
@@ -108,6 +112,22 @@ export default [
                 path: '/cs/dashboard',
                 component: Dashboard
             },
+            // ===== HEWAN =====
+            {
+                name: 'Hewan',
+                path: '/cs/hewan',
+                component: Hewan
+            },
+            {
+                name: 'formHewan',
+                path: '/cs/form-hewan',
+                component: formHewan
+            },
+            {
+                name: 'formEditHewan',
+                path: '/cs/form-hewan/:id',
+                component: formHewan
+            }
         ]
             
     },
