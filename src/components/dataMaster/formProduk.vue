@@ -41,10 +41,9 @@
         </b-field>
 
         <div class="image-preview" v-if="form.gambar.value">
-          <span class="tag" v-if="form.gambar.value">
+          <!-- <span class="tag" v-if="form.gambar.value">
             {{ form.gambar.value.name }}
-          </span>
-          <br/>
+          </span> -->
           <img class="preview" :src="gambarProduk">
         </div>
 
@@ -187,6 +186,7 @@ export default {
 
       this.$http.get(uri).then(response => {
         this.editDataProduk = response.data.value
+        console.log(response.data.value)
         this.formEditHandler(this.editDataProduk)
       })
     },
@@ -198,6 +198,9 @@ export default {
       this.form.stok.value = parseInt(dataProduk.stok)
       this.form.stok_minimum.value = parseInt(dataProduk.stok_minimum)
       this.form.gambar.value = dataProduk.gambar
+
+      // biar ngambil preview gambar produk yang ada di database
+      this.gambarProduk = this.$api_baseUrl + 'produk/picture/' + dataProduk.gambar
     },
     addData() {
       this.isLoading = true // Biar dia loading dulu
