@@ -219,9 +219,8 @@ export default {
       })
       .catch(error => {
         this.errors = error
-        this.snackbarMsg = this.errors
+        this.snackbarMsg = "Terjadi kesalahan... Silahkan coba lagi"
         this.snackbar(this.snackbarMsg, 'is-danger')
-        console.log('error : ' + this.errors)
       })
     },
     snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak

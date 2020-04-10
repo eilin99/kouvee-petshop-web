@@ -192,19 +192,40 @@ export default {
       this.isLoading = true
       var uri = this.$api_baseUrl + "pegawai"
 
-      this.$http.get(uri).then(response => {
-        this.datas = response.data.value
-        this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
-        this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
-        this.isLoading = false
-      })
-      .catch(error => {
-        this.errors = error
-        this.tableLoadingIcon = "emoticon-sad"
-          this.tableMessage = 'Tidak ada Data'
+      if (!this.$session.exists()) {
+        this.$router.push('/login');
+      }else{
+        this.$http.get(uri).then(response => {
+          this.datas = response.data.value
+          this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+          this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
           this.isLoading = false
-      })
+        })
+        .catch(error => {
+          this.errors = error
+          this.tableLoadingIcon = "emoticon-sad"
+            this.tableMessage = 'Tidak ada Data'
+            this.isLoading = false
+        })
+      }
     },
+    // getData() {
+    //   this.isLoading = true
+    //   var uri = this.$api_baseUrl + "pegawai"
+
+    //   this.$http.get(uri).then(response => {
+    //     this.datas = response.data.value
+    //     this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+    //     this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
+    //     this.isLoading = false
+    //   })
+    //   .catch(error => {
+    //     this.errors = error
+    //     this.tableLoadingIcon = "emoticon-sad"
+    //       this.tableMessage = 'Tidak ada Data'
+    //       this.isLoading = false
+    //   })
+    // },
     deleteData(deleteId) {
       var uri = this.$api_baseUrl + "pegawai/delete/" + deleteId;
       var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
@@ -216,9 +237,8 @@ export default {
       })
       .catch(error => {
         this.errors = error
-        this.snackbarMsg = this.errors
+        this.snackbarMsg = "Terjadi kesalahan... Silahkan coba lagi"
         this.snackbar(this.snackbarMsg, 'is-danger')
-        console.log('error : ' + this.errors)
       })
     },
     snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak
@@ -244,7 +264,12 @@ export default {
     }
   },
   mounted() {
-    this.getData()
+    // if (!this.$session.exists()) {
+    //   this.$router.push('/login');
+    // } else {
+    //   this.activeUser = this.$session.get('pegawai')
+      this.getData()
+  //   }
   },
 }
 </script>

@@ -13,7 +13,7 @@
                     icon="view-dashboard"
                     label="Dashboard"
                     tag="router-link"
-                    to="/admin/dashboard"
+                    to="/owner/dashboard"
                     :active="isActive"
                     @click="namaData = 'Dashboard'">
                 </b-menu-item>
@@ -244,10 +244,10 @@ export default {
     }
   },
   mounted() {
-    this.activeUser = this.$session.get('pegawai')
-
     if (!this.$session.exists()) {
-      this.$router.push('/login')
+      this.$router.push('/login');
+    } else {
+      this.activeUser = this.$session.get('pegawai')
     }
   }
 }
