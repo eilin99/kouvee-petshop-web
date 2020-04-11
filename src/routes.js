@@ -12,11 +12,12 @@ import Produk from './components/dataMaster/Produk.vue'
 import formProduk from './components/dataMaster/formProduk.vue'
 import Layanan from './components/dataMaster/Layanan.vue'
 import formLayanan from './components/dataMaster/formLayanan.vue'
+import JenisHewan from './components/dataMaster/JenisHewan.vue'
+import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
+import Supplier from './components/dataMaster/Supplier.vue'
+import formSupplier from './components/dataMaster/formSupplier.vue'
 
 // CS
-import Hewan from './components/dataMaster/Hewan.vue'
-import formHewan from './components/dataMaster/formHewan'
-
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
 // import formPelanggan from './components/dataMaster/formPelanggan.vue'
 // import Hewan from './components/dataMaster/Hewan.vue'
@@ -80,6 +81,22 @@ export default [
                 path: '/owner/form-produk/:id',
                 component: formProduk
             },
+            // ===== JENIS HEWAN =====
+            {
+                name: 'JenisHewan',
+                path: '/owner/jenis-hewan',
+                component: JenisHewan
+            },
+            {
+                name: 'formJenisHewan',
+                path: '/owner/form-jenis-hewan',
+                component: formJenisHewan
+            },
+            {
+                name: 'formEditJenisHewan',
+                path: '/owner/form-jenis-hewan/:id',
+                component: formJenisHewan
+            },
             // ===== LAYANAN =====
             {
                 name: 'Layanan',
@@ -95,7 +112,23 @@ export default [
                 name: 'formEditLayanan',
                 path: '/owner/form-layanan/:id',
                 component: formLayanan
-            }
+            },
+            // ===== SUPPLIER =====
+            {
+                name: 'Supplier',
+                path: '/owner/supplier',
+                component: Supplier
+            },
+            {
+                name: 'formSupplier',
+                path: '/owner/form-supplier',
+                component: formSupplier
+            },
+            {
+                name: 'formEditSupplier',
+                path: '/owner/form-supplier/:id',
+                component: formSupplier
+            },
         ]
             
     },

@@ -1,5 +1,5 @@
 <template>
-  <section id="pegawai">
+  <section id="jenis-hewan">
 
     <b-table
       :data="datas"
@@ -11,7 +11,7 @@
       per-page="5"
       ref="table"
       detailed
-      detail-key="id_pegawai"
+      detail-key="id_jenis"
       :show-detail-icon="true"
       :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
@@ -22,84 +22,39 @@
       <template slot-scope="props">
 
         <b-table-column 
-            field="id_pegawai" 
+            field="id_jenis" 
             label="ID" 
             :searchable="true" 
             :visible="false"
             width="50px"
             centered
             sortable>
-          {{ props.row.id_pegawai }}
+          {{ props.row.id_jenis }}
         </b-table-column>
 
         <b-table-column 
-            field="nama_pegawai" 
-            label="Nama Lengkap" 
+            field="jenis" 
+            label="Jenis Hewan" 
             :searchable="true" 
             sortable>
-          {{ props.row.nama_pegawai }}
+          {{ props.row.jenis }}
         </b-table-column>
 
-        <b-table-column 
-            field="alamat" 
-            label="Alamat"
-            :searchable="true">
-          {{ props.row.alamat }}
-        </b-table-column>
-
-        <b-table-column 
-            field="tgl_lahir" 
-            label="Tgl Lahir">
-          <span class="tag is-success">
-            {{ new Date(props.row.tgl_lahir).toLocaleDateString() }}
-          </span>
-        </b-table-column>
-
-        <b-table-column 
-            field="no_telp" 
-            label="No. Telp" 
-            width="150px"
-            :searchable="true">
-          <span>
-            {{ props.row.no_telp }}
-          </span>
-        </b-table-column>
-
-        <b-table-column 
-            field="username" 
-            label="Username"
-            width="100px"
-            :searchable="true">
-          <span>
-            {{ props.row.username }}
-          </span>
-        </b-table-column>
-
-        <b-table-column 
-            field="jabatan" 
-            label="Jabatan" 
-            :searchable="true"
-            width="50px"
-            sortable>
-          <span>
-            {{ props.row.jabatan }}
-          </span>
-        </b-table-column>
-
+        
         <b-table-column label="Action">
           <span>
             <b-button 
                 type="is-primary" 
                 class="btn-action" 
                 tag="router-link"
-                :to="'/owner/form-pegawai/' + props.row.id_pegawai"
+                :to="'/owner/form-jenis-hewan/' + props.row.id_jenis"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
             <b-button 
                 type="is-danger" 
                 class="btn-action" 
-                @click="confirmDelete(props.row.id_pegawai)" 
+                @click="confirmDelete(props.row.id_jenis)" 
                 rounded>
                   <b-icon icon="delete" size="is-small"></b-icon>
             </b-button>
@@ -133,7 +88,7 @@
                 <div class="column">
                   <p>
                     <strong>Edited By : </strong>
-                    <small>{{ props.row.edited_by }}</small>
+                    <small>{{ props.row.nama_pegawai }}</small>
                   </p>
                 </div>
               </div>
@@ -162,7 +117,7 @@
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/owner/form-pegawai" 
+            to="/owner/form-jenis-hewan" 
             @click="addData()"
             expanded>
           Tambah
@@ -190,7 +145,7 @@ export default {
   methods: {
     getData() {
       this.isLoading = true
-      var uri = this.$api_baseUrl + "pegawai"
+      var uri = this.$api_baseUrl + "jenishewan"
 
       if (!this.$session.exists()) {
         this.$router.push('/login');
@@ -211,7 +166,7 @@ export default {
     },
     // getData() {
     //   this.isLoading = true
-    //   var uri = this.$api_baseUrl + "pegawai"
+    //   var uri = this.$api_baseUrl + "jenishewan"
 
     //   this.$http.get(uri).then(response => {
     //     this.datas = response.data.value
@@ -227,7 +182,7 @@ export default {
     //   })
     // },
     deleteData(deleteId) {
-      var uri = this.$api_baseUrl + "pegawai/delete/" + deleteId;
+      var uri = this.$api_baseUrl + "jenishewan/delete/" + deleteId;
       var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
       
       this.$http.put(uri, pic).then(response => {
@@ -253,8 +208,8 @@ export default {
     },
     confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
       this.$buefy.dialog.confirm({
-        title: 'Hapus Data Pegawai',
-        message: 'Apa anda yakin ingin <b>menghapus</b> pegawai?',
+        title: 'Hapus Data Jenis Hewan',
+        message: 'Apa anda yakin ingin <b>menghapus</b> jenis hewan ini?',
         confirmText: 'Hapus',
         cancelText: 'Batal',
         type: 'is-danger',
