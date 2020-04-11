@@ -125,37 +125,37 @@ export default [
                 component: Dashboard
             },
             // ===== PELANGGAN =====
-            // {
-            //     name: 'Pelanggan',
-            //     path: '/cs/pelanggan',
-            //     component: Pelanggan
-            // },
-            // {
-            //     name: 'formPelanggan',
-            //     path: '/cs/form-pelanggan',
-            //     component: formPelanggan
-            // },
-            // {
-            //     name: 'formEditPelanggan',
-            //     path: '/cs/form-pelanggan/:id',
-            //     component: formPelanggan
-            // },
+            {
+                name: 'Pelanggan',
+                path: '/cs/pelanggan',
+                component: Pelanggan
+            },
+            {
+                name: 'formPelanggan',
+                path: '/cs/form-pelanggan',
+                component: formPelanggan
+            },
+            {
+                name: 'formEditPelanggan',
+                path: '/cs/form-pelanggan/:id',
+                component: formPelanggan
+            },
             // ===== HEWAN =====
-            // {
-            //     name: 'Hewan',
-            //     path: '/cs/hewan',
-            //     component: Hewan
-            // },
-            // {
-            //     name: 'formHewan',
-            //     path: '/cs/form-hewan',
-            //     component: formHewan
-            // },
-            // {
-            //     name: 'formEditHewan',
-            //     path: '/cs/form-hewan/:id',
-            //     component: formHewan
-            // },
+            {
+                name: 'Hewan',
+                path: '/cs/hewan',
+                component: Hewan
+            },
+            {
+                name: 'formHewan',
+                path: '/cs/form-hewan',
+                component: formHewan
+            },
+            {
+                name: 'formEditHewan',
+                path: '/cs/form-hewan/:id',
+                component: formHewan
+            },
         ] 
     },
 ]
