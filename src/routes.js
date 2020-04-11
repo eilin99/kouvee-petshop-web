@@ -10,8 +10,14 @@ import Pegawai from './components/dataMaster/Pegawai.vue'
 import formPegawai from './components/dataMaster/formPegawai.vue'
 import Produk from './components/dataMaster/Produk.vue'
 import formProduk from './components/dataMaster/formProduk.vue'
+import Layanan from './components/dataMaster/Layanan.vue'
+import formLayanan from './components/dataMaster/formLayanan.vue'
 import JenisHewan from './components/dataMaster/JenisHewan.vue'
 import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
+
+// CS
+import Hewan from './components/dataMaster/Hewan.vue'
+import formHewan from './components/dataMaster/formHewan'
 
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
 // import formPelanggan from './components/dataMaster/formPelanggan.vue'
@@ -92,6 +98,22 @@ export default [
                 path: '/owner/form-jenis-hewan/:id',
                 component: formJenisHewan
             },
+            // ===== LAYANAN =====
+            {
+                name: 'Layanan',
+                path: '/owner/layanan',
+                component: Layanan
+            },
+            {
+                name: 'formLayanan',
+                path: '/owner/form-layanan',
+                component: formLayanan
+            },
+            {
+                name: 'formEditLayanan',
+                path: '/owner/form-layanan/:id',
+                component: formLayanan
+            }
         ]
             
     },
@@ -152,7 +174,6 @@ export default [
             //     path: '/cs/form-hewan/:id',
             //     component: formHewan
             // },
-        ]
-            
+        ] 
     },
 ]
