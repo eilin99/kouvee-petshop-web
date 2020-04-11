@@ -76,7 +76,7 @@
                 <div class="column">
                   <p>
                     <strong>Updated At : </strong>
-                    <small>{{ props.row.created_at }}</small>
+                    <small>{{ props.row.updated_at }}</small>
                   </p>
                 </div>
                 <div class="column">
