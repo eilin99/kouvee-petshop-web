@@ -89,7 +89,7 @@
                 type="is-primary" 
                 class="btn-action" 
                 tag="router-link"
-                :to="'/admin/form-produk/' + props.row.id_produk"
+                :to="'/owner/form-produk/' + props.row.id_produk"
                 rounded>
                   <b-icon icon="pencil" size="is-small"></b-icon>
             </b-button>
@@ -112,7 +112,7 @@
                 <div class="column">
                   <figure class="media-left">
                     <p class="image is-128x128">
-                      <img :src="props.row.gambar">
+                      <img :src="$api_baseUrl + 'produk/picture/' + props.row.gambar">
                     </p>
                   </figure>
                 </div>
@@ -166,7 +166,7 @@
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/admin/form-produk" 
+            to="/owner/form-produk" 
             @click="addData()"
             expanded>
           Tambah
@@ -219,9 +219,8 @@ export default {
       })
       .catch(error => {
         this.errors = error
-        this.snackbarMsg = this.errors
+        this.snackbarMsg = "Terjadi kesalahan... Silahkan coba lagi"
         this.snackbar(this.snackbarMsg, 'is-danger')
-        console.log('error : ' + this.errors)
       })
     },
     snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak

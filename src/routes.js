@@ -17,6 +17,17 @@ import formLayanan from './components/dataMaster/formLayanan.vue'
 import Hewan from './components/dataMaster/Hewan.vue'
 import formHewan from './components/dataMaster/formHewan'
 
+// import Pelanggan from './components/dataMaster/Pelanggan.vue'
+// import formPelanggan from './components/dataMaster/formPelanggan.vue'
+// import Hewan from './components/dataMaster/Hewan.vue'
+// import formHewan from './components/dataMaster/formHewan.vue'
+
+// Transaksi
+// ......
+
+// Laporan
+// ......
+
 export default [
     {
         path: '/',
@@ -99,6 +110,7 @@ export default [
                 path: '/kasir/dashboard',
                 component: Dashboard
             },
+            
         ]
             
     },
@@ -112,23 +124,38 @@ export default [
                 path: '/cs/dashboard',
                 component: Dashboard
             },
+            // ===== PELANGGAN =====
+            // {
+            //     name: 'Pelanggan',
+            //     path: '/cs/pelanggan',
+            //     component: Pelanggan
+            // },
+            // {
+            //     name: 'formPelanggan',
+            //     path: '/cs/form-pelanggan',
+            //     component: formPelanggan
+            // },
+            // {
+            //     name: 'formEditPelanggan',
+            //     path: '/cs/form-pelanggan/:id',
+            //     component: formPelanggan
+            // },
             // ===== HEWAN =====
-            {
-                name: 'Hewan',
-                path: '/cs/hewan',
-                component: Hewan
-            },
-            {
-                name: 'formHewan',
-                path: '/cs/form-hewan',
-                component: formHewan
-            },
-            {
-                name: 'formEditHewan',
-                path: '/cs/form-hewan/:id',
-                component: formHewan
-            }
-        ]
-            
+            // {
+            //     name: 'Hewan',
+            //     path: '/cs/hewan',
+            //     component: Hewan
+            // },
+            // {
+            //     name: 'formHewan',
+            //     path: '/cs/form-hewan',
+            //     component: formHewan
+            // },
+            // {
+            //     name: 'formEditHewan',
+            //     path: '/cs/form-hewan/:id',
+            //     component: formHewan
+            // },
+        ] 
     },
 ]

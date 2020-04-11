@@ -30,7 +30,7 @@
                     </b-input>
               </b-field>
 
-              <b-button type="is-info" expanded @click="login()">Masuk</b-button>
+              <b-button type="is-info submit" expanded @click="login()">Masuk</b-button>
 
             </div>
           </div>
@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    login: function() {
+    login() {
       this.isLoading = true
 
       var self = this // Biar bisa nge-cache yang didapet dari http request
@@ -107,6 +107,12 @@ export default {
     netralize(loginForm) { // biar warning ilang waktu isi formnya diubah
       loginForm.type = ''
       loginForm.message = ''
+    }
+  },
+  mounted() {
+    if (this.$session.exists()) {
+      console.log("huhu")
+      this.$router.push('/cs/dashboard')
     }
   }
 }

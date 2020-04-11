@@ -50,6 +50,7 @@
           <b-select v-model="form.jabatan.value" placeholder="Pilih jabatan">
             <option value="Kasir">Kasir</option>
             <option value="CS">CS</option>
+            <option value="CS">Owner</option>
           </b-select>
         </b-field>
 
@@ -77,7 +78,7 @@
               class="btn-form" 
               type="is-dark" 
               tag="router-link" 
-              to="/admin/pegawai" 
+              to="/owner/pegawai" 
               rounded>
                 Kembali
           </b-button>
@@ -174,14 +175,18 @@ export default {
 
       this.$http.post(uri, this.dataPegawai).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.router.push( { to: 'admin/pegawai' } )
+        this.$router.push( { name: 'Pegawai' } )
         this.snackbarMsg = response.message
-        this.snackbar(this.snackbarMsg, 'is-success')
+        this.snackbar("Data berhasil ditambahkan!", 'is-success')
       })
       .catch(error => {
         this.errors = error;
         this.isLoading = false // Biar berhenti loading
-        this.snackbar(this.errors, 'is-danger')
+        if (this.errors.message == "Request failed with status code 400") {
+          this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+        } else {
+          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+        }
       });
     },
     editData(editId) {
@@ -199,14 +204,18 @@ export default {
 
       this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.router.push( { to: 'admin/pegawai' } )
+        this.$router.push( { name: 'Pegawai' } )
         this.snackbarMsg = response.message
-        this.snackbar(this.snackbarMsg, 'is-success')
+        this.snackbar("Data berhasil diedit!", 'is-success')
       })
       .catch(error => {
         this.errors = error;
         this.isLoading = false // Biar berhenti loading
-        this.snackbar(this.errors, 'is-danger')
+        if (this.errors.message == "Request failed with status code 400") {
+          this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+        } else {
+          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+        }
       });
     },
     confirm() {

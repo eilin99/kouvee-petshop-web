@@ -13,7 +13,7 @@
                     icon="view-dashboard"
                     label="Dashboard"
                     tag="router-link"
-                    to="/admin/dashboard"
+                    to="/kasir/dashboard"
                     :active="isActive"
                     @click="namaData = 'Dashboard'">
                 </b-menu-item>

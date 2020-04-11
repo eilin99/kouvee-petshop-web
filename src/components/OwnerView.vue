@@ -13,7 +13,7 @@
                     icon="view-dashboard"
                     label="Dashboard"
                     tag="router-link"
-                    to="/admin/dashboard"
+                    to="/owner/dashboard"
                     :active="isActive"
                     @click="namaData = 'Dashboard'">
                 </b-menu-item>
@@ -40,7 +40,7 @@
                 </b-menu-item>
 
                 <!-- Data Transaksi -->
-                <b-menu-item
+                <!-- <b-menu-item
                     icon="cash-multiple">
                   <template slot="label" slot-scope="props">
                     Transaksi
@@ -58,7 +58,7 @@
                         :to="dataTransaksi.to">
                     </b-menu-item>
 
-                </b-menu-item>
+                </b-menu-item> -->
 
                 <!-- Laporan-laporan -->
                 <b-menu-item
@@ -206,8 +206,6 @@ export default {
       { 'label': "Ukuran Hewan", 'icon':"file", 'to':"/owner/ukuran-hewan", 'title': "Data Ukuran Hewan" },
       { 'label': "Jenis Hewan", 'icon':"file", 'to':"/owner/jenis-hewan", 'title': "Data Jenis Hewan" },
       { 'label': "Supplier", 'icon':"truck", 'to':"/owner/supplier", 'title': "Data Supplier" },
-      { 'label': "Pelanggan", 'icon':"face", 'to':"/owner/pelanggan", 'title': "Data Pelanggan" },
-      { 'label': "Hewan", 'icon':"paw", 'to':"/owner/hewan", 'title': "Data Hewan" },
     ]
 
     const dataTransaksis = [
@@ -246,7 +244,11 @@ export default {
     }
   },
   mounted() {
-    this.activeUser = this.$session.get('pegawai')
+    if (!this.$session.exists()) {
+      this.$router.push('/login');
+    } else {
+      this.activeUser = this.$session.get('pegawai')
+    }
   }
 }
 </script>
@@ -255,7 +257,7 @@ export default {
 .is-fullheight.columns {
     height: calc(100vh - ( 0rem - .75rem ) );
     /* height: 100%; */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .title-nama-data {
