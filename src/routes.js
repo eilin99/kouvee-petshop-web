@@ -10,6 +10,8 @@ import Pegawai from './components/dataMaster/Pegawai.vue'
 import formPegawai from './components/dataMaster/formPegawai.vue'
 import Produk from './components/dataMaster/Produk.vue'
 import formProduk from './components/dataMaster/formProduk.vue'
+import JenisHewan from './components/dataMaster/JenisHewan.vue'
+import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
 
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
 // import formPelanggan from './components/dataMaster/formPelanggan.vue'
@@ -73,6 +75,22 @@ export default [
                 name: 'formEditProduk',
                 path: '/owner/form-produk/:id',
                 component: formProduk
+            },
+            // ===== JENIS HEWAN =====
+            {
+                name: 'JenisHewan',
+                path: '/owner/jenis-hewan',
+                component: JenisHewan
+            },
+            {
+                name: 'formJenisHewan',
+                path: '/owner/form-jenis-hewan',
+                component: formJenisHewan
+            },
+            {
+                name: 'formEditJenisHewan',
+                path: '/owner/form-jenis-hewan/:id',
+                component: formJenisHewan
             },
         ]
             
