@@ -125,21 +125,21 @@ export default [
                 component: Dashboard
             },
             // ===== PELANGGAN =====
-            {
-                name: 'Pelanggan',
-                path: '/cs/pelanggan',
-                component: Pelanggan
-            },
-            {
-                name: 'formPelanggan',
-                path: '/cs/form-pelanggan',
-                component: formPelanggan
-            },
-            {
-                name: 'formEditPelanggan',
-                path: '/cs/form-pelanggan/:id',
-                component: formPelanggan
-            },
+            // {
+            //     name: 'Pelanggan',
+            //     path: '/cs/pelanggan',
+            //     component: Pelanggan
+            // },
+            // {
+            //     name: 'formPelanggan',
+            //     path: '/cs/form-pelanggan',
+            //     component: formPelanggan
+            // },
+            // {
+            //     name: 'formEditPelanggan',
+            //     path: '/cs/form-pelanggan/:id',
+            //     component: formPelanggan
+            // },
             // ===== HEWAN =====
             {
                 name: 'Hewan',
