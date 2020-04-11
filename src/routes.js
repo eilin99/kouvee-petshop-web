@@ -14,11 +14,10 @@ import Layanan from './components/dataMaster/Layanan.vue'
 import formLayanan from './components/dataMaster/formLayanan.vue'
 import JenisHewan from './components/dataMaster/JenisHewan.vue'
 import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
+import Supplier from './components/dataMaster/Supplier.vue'
+import formSupplier from './components/dataMaster/formSupplier.vue'
 
 // CS
-import Hewan from './components/dataMaster/Hewan.vue'
-import formHewan from './components/dataMaster/formHewan'
-
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
 // import formPelanggan from './components/dataMaster/formPelanggan.vue'
 // import Hewan from './components/dataMaster/Hewan.vue'
@@ -113,7 +112,23 @@ export default [
                 name: 'formEditLayanan',
                 path: '/owner/form-layanan/:id',
                 component: formLayanan
-            }
+            },
+            // ===== SUPPLIER =====
+            {
+                name: 'Supplier',
+                path: '/owner/supplier',
+                component: Supplier
+            },
+            {
+                name: 'formSupplier',
+                path: '/owner/form-supplier',
+                component: formSupplier
+            },
+            {
+                name: 'formEditSupplier',
+                path: '/owner/form-supplier/:id',
+                component: formSupplier
+            },
         ]
             
     },
