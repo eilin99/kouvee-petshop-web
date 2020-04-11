@@ -112,7 +112,7 @@
                 <div class="column">
                   <figure class="media-left">
                     <p class="image is-128x128">
-                      <img :src="props.row.gambar">
+                      <img :src="$api_baseUrl + 'produk/picture/' + props.row.gambar">
                     </p>
                   </figure>
                 </div>

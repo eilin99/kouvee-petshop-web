@@ -186,11 +186,10 @@ export default {
 
       this.$http.get(uri).then(response => {
         this.editDataProduk = response.data.value
-        console.log(response.data.value)
-        this.formEditHandler(this.editDataProduk)
+        this.formEditHandler(this.editDataProduk) // this.editDataProduk yg isinya data dari db adalah param inputan untuk fungsi ini 
       })
     },
-    formEditHandler(dataProduk) {
+    formEditHandler(dataProduk) { // dataProduk disini bukan yg di data() vue tapi dari inputan param
       this.form.nama_produk.value = dataProduk.nama_produk
       this.form.satuan.value = dataProduk.satuan
       this.form.harga_jual.value = dataProduk.harga_jual
@@ -213,7 +212,7 @@ export default {
       this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
       this.dataProduk.append("gambar", this.form.gambar.value)
       this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
-      
+
       var uri = this.$api_baseUrl + "produk";
 
       this.$http.post(uri, this.dataProduk).then(response => {
@@ -236,19 +235,31 @@ export default {
       this.isLoading = true // Biar dia loading dulu
 
       console.log(this.form.gambar.value)
+      // this.editDataProduk.nama_produk = this.form.nama_produk.value
+      // this.editDataProduk.satuan = this.form.satuan.value
+      // this.editDataProduk.harga_jual = this.form.harga_jual.value
+      // this.editDataProduk.harga_beli = this.form.harga_beli.value
+      // this.editDataProduk.stok = this.form.stok.value
+      // this.editDataProduk.stok_minimum = this.form.stok_minimum.value
+      // this.editDataProduk.gambar = this.form.gambar.value
+      // this.editDataProduk.pic = this.$session.get('pegawai').id_pegawai
 
-      this.editDataProduk.nama_produk = this.form.nama_produk.value
-      this.editDataProduk.satuan = this.form.satuan.value
-      this.editDataProduk.harga_jual = this.form.harga_jual.value
-      this.editDataProduk.harga_beli = this.form.harga_beli.value
-      this.editDataProduk.stok = this.form.stok.value
-      this.editDataProduk.stok_minimum = this.form.stok_minimum.value
-      this.editDataProduk.gambar = this.form.gambar.value
-      this.editDataProduk.pic = this.$session.get('pegawai').id_pegawai
+      this.dataProduk.append("nama_produk", this.form.nama_produk.value)
+      this.dataProduk.append("satuan", this.form.satuan.value)
+      this.dataProduk.append("harga_jual", this.form.harga_jual.value)
+      this.dataProduk.append("harga_beli", this.form.harga_beli.value)
+      this.dataProduk.append("stok", this.form.stok.value)
+      this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
+      if(typeof(this.form.gambar.value) != 'string') { // Kalo gak ganti gambar, isi this.form.gambar itu string. Kalo ganti gambar, jadi objek.
+        this.dataProduk.append("gambar", this.form.gambar.value) // Jadi kalo dia masih string, dia gak akan ganti gambarnya
+      }
+      this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
+
+      console.log(this.dataProduk)
 
       var uri = this.$api_baseUrl + "produk/" + editId;
 
-      this.$http.post(uri, this.editDataProduk, this.config).then(response => {
+      this.$http.post(uri, this.dataProduk, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
         this.$router.push( { name: 'Produk' } )
         this.snackbarMsg = response.message
