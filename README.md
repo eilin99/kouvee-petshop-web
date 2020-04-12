@@ -24,3 +24,13 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### BUEFY
+Cek https://buefy.org/documentation/ kalo bingung
+
+### CATATAN PENTING
+Jangan lupa bikin branch baru saat mengerjakan
+jangan langsung push ke master.
+Kalo bingung silahkan tanya
+
+Selamat mengerjakan
