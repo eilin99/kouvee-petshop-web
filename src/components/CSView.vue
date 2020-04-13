@@ -105,7 +105,7 @@
           <template>
             <b-navbar class="has-background-white-ter">
               <template slot="brand">
-                <h1 class="title-nama-data title is-3">CS</h1>
+                <h1 class="title-nama-data title is-3">Customer Service</h1>
               </template>
 
               <template slot="end">
