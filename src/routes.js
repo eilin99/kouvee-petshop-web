@@ -16,6 +16,8 @@ import JenisHewan from './components/dataMaster/JenisHewan.vue'
 import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
 import Supplier from './components/dataMaster/Supplier.vue'
 import formSupplier from './components/dataMaster/formSupplier.vue'
+import Customer from './components/dataMaster/Customer.vue'
+import formCustomer from './components/dataMaster/formCustomer.vue'
 
 // CS
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
