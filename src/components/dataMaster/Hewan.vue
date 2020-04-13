@@ -22,8 +22,7 @@
 
         <b-table-column 
             field="index" 
-            label="No. " 
-            :searchable="true" 
+            label="No. "  
             width="50px"
             centered
             sortable>
@@ -86,7 +85,7 @@
           </span>
         </b-table-column>
 
-        <b-table-column label="Action" centered>
+        <b-table-column label="Action" width="115px" centered>
           <span>
             <b-button 
                 type="is-text" 
@@ -131,7 +130,7 @@
                 <div class="column">
                   <p>
                     <strong>Edited By : </strong>
-                    <small>{{ props.row.edited_by }}</small>
+                    <small>{{ props.row.nama_pegawai }}</small>
                   </p>
                 </div>
               </div>

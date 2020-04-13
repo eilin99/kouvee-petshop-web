@@ -24,8 +24,6 @@
         <b-table-column 
             field="id_jenis" 
             label="No." 
-            :searchable="true" 
-            :visible="true"
             width="50px"
             centered
             sortable>

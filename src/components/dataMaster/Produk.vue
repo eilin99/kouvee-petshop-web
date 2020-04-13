@@ -23,12 +23,11 @@
 
         <b-table-column 
             field="id_produk" 
-            label="ID" 
-            :searchable="true" 
+            label="No." 
             width="50px"
-            centered=""
+            centered
             sortable>
-          {{ props.row.id_produk }}
+          {{ props.index + 1 }}
         </b-table-column>
 
         <b-table-column 

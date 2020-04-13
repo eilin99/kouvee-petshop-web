@@ -23,7 +23,6 @@
          <b-table-column 
             field="index" 
             label="No." 
-            :searchable="true" 
             width="50px"
             centered
             sortable>
