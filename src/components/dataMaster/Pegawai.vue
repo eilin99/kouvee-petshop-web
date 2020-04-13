@@ -24,7 +24,6 @@
         <b-table-column 
             field="id_pegawai" 
             label="No." 
-            :visible="true"
             width="50px"
             centered
             sortable>
