@@ -175,22 +175,22 @@ export default [
             //     path: '/cs/form-pelanggan/:id',
             //     component: formPelanggan
             // },
-            // ===== HEWAN =====
-            {
-                name: 'Hewan',
-                path: '/cs/hewan',
-                component: Hewan
-            },
-            {
-                name: 'formHewan',
-                path: '/cs/form-hewan',
-                component: formHewan
-            },
-            {
-                name: 'formEditHewan',
-                path: '/cs/form-hewan/:id',
-                component: formHewan
-            },
+             //===== HEWAN =====
+            //{
+            //    name: 'Hewan',
+            //    path: '/cs/hewan',
+            //    component: Hewan
+          //  },
+           // {
+            //    name: 'formHewan',
+           //     path: '/cs/form-hewan',
+            //    component: formHewan
+          //  },
+           // {
+             //   name: 'formEditHewan',
+            //    path: '/cs/form-hewan/:id',
+            //    component: formHewan
+           // },
         ] 
     },
 ]
