@@ -105,7 +105,7 @@
           <template>
             <b-navbar class="has-background-white-ter">
               <template slot="brand">
-                <h1 class="title-nama-data title is-3">{{ namaData }}</h1>
+                <h1 class="title-nama-data title is-3">Owner</h1>
               </template>
 
               <template slot="end">
@@ -166,13 +166,6 @@
                     </b-dropdown-item>
                 </b-dropdown>                
 
-                <!-- <b-navbar-item tag="div">
-                  <a class="buttonis-danger"
-                      tag="router-link"
-                      to="/login">
-                      Log out
-                  </a>
-                </b-navbar-item> -->
               </template>
             </b-navbar>
           </template>
