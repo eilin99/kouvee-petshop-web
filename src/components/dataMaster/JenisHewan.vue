@@ -23,13 +23,13 @@
 
         <b-table-column 
             field="id_jenis" 
-            label="ID" 
+            label="No." 
             :searchable="true" 
-            :visible="false"
+            :visible="true"
             width="50px"
             centered
             sortable>
-          {{ props.row.id_jenis }}
+          {{ props.index + 1 }}
         </b-table-column>
 
         <b-table-column 
@@ -41,22 +41,20 @@
         </b-table-column>
 
         
-        <b-table-column label="Action">
+        <b-table-column label="Action" centered>
           <span>
             <b-button 
-                type="is-primary" 
-                class="btn-action" 
+                type="is-text" 
                 tag="router-link"
                 :to="'/owner/form-jenis-hewan/' + props.row.id_jenis"
                 rounded>
-                  <b-icon icon="pencil" size="is-small"></b-icon>
+                  <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
             <b-button 
-                type="is-danger" 
-                class="btn-action" 
+                type="is-text" 
                 @click="confirmDelete(props.row.id_jenis)" 
                 rounded>
-                  <b-icon icon="delete" size="is-small"></b-icon>
+                  <b-icon icon="delete" type="is-danger"></b-icon>
             </b-button>
           </span>
         </b-table-column>
@@ -228,10 +226,3 @@ export default {
   },
 }
 </script>
-
-
-<style scoped>
-.btn-action {
-  margin-right: 10px;
-}
-</style>

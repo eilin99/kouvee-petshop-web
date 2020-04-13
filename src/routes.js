@@ -20,8 +20,8 @@ import formSupplier from './components/dataMaster/formSupplier.vue'
 // CS
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
 // import formPelanggan from './components/dataMaster/formPelanggan.vue'
-// import Hewan from './components/dataMaster/Hewan.vue'
-// import formHewan from './components/dataMaster/formHewan.vue'
+import Hewan from './components/dataMaster/Hewan.vue'
+import formHewan from './components/dataMaster/formHewan.vue'
 
 // Transaksi
 // ......
