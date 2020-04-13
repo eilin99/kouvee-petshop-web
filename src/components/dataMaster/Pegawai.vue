@@ -1,6 +1,6 @@
 <template>
   <section id="pegawai">
-
+  
     <b-table
       :data="datas"
       :columns="columns"

@@ -1,6 +1,8 @@
 <template>
   <section id="dashboard">
-    <p>aowkoakwokaok</p>
+    <p class="subtitle is-4">
+      Welcome to Kouvee Petshop website!
+    </p>
   </section>
 </template>
 

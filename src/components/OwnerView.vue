@@ -2,9 +2,9 @@
   <div id="owner">
 
     <div class="columns is-fullheight">
-      <div class="column is-2 has-background-grey-lighter" style="overflow-y: scroll">
+      <div class="column is-2 has-background-grey-lighter">
         <div id="sidebar">
-          <template>
+          
             <b-menu class="is-sidebar-menu">
               <b-menu-list label="Menu">
 
@@ -15,7 +15,7 @@
                     tag="router-link"
                     to="/owner/dashboard"
                     :active="isActive"
-                    @click="namaData = 'Dashboard'">
+                    @focus="console.log('haiii')">
                 </b-menu-item>
 
                 <!-- Data Master -->
@@ -35,30 +35,9 @@
                         :label="dataMaster.label"
                         tag="router-link"
                         :to="dataMaster.to"
-                        @click="namaData = dataMaster.title;">
+                        @click="console.log('hellooo')">
                     </b-menu-item>
                 </b-menu-item>
-
-                <!-- Data Transaksi -->
-                <!-- <b-menu-item
-                    icon="cash-multiple">
-                  <template slot="label" slot-scope="props">
-                    Transaksi
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="dataTransaksi in dataTransaksis"
-                        :key="dataTransaksi.label"
-                        :icon="dataTransaksi.icon"
-                        :label="dataTransaksi.label"
-                        tag="router-link"
-                        :to="dataTransaksi.to">
-                    </b-menu-item>
-
-                </b-menu-item> -->
 
                 <!-- Laporan-laporan -->
                 <b-menu-item
@@ -92,20 +71,15 @@
                 </b-menu-item>
               </b-menu-list>
 
-              <!-- <b-menu-list label="Actions">
-                <b-menu-item label="Logout"></b-menu-item>
-              </b-menu-list> -->
             </b-menu>
-          </template>
         </div>
       </div>
 
       <div class="column has-background-white-ter is-fullheight" style="overflow-y: scroll">
         <div id="navbar">
-          <template>
             <b-navbar class="has-background-white-ter">
               <template slot="brand">
-                <h1 class="title-nama-data title is-3">{{ namaData }}</h1>
+                <h1 class="title title-atas title is-3">Kouvee Petshop</h1>
               </template>
 
               <template slot="end">
@@ -152,9 +126,9 @@
                     <b-dropdown-item
                         value="logout"
                         aria-role="menuitem"
-                        @click="logout">
+                        @click="ubahPassword">
                         <b-icon icon="settings"></b-icon>
-                        Pengaturan
+                        Ubah password
                     </b-dropdown-item>
                     
                     <b-dropdown-item
@@ -164,24 +138,14 @@
                         <b-icon icon="logout"></b-icon>
                         Keluar
                     </b-dropdown-item>
-                </b-dropdown>                
-
-                <!-- <b-navbar-item tag="div">
-                  <a class="buttonis-danger"
-                      tag="router-link"
-                      to="/login">
-                      Log out
-                  </a>
-                </b-navbar-item> -->
+                </b-dropdown>
+                
               </template>
             </b-navbar>
-          </template>
         </div>
         <div id="content">
           <div class="box">
-            <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias nemo, soluta numquam doloribus id unde harum facere natus libero officiis, explicabo ipsam rem odio minima dolorem aperiam omnis ea vel.</p> -->
             <router-view activeUser="activeUser" />
-            
           </div>
         </div>
 
@@ -215,21 +179,21 @@ export default {
     ]
 
     const laporans = [
-      { 'label': "Laporan Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
-      { 'label': "Laporan Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
-      { 'label': "Laporan Pendapatan Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Tahunan" },
-      { 'label': "Laporan Pendapatan Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Bulanan" },
-      { 'label': "Laporan Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
-      { 'label': "Laporan Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
+      { 'label': "Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
+      { 'label': "Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
+      { 'label': "Pendapatan Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Tahunan" },
+      { 'label': "Pendapatan Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Bulanan" },
+      { 'label': "Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
+      { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
     ]
 
     return {
-      namaData: 'Data Pegawai',
       dataMasters,
       dataTransaksis,
       laporans,
       activeUser: Object,
-      isActive: true
+      isActive: true,
+      menuExpanded:false
     }
   },
   methods: {
@@ -260,7 +224,7 @@ export default {
     /* overflow-y: scroll; */
 }
 
-.title-nama-data {
+.title-atas {
   margin: 20px 10px;
 }
 
