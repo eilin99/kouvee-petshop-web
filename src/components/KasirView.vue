@@ -105,7 +105,7 @@
           <template>
             <b-navbar class="has-background-white-ter">
               <template slot="brand">
-                <h1 class="title-nama-data title is-3">{{ namaData }}</h1>
+                <h1 class="title-nama-data title is-3">Kasir</h1>
               </template>
 
               <template slot="end">
@@ -214,7 +214,6 @@ export default {
     ]
 
     return {
-      namaData: 'Data Pegawai',
       dataMasters,
       dataTransaksis,
       activeUser: Object,
