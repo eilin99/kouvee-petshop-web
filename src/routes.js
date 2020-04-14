@@ -20,8 +20,8 @@ import UkuranHewan from './components/dataMaster/UkuranHewan.vue'
 import formUkuranHewan from './components/dataMaster/formUkuranHewan.vue'
 
 // CS
-// import Pelanggan from './components/dataMaster/Pelanggan.vue'
-// import formPelanggan from './components/dataMaster/formPelanggan.vue'
+import Pelanggan from './components/dataMaster/Pelanggan.vue'
+import formPelanggan from './components/dataMaster/formPelanggan.vue'
 import Hewan from './components/dataMaster/Hewan.vue'
 import formHewan from './components/dataMaster/formHewan.vue'
 
@@ -176,21 +176,21 @@ export default [
                 component: Dashboard
             },
             // ===== PELANGGAN =====
-            // {
-            //     name: 'Pelanggan',
-            //     path: '/cs/pelanggan',
-            //     component: Pelanggan
-            // },
-            // {
-            //     name: 'formPelanggan',
-            //     path: '/cs/form-pelanggan',
-            //     component: formPelanggan
-            // },
-            // {
-            //     name: 'formEditPelanggan',
-            //     path: '/cs/form-pelanggan/:id',
-            //     component: formPelanggan
-            // },
+            {
+                name: 'Pelanggan',
+                path: '/cs/pelanggan',
+                component: Pelanggan
+            },
+            {
+                name: 'formPelanggan',
+                path: '/cs/form-pelanggan',
+                component: formPelanggan
+            },
+            {
+                name: 'formEditPelanggan',
+                path: '/cs/form-pelanggan/:id',
+                component: formPelanggan
+            },
             // ===== HEWAN =====
             {
                 name: 'Hewan',
