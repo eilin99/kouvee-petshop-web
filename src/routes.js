@@ -16,6 +16,8 @@ import JenisHewan from './components/dataMaster/JenisHewan.vue'
 import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
 import Supplier from './components/dataMaster/Supplier.vue'
 import formSupplier from './components/dataMaster/formSupplier.vue'
+import UkuranHewan from './components/dataMaster/UkuranHewan.vue'
+import formUkuranHewan from './components/dataMaster/formUkuranHewan.vue'
 
 // CS
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
@@ -128,6 +130,22 @@ export default [
                 name: 'formEditSupplier',
                 path: '/owner/form-supplier/:id',
                 component: formSupplier
+            },
+            // ===== UKURAN HEWAN =====
+            {
+                name: 'UkuranHewan',
+                path: '/owner/ukuran-hewan',
+                component: UkuranHewan
+            },
+            {
+                name: 'formUkuranHewan',
+                path: '/owner/form-ukuran-hewan',
+                component: formUkuranHewan
+            },
+            {
+                name: 'formEditUkuranHewan',
+                path: '/owner/form-ukuran-hewan/:id',
+                component: formUkuranHewan
             },
         ]
             
