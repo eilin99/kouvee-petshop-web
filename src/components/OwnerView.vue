@@ -79,7 +79,7 @@
         <div id="navbar">
             <b-navbar class="has-background-white-ter">
               <template slot="brand">
-                <h1 class="title title-atas title is-3">Kouvee Petshop</h1>
+                <h1 class="title title-atas title is-3">Owner</h1>
               </template>
 
               <template slot="end">
@@ -139,7 +139,6 @@
                         Keluar
                     </b-dropdown-item>
                 </b-dropdown>
-                
               </template>
             </b-navbar>
         </div>
