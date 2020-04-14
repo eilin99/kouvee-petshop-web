@@ -9,7 +9,7 @@
             :type="form.nama_hewan.type"
             :message="form.nama_hewan.message"
             horizontal>
-              <b-input v-model="form.nama_hewan.value"></b-input>
+              <b-input @input="clearError(form.nama_hewan)" v-model="form.nama_hewan.value"></b-input>
         </b-field>
 
         <b-field 
@@ -21,7 +21,8 @@
               ref="datepicker"
               expanded
               placeholder="Pilih Tanggal Lahir"
-              v-model="form.tgl_lahir.value">
+              v-model="form.tgl_lahir.value"
+              @input="clearError(form.tgl_lahir)" >
           </b-datepicker>
           <b-button
               @click="$refs.datepicker.toggle()"
@@ -35,7 +36,7 @@
             :type="form.jenis.type"
             :message="form.jenis.message"
             horizontal>
-          <b-select v-model="form.jenis.value" placeholder="Pilih jenis hewan">
+          <b-select v-model="form.jenis.value" @input="clearError(form.jenis)"  placeholder="Pilih jenis hewan">
             <option v-for="(item) in jenis_hewan" 
                 :key="item.id_jenis"
                 :value="item.id_jenis">
@@ -49,7 +50,7 @@
             :type="form.ukuran.type"
             :message="form.ukuran.message"
             horizontal>
-          <b-select v-model="form.ukuran.value" placeholder="Pilih ukuran hewan">
+          <b-select v-model="form.ukuran.value" @input="clearError(form.ukuran)" placeholder="Pilih ukuran hewan">
             <option v-for="(item) in ukuran_hewan" 
                 :key="item.id_ukuran"
                 :value="item.id_ukuran">
@@ -63,7 +64,7 @@
             :type="form.customer.type"
             :message="form.customer.message"
             horizontal>
-          <b-select v-model="form.customer.value" placeholder="Pilih customer">
+          <b-select v-model="form.customer.value" @input="clearError(form.customer)" placeholder="Pilih customer">
             <option v-for="(item) in customer" 
                 :key="item.id_customer"
                 :value="item.id_customer">
@@ -178,54 +179,105 @@ export default {
 
       return fixedDate
     },
+    clearError(form) {
+      console.log(form)
+      form.type = ''
+      form.message = '' 
+    },
+    cekData() {
+      let count = 0
+
+      if(this.form.nama_hewan.value === "") {
+        this.form.nama_hewan.type = 'is-danger'
+        this.form.nama_hewan.message = "Nama tidak valid!"
+        count++
+      }
+      if(this.form.jenis.value === "") {
+        this.form.jenis.type = 'is-danger'
+        this.form.jenis.message = "Jenis tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.ukuran.value === "") {
+        this.form.ukuran.type = 'is-danger'
+        this.form.ukuran.message = "Ukuran tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.tgl_lahir.value === "") {
+        this.form.tgl_lahir.type = 'is-danger'
+        this.form.tgl_lahir.message = "Tanggal lahir tidak boleh kosong!"
+        count++
+      }
+      if(this.form.customer.value === "") {
+        this.form.customer.type = 'is-danger'
+        this.form.customer.message = "Customer telepon tidak boleh kosong!"
+        count++
+      }
+
+      if(count > 0)
+        return false
+    },
     addData() {
       this.isLoading = true // Biar dia loading dulu
 
-      this.dataHewan.append("nama_hewan", this.form.nama_hewan.value)
-      this.dataHewan.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
-      this.dataHewan.append("id_jenis", this.form.jenis.value)
-      this.dataHewan.append("id_ukuran", this.form.ukuran.value)
-      this.dataHewan.append("id_customer", this.form.customer.value)
-      this.dataHewan.append("pic", this.$session.get('pegawai').id_pegawai)
-      
-      var uri = this.$api_baseUrl + "hewan";
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.dataHewan.append("nama_hewan", this.form.nama_hewan.value)
+        this.dataHewan.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
+        this.dataHewan.append("id_jenis", this.form.jenis.value)
+        this.dataHewan.append("id_ukuran", this.form.ukuran.value)
+        this.dataHewan.append("id_customer", this.form.customer.value)
+        this.dataHewan.append("pic", this.$session.get('pegawai').id_pegawai)
+        
+        var uri = this.$api_baseUrl + "hewan";
 
-      this.$http.post(uri, this.dataHewan).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: "Hewan" } )
-        this.snackbarMsg = response.data.message
-        this.snackbar(this.snackbarMsg, 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        console.log(this.errors)
-        this.isLoading = false // Biar berhenti loading
-        this.snackbar(this.errors, 'is-danger')
-      });
+        this.$http.post(uri, this.dataHewan).then(response => {
+          this.$router.push( { name: "Hewan" } )
+          this.snackbarMsg = response.data.message
+          this.snackbar("Data berhasil ditambahkan!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          console.log(this.errors)
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
 
-      this.editDataHewan.nama_hewan = this.form.nama_hewan.value
-      this.editDataHewan.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
-      this.editDataHewan.id_jenis = this.form.jenis.value
-      this.editDataHewan.id_ukuran = this.form.ukuran.value
-      this.editDataHewan.id_customer = this.form.customer.value
-      this.editDataHewan.pic = this.$session.get('pegawai').id_pegawai
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.editDataHewan.nama_hewan = this.form.nama_hewan.value
+        this.editDataHewan.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
+        this.editDataHewan.id_jenis = this.form.jenis.value
+        this.editDataHewan.id_ukuran = this.form.ukuran.value
+        this.editDataHewan.id_customer = this.form.customer.value
+        this.editDataHewan.pic = this.$session.get('pegawai').id_pegawai
 
-      var uri = this.$api_baseUrl + "hewan/" + editId;
+        var uri = this.$api_baseUrl + "hewan/" + editId;
 
-      this.$http.put(uri, this.editDataHewan).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: "Hewan" } )
-        this.snackbarMsg = response.data.message
-        this.snackbar(this.snackbarMsg, 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        this.snackbar(this.errors, 'is-danger')
-      });
+        this.$http.put(uri, this.editDataHewan).then(response => {
+          this.$router.push( { name: "Hewan" } )
+          this.snackbarMsg = response.data.message
+          this.snackbar("Data berhasil diedit!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     confirm() {
       // Kalo editId masih default (0) berarti dia bakal addData.

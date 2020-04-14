@@ -20,8 +20,8 @@ import UkuranHewan from './components/dataMaster/UkuranHewan.vue'
 import formUkuranHewan from './components/dataMaster/formUkuranHewan.vue'
 
 // CS
-import Pelanggan from './components/dataMaster/Pelanggan.vue'
-import formPelanggan from './components/dataMaster/formPelanggan.vue'
+import Pelanggan from './components/dataMaster/Customer.vue'
+import formPelanggan from './components/dataMaster/formCustomer.vue'
 import Hewan from './components/dataMaster/Hewan.vue'
 import formHewan from './components/dataMaster/formHewan.vue'
 
@@ -165,6 +165,7 @@ export default [
         ]
             
     },
+    // Routes untuk CS
     {
         path: '/CS',
         component: CS,
@@ -193,20 +194,20 @@ export default [
             },
             // ===== HEWAN =====
             {
-                name: 'Hewan',
-                path: '/cs/hewan',
-                component: Hewan
-            },
-            {
-                name: 'formHewan',
-                path: '/cs/form-hewan',
-                component: formHewan
-            },
-            {
-                name: 'formEditHewan',
-                path: '/cs/form-hewan/:id',
-                component: formHewan
-            },
+               name: 'Hewan',
+               path: '/cs/hewan',
+               component: Hewan
+           },
+           {
+               name: 'formHewan',
+               path: '/cs/form-hewan',
+               component: formHewan
+           },
+           {
+               name: 'formEditHewan',
+               path: '/cs/form-hewan/:id',
+               component: formHewan
+           },
         ] 
     },
 ]

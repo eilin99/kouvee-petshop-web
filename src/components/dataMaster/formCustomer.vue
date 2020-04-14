@@ -1,15 +1,50 @@
 <template>
-  <section id="form-jenis-hewan">
-    <h4 class="title is-5">{{ actionTitle }} Data Jenis Hewan</h4>
+  <section id="form-customer">
+    <h4 class="title is-5">{{ actionTitle }} Data Customer</h4>
     <hr>
     <div class="columns">
       <div class="column is-8">
         <b-field 
-            label="Jenis Hewan" 
-            :type="form.jenis.type"
-            :message="form.jenis.message"
+            label="Nama Lengkap" 
+            :type="form.nama_customer.type"
+            :message="form.nama_customer.message"
             horizontal>
-              <b-input @input="clearError(form.jenis)" v-model="form.jenis.value"></b-input>
+              <b-input @input="clearError(form.nama_customer)" v-model="form.nama_customer.value"></b-input>
+        </b-field>
+
+        <b-field 
+            label="Alamat" 
+            :type="form.alamat.type"
+            :message="form.alamat.message"
+            horizontal>
+              <b-input @input="clearError(form.alamat)" v-model="form.alamat.value"></b-input>
+        </b-field>
+
+       <b-field 
+            label="Tanggal Lahir" 
+            :type="form.tgl_lahir.type"
+            :message="form.tgl_lahir.message"
+            horizontal>
+          <b-datepicker
+              ref="datepicker"
+              expanded
+              placeholder="Pilih Tanggal Lahir"
+              v-model="form.tgl_lahir.value"
+              @input="clearError(form.tgl_lahir)">
+          </b-datepicker>
+          <b-button
+              @click="$refs.datepicker.toggle()"
+              type="is-primary">
+              <b-icon icon="calendar" size="is-small"></b-icon>
+          </b-button>
+        </b-field>
+        
+         <b-field 
+            label="Nomor Telepon" 
+            :type="form.no_telp.type"
+            :message="form.no_telp.message"
+            horizontal>
+              <b-input @input="clearError(form.no_telp)" v-model="form.no_telp.value"></b-input>
         </b-field>
 
         <div class="has-text-right">
@@ -17,7 +52,7 @@
               class="btn-form" 
               type="is-dark" 
               tag="router-link" 
-              to="/owner/jenis-hewan" 
+              to="/cs/pelanggan" 
               rounded>
                 Kembali
           </b-button>
@@ -50,25 +85,31 @@ export default {
       isLoading: true,
       actionTitle: '',
       editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
-      dataJenisHewan: new FormData(), // Buat nampung isi form
-      editDataJenisHewan: {}, // Buat nampung data yg mau diedit kalo ada
+      dataCustomer: new FormData(), // Buat nampung isi form
+      editDataCustomer: {}, // Buat nampung data yg mau diedit kalo ada
       form: {
-        jenis: { value: '', type: '', message: '' },
+        nama_customer: { value: '', type: '', message: '' },
+        alamat: { value: '', type: '', message: '' },
+        tgl_lahir : { value: '', type: '', message: '' },
+        no_telp: { value: '', type: '', message: '' },
       },
       snackbarMsg: '',
     }
   },
   methods: {
     getData(editId) {
-      var uri = this.$api_baseUrl + "jenishewan/" + editId
+      var uri = this.$api_baseUrl + "customer/" + editId
 
       this.$http.get(uri).then(response => {
-        this.editDataJenisHewan = response.data.value
-        this.formEditHandler(this.editDataJenisHewan)
+        this.editDataCustomer = response.data.value
+        this.formEditHandler(this.editDataCustomer)
       })
     },
-    formEditHandler(dataJenisHewan) {
-      this.form.jenis.value = dataJenisHewan.jenis
+    formEditHandler(dataCustomer) {
+      this.form.nama_customer.value = dataCustomer.nama_customer
+      this.form.alamat.value = dataCustomer.alamat
+      this.form.tgl_lahir.value = new Date(dataCustomer.tgl_lahir)
+      this.form.no_telp.value = dataCustomer.no_telp
     },
     convertTgl(tglLahir) {
       var formDate = tglLahir // Mengambil FULL date dari datepicker
@@ -93,10 +134,26 @@ export default {
     },
     cekData() {
       let count = 0
+      let regex = new RegExp(/^\d+$/)
 
-      if(this.form.jenis.value === "") {
-        this.form.jenis.type = 'is-danger'
-        this.form.jenis.message = "Jenis tidak boleh kosong!"
+      if(this.form.nama_customer.value === "") {
+        this.form.nama_customer.type = 'is-danger'
+        this.form.nama_customer.message = "Nama tidak boleh kosong!"
+        count++
+      }
+      if(this.form.alamat.value === "") {
+        this.form.alamat.type = 'is-danger'
+        this.form.alamat.message = "Alamat tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.tgl_lahir.value === "") {
+        this.form.tgl_lahir.type = 'is-danger'
+        this.form.tgl_lahir.message = "Tanggal lahir tidak boleh kosong!"
+        count++
+      }
+      if(this.form.no_telp.value === "" || !regex.test(this.form.no_telp.value)) {
+        this.form.no_telp.type = 'is-danger'
+        this.form.no_telp.message = "Nomor telepon tidak valid!"
         count++
       }
 
@@ -105,17 +162,20 @@ export default {
     },
     addData() {
       this.isLoading = true // Biar dia loading dulu
-
-      if(this.cekData() == false) {
+      
+      if(this.cekData() === false){
         this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
       } else {
-        this.dataJenisHewan.append("jenis", this.form.jenis.value)
-        this.dataJenisHewan.append("pic", this.$session.get('pegawai').id_pegawai)
+        this.dataCustomer.append("nama_customer", this.form.nama_customer.value)
+        this.dataCustomer.append("alamat", this.form.alamat.value)
+        this.dataCustomer.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
+        this.dataCustomer.append("no_telp", this.form.no_telp.value)
+        this.dataCustomer.append("pic", this.$session.get('pegawai').id_pegawai)
         
-        var uri = this.$api_baseUrl + "jenishewan";
+        var uri = this.$api_baseUrl + "customer";
 
-        this.$http.post(uri, this.dataJenisHewan).then(response => {
-          this.$router.push( { name: 'JenisHewan' } )
+        this.$http.post(uri, this.dataCustomer).then(response => {
+          this.$router.push( { name: 'Pelanggan' } )
           this.snackbarMsg = response.message
           this.snackbar("Data berhasil ditambahkan!", 'is-success')
         })
@@ -134,15 +194,18 @@ export default {
       this.isLoading = true // Biar dia loading dulu
 
       if(this.cekData() == false) {
-        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+        this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
       } else {
-        this.editDataJenisHewan.jenis = this.form.jenis.value
-        this.editDataJenisHewan.pic = this.$session.get('pegawai').id_pegawai
+        this.editDataCustomer.nama_customer = this.form.nama_customer.value
+        this.editDataCustomer.alamat = this.form.alamat.value
+        this.editDataCustomer.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
+        this.editDataCustomer.no_telp = this.form.no_telp.value
+        this.editDataCustomer.pic = this.$session.get('pegawai').id_pegawai
 
-        var uri = this.$api_baseUrl + "jenishewan/" + editId;
+        var uri = this.$api_baseUrl + "customer/" + editId;
 
-        this.$http.put(uri, this.editDataJenisHewan, this.config).then(response => {
-          this.$router.push( { name: 'JenisHewan' } )
+        this.$http.put(uri, this.editDataCustomer, this.config).then(response => {
+          this.$router.push( { name: 'Pelanggan' } )
           this.snackbarMsg = response.message
           this.snackbar("Data berhasil diedit!", 'is-success')
         })
@@ -155,6 +218,7 @@ export default {
           }
         });
       }
+
       this.isLoading = false // Biar berhenti loading
     },
     confirm() {
