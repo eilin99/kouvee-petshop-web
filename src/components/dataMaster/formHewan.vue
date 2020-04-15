@@ -232,16 +232,6 @@ export default {
       // Kalo nggak 0, berarti dia editData
       this.editId == 0 ? this.addData() : this.editData(this.editId)
     },
-    snackbar(snackbarMessage, type) {
-      this.$buefy.snackbar.open({
-        duration: 5000,
-        message: snackbarMessage,
-        type: type,
-        position: 'is-bottom-left',
-        actionText: 'OK',
-        queue: false,
-      })
-    },
   },
   mounted() {
     this.getJenis()
