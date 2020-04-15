@@ -16,12 +16,14 @@ import JenisHewan from './components/dataMaster/JenisHewan.vue'
 import formJenisHewan from './components/dataMaster/formJenisHewan.vue'
 import Supplier from './components/dataMaster/Supplier.vue'
 import formSupplier from './components/dataMaster/formSupplier.vue'
+import UkuranHewan from './components/dataMaster/UkuranHewan.vue'
+import formUkuranHewan from './components/dataMaster/formUkuranHewan.vue'
 
 // CS
-// import Pelanggan from './components/dataMaster/Pelanggan.vue'
-// import formPelanggan from './components/dataMaster/formPelanggan.vue'
-// import Hewan from './components/dataMaster/Hewan.vue'
-// import formHewan from './components/dataMaster/formHewan.vue'
+import Pelanggan from './components/dataMaster/Customer.vue'
+import formPelanggan from './components/dataMaster/formCustomer.vue'
+import Hewan from './components/dataMaster/Hewan.vue'
+import formHewan from './components/dataMaster/formHewan.vue'
 
 // Transaksi
 // ......
@@ -129,6 +131,22 @@ export default [
                 path: '/owner/form-supplier/:id',
                 component: formSupplier
             },
+            // ===== UKURAN HEWAN =====
+            {
+                name: 'UkuranHewan',
+                path: '/owner/ukuran-hewan',
+                component: UkuranHewan
+            },
+            {
+                name: 'formUkuranHewan',
+                path: '/owner/form-ukuran-hewan',
+                component: formUkuranHewan
+            },
+            {
+                name: 'formEditUkuranHewan',
+                path: '/owner/form-ukuran-hewan/:id',
+                component: formUkuranHewan
+            },
         ]
             
     },
@@ -147,6 +165,7 @@ export default [
         ]
             
     },
+    // Routes untuk CS
     {
         path: '/CS',
         component: CS,
@@ -158,37 +177,37 @@ export default [
                 component: Dashboard
             },
             // ===== PELANGGAN =====
-            // {
-            //     name: 'Pelanggan',
-            //     path: '/cs/pelanggan',
-            //     component: Pelanggan
-            // },
-            // {
-            //     name: 'formPelanggan',
-            //     path: '/cs/form-pelanggan',
-            //     component: formPelanggan
-            // },
-            // {
-            //     name: 'formEditPelanggan',
-            //     path: '/cs/form-pelanggan/:id',
-            //     component: formPelanggan
-            // },
+            {
+                name: 'Pelanggan',
+                path: '/cs/pelanggan',
+                component: Pelanggan
+            },
+            {
+                name: 'formPelanggan',
+                path: '/cs/form-pelanggan',
+                component: formPelanggan
+            },
+            {
+                name: 'formEditPelanggan',
+                path: '/cs/form-pelanggan/:id',
+                component: formPelanggan
+            },
             // ===== HEWAN =====
             {
-                name: 'Hewan',
-                path: '/cs/hewan',
-                component: Hewan
-            },
-            {
-                name: 'formHewan',
-                path: '/cs/form-hewan',
-                component: formHewan
-            },
-            {
-                name: 'formEditHewan',
-                path: '/cs/form-hewan/:id',
-                component: formHewan
-            },
+               name: 'Hewan',
+               path: '/cs/hewan',
+               component: Hewan
+           },
+           {
+               name: 'formHewan',
+               path: '/cs/form-hewan',
+               component: formHewan
+           },
+           {
+               name: 'formEditHewan',
+               path: '/cs/form-hewan/:id',
+               component: formHewan
+           },
         ] 
     },
 ]

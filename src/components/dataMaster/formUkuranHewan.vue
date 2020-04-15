@@ -1,15 +1,15 @@
 <template>
-  <section id="form-jenis-hewan">
-    <h4 class="title is-5">{{ actionTitle }} Data Jenis Hewan</h4>
+  <section id="form-ukuran-hewan">
+    <h4 class="title is-5">{{ actionTitle }} Data Ukuran Hewan</h4>
     <hr>
     <div class="columns">
       <div class="column is-8">
         <b-field 
-            label="Jenis Hewan" 
-            :type="form.jenis.type"
-            :message="form.jenis.message"
+            label="Ukuran Hewan" 
+            :type="form.ukuran.type"
+            :message="form.ukuran.message"
             horizontal>
-              <b-input @input="clearError(form.jenis)" v-model="form.jenis.value"></b-input>
+              <b-input @input="clearError(form.ukuran)" v-model="form.ukuran.value"></b-input>
         </b-field>
 
         <div class="has-text-right">
@@ -17,7 +17,7 @@
               class="btn-form" 
               type="is-dark" 
               tag="router-link" 
-              to="/owner/jenis-hewan" 
+              to="/owner/ukuran-hewan" 
               rounded>
                 Kembali
           </b-button>
@@ -50,25 +50,25 @@ export default {
       isLoading: true,
       actionTitle: '',
       editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
-      dataJenisHewan: new FormData(), // Buat nampung isi form
-      editDataJenisHewan: {}, // Buat nampung data yg mau diedit kalo ada
+      dataUkuranHewan: new FormData(), // Buat nampung isi form
+      editDataUkuranHewan: {}, // Buat nampung data yg mau diedit kalo ada
       form: {
-        jenis: { value: '', type: '', message: '' },
+        ukuran: { value: '', type: '', message: '' },
       },
       snackbarMsg: '',
     }
   },
   methods: {
     getData(editId) {
-      var uri = this.$api_baseUrl + "jenishewan/" + editId
+      var uri = this.$api_baseUrl + "ukuranhewan/" + editId
 
       this.$http.get(uri).then(response => {
-        this.editDataJenisHewan = response.data.value
-        this.formEditHandler(this.editDataJenisHewan)
+        this.editDataUkuranHewan = response.data.value
+        this.formEditHandler(this.editDataUkuranHewan)
       })
     },
-    formEditHandler(dataJenisHewan) {
-      this.form.jenis.value = dataJenisHewan.jenis
+    formEditHandler(dataUkuranHewan) {
+      this.form.ukuran.value = dataUkuranHewan.ukuran
     },
     convertTgl(tglLahir) {
       var formDate = tglLahir // Mengambil FULL date dari datepicker
@@ -94,9 +94,9 @@ export default {
     cekData() {
       let count = 0
 
-      if(this.form.jenis.value === "") {
-        this.form.jenis.type = 'is-danger'
-        this.form.jenis.message = "Jenis tidak boleh kosong!"
+      if(this.form.ukuran.value === "") {
+        this.form.ukuran.type = 'is-danger'
+        this.form.ukuran.message = "Ukuran hewan tidak boleh kosong!"
         count++
       }
 
@@ -109,13 +109,13 @@ export default {
       if(this.cekData() == false) {
         this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
       } else {
-        this.dataJenisHewan.append("jenis", this.form.jenis.value)
-        this.dataJenisHewan.append("pic", this.$session.get('pegawai').id_pegawai)
+        this.dataUkuranHewan.append("ukuran", this.form.ukuran.value)
+        this.dataUkuranHewan.append("pic", this.$session.get('pegawai').id_pegawai)
         
-        var uri = this.$api_baseUrl + "jenishewan";
+        var uri = this.$api_baseUrl + "ukuranhewan";
 
-        this.$http.post(uri, this.dataJenisHewan).then(response => {
-          this.$router.push( { name: 'JenisHewan' } )
+        this.$http.post(uri, this.dataUkuranHewan).then(response => {
+          this.$router.push( { name: 'UkuranHewan' } )
           this.snackbarMsg = response.message
           this.snackbar("Data berhasil ditambahkan!", 'is-success')
         })
@@ -136,13 +136,13 @@ export default {
       if(this.cekData() == false) {
         this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
       } else {
-        this.editDataJenisHewan.jenis = this.form.jenis.value
-        this.editDataJenisHewan.pic = this.$session.get('pegawai').id_pegawai
+        this.editDataUkuranHewan.ukuran = this.form.ukuran.value
+        this.editDataUkuranHewan.pic = this.$session.get('pegawai').id_pegawai
 
-        var uri = this.$api_baseUrl + "jenishewan/" + editId;
+        var uri = this.$api_baseUrl + "ukuranhewan/" + editId;
 
-        this.$http.put(uri, this.editDataJenisHewan, this.config).then(response => {
-          this.$router.push( { name: 'JenisHewan' } )
+        this.$http.put(uri, this.editDataUkuranHewan, this.config).then(response => {
+          this.$router.push( { name: 'UkuranHewan' } )
           this.snackbarMsg = response.message
           this.snackbar("Data berhasil diedit!", 'is-success')
         })

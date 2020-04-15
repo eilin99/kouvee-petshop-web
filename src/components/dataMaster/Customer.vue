@@ -1,5 +1,5 @@
 <template>
-  <section id="produk">
+  <section id="customer">
 
     <b-table
       :data="datas"
@@ -11,7 +11,7 @@
       per-page="5"
       ref="table"
       detailed
-      detail-key="nama_produk"
+      detail-key="id_customer"
       :show-detail-icon="true"
       :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
@@ -22,7 +22,7 @@
       <template slot-scope="props">
 
         <b-table-column 
-            field="id_produk" 
+            field="id_customer" 
             label="No." 
             width="50px"
             centered
@@ -31,69 +31,52 @@
         </b-table-column>
 
         <b-table-column 
-            field="nama_produk" 
-            label="Nama Produk" 
+            field="nama_customer" 
+            label="Nama Customer" 
             :searchable="true" 
             sortable>
-          {{ props.row.nama_produk }}
+          {{ props.row.nama_customer }}
         </b-table-column>
 
         <b-table-column 
-            field="satuan" 
-            label="Satuan"
-            width="50px"
+            field="alamat" 
+            label="Alamat"
             :searchable="true">
-          {{ props.row.satuan }}
+          {{ props.row.alamat }}
         </b-table-column>
 
+        <b-table-column
+            field="tgl_lahir"
+            label="Tangal Lahir"
+            width="130px"
+            :searchable="true">
+            <span class="tag is-success">
+            {{ props.row.tgl_lahir }}
+          </span>
+        </b-table-column>
+        
         <b-table-column 
-            field="stok_minimum" 
-            label="Stok min."
-            width="70px">
-          {{ props.row.stok_minimum }}
+            field="no_telp" 
+            label="No. Telp" 
+            width="150px"
+            :searchable="true">
+          <span>
+            {{ props.row.no_telp }}
+          </span>
         </b-table-column>
 
-        <b-table-column 
-            field="stok" 
-            label="Stok"
-            width="70px"
-            sortable>
-              <div v-if="parseInt(props.row.stok) < parseInt(props.row.stok_minimum)">
-                <b-tag type="is-danger" size="is-medium" rounded>
-                  {{ props.row.stok }}
-                  </b-tag>
-              </div>
-              <div v-else>
-                {{ props.row.stok }}
-              </div>
-        </b-table-column>
-
-        <b-table-column 
-            field="harga_beli" 
-            label="Harga beli"
-            sortable>
-          {{ 'Rp.' + props.row.harga_beli }}
-        </b-table-column>
-
-        <b-table-column 
-            field="harga_jual" 
-            label="Harga jual"
-            sortable>
-          {{ 'Rp.' + props.row.harga_jual }}
-        </b-table-column>
-
-        <b-table-column label="Action" centered>
+        <b-table-column label="Action" width="115px" centered>
           <span>
             <b-button 
                 type="is-text" 
                 tag="router-link"
-                :to="'/owner/form-produk/' + props.row.id_produk"
+                :to="'/cs/form-pelanggan/' + props.row.id_customer"
                 rounded>
                   <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
             <b-button 
-                type="is-text"  
-                @click="confirmDelete(props.row.id_produk)" 
+                type="is-text" 
+                @click="confirmDelete(props.row.id_customer)" 
                 rounded>
                   <b-icon icon="delete" type="is-danger"></b-icon>
             </b-button>
@@ -107,33 +90,26 @@
             <div class="content">
               <div class="columns">
                 <div class="column">
-                  <figure class="media-left">
-                    <p class="image is-128x128">
-                      <img :src="$api_baseUrl + 'produk/picture/' + props.row.gambar">
-                    </p>
-                  </figure>
-                </div>
-                <div class="column">
                   <p>
-                    <strong>Created At : </strong><br/>
+                    <strong>Created At : </strong>
                     <small>{{ props.row.created_at }}</small>
                   </p>
                 </div>
                 <div class="column">
                   <p>
-                    <strong>Updated At : </strong><br/>
+                    <strong>Updated At : </strong>
                     <small>{{ props.row.updated_at }}</small>
                   </p>
                 </div>
                 <div class="column">
                   <p>
-                    <strong>Deleted At : </strong><br/>
+                    <strong>Deleted At : </strong>
                     <small>{{ props.row.deleted_at }}</small>
                   </p>
                 </div>
                 <div class="column">
                   <p>
-                    <strong>PIC : </strong><br/>
+                    <strong>Edited By : </strong>
                     <small>{{ props.row.nama_pegawai }}</small>
                   </p>
                 </div>
@@ -163,7 +139,7 @@
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/owner/form-produk" 
+            to="/cs/form-pelanggan" 
             @click="addData()"
             expanded>
           Tambah
@@ -172,6 +148,7 @@
     </template>
 
     </b-table>
+
   </section>
 </template>
 
@@ -182,7 +159,7 @@ export default {
       datas: [],
       tableLoadingIcon: 'clock',
       tableMessage: 'Memuat Data',
-      detailOpened: [],  // Buat nampung index dari detail yang kebuka di tabel
+      detailOpened: [], // Buat nampung index dari detail yang kebuka di tabel
       isLoading: true,
       snackbarMsg: '',
     }
@@ -190,26 +167,30 @@ export default {
   methods: {
     getData() {
       this.isLoading = true
-      var uri = this.$api_baseUrl + "produk"
+      var uri = this.$api_baseUrl + "customer"
 
-      this.$http.get(uri).then(response => {
-        this.datas = response.data.value
-        this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
-        this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
-        this.isLoading = false
-      })
-      .catch(error => {
-        this.errors = error
-        this.tableLoadingIcon = "emoticon-sad"  // Tampilan kalo
-        this.tableMessage = 'Tidak ada data'    // ga ada data
-        this.isLoading = false
-      })
+      if (!this.$session.exists()) {
+        this.$router.push('/login');
+      }else{
+        this.$http.get(uri).then(response => {
+          this.datas = response.data.value
+          this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+          this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
+          this.isLoading = false
+        })
+        .catch(error => {
+          this.errors = error
+          this.tableLoadingIcon = "emoticon-sad"
+            this.tableMessage = 'Tidak ada Data'
+            this.isLoading = false
+        })
+      }
     },
     deleteData(deleteId) {
-      var uri = this.$api_baseUrl + "produk/delete/" + deleteId;
+      var uri = this.$api_baseUrl + "customer/delete/" + deleteId;
       var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
       
-      this.$http.post(uri, pic).then(response => {
+      this.$http.put(uri, pic).then(response => {
         this.getData();
         this.snackbarMsg = response
         this.snackbar('Data terhapus!', 'is-success')
@@ -232,8 +213,8 @@ export default {
     },
     confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
       this.$buefy.dialog.confirm({
-        title: 'Hapus Data Produk',
-        message: 'Apa anda yakin ingin <b>menghapus</b> produk?',
+        title: 'Hapus Data Customer',
+        message: 'Apa anda yakin ingin <b>menghapus</b> customer?',
         confirmText: 'Hapus',
         cancelText: 'Batal',
         type: 'is-danger',
@@ -243,7 +224,12 @@ export default {
     }
   },
   mounted() {
-    this.getData()
+    // if (!this.$session.exists()) {
+    //   this.$router.push('/login');
+    // } else {
+    //   this.activeUser = this.$session.get('pegawai')
+      this.getData()
+  //   }
   },
 }
 </script>

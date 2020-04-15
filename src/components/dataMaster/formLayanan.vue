@@ -9,7 +9,7 @@
             :type="form.nama_layanan.type"
             :message="form.nama_layanan.message"
             horizontal>
-              <b-input v-model="form.nama_layanan.value"></b-input>
+              <b-input @input="clearError(form.nama_layanan)" v-model="form.nama_layanan.value"></b-input>
         </b-field>
 
         <b-field 
@@ -17,7 +17,7 @@
             :type="form.jenis.type"
             :message="form.jenis.message"
             horizontal>
-          <b-select v-model="form.jenis.value" placeholder="Pilih jenis hewan">
+          <b-select @input="clearError(form.jenis)" v-model="form.jenis.value" placeholder="Pilih jenis hewan">
             <option v-for="(item) in jenis_hewan" 
                 :key="item.id_jenis"
                 :value="item.id_jenis">
@@ -31,7 +31,7 @@
             :type="form.ukuran.type"
             :message="form.ukuran.message"
             horizontal>
-          <b-select v-model="form.ukuran.value" placeholder="Pilih ukuran hewan">
+          <b-select @input="clearError(form.ukuran)" v-model="form.ukuran.value" placeholder="Pilih ukuran hewan">
             <option v-for="(item) in ukuran_hewan" 
                 :key="item.id_ukuran"
                 :value="item.id_ukuran">
@@ -46,6 +46,7 @@
             :message="form.harga.message"
             horizontal>
               <b-input v-model="form.harga.value"
+                @input="clearError(form.harga)"
                 required
                 validation-message="Only number is allowed"
                 pattern="[0-9]*">
@@ -132,52 +133,103 @@ export default {
       this.form.ukuran.value = dataLayanan.id_ukuran
       this.form.harga.value = dataLayanan.harga
     },
+    clearError(form) {
+      console.log(form)
+      form.type = ''
+      form.message = '' 
+    },
+    cekData() {
+      let count = 0
+      let regex = new RegExp(/^\d+$/)
+
+      if(this.form.nama_layanan.value === "") {
+        this.form.nama_layanan.type = 'is-danger'
+        this.form.nama_layanan.message = "Nama tidak boleh kosong!"
+        count++
+      }
+      if(this.form.jenis.value === "") {
+        this.form.jenis.type = 'is-danger'
+        this.form.jenis.message = "Jenis tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.ukuran.value === "") {
+        this.form.ukuran.type = 'is-danger'
+        this.form.ukuran.message = "Ukuran tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.harga.value === "") {
+        this.form.harga.type = 'is-danger'
+        this.form.harga.message = "Harga tidak boleh kosong!"
+        count++
+      } else if(!regex.test(this.form.harga.value) || this.form.harga.value < 1) {
+        this.form.harga.type = 'is-danger'
+        this.form.harga.message = "Harga tidak valid!"
+        count++
+      } 
+
+      if(count > 0)
+        return false
+    },
     addData() {
       this.isLoading = true // Biar dia loading dulu
 
-      this.dataLayanan.append("nama_layanan", this.form.nama_layanan.value)
-      this.dataLayanan.append("id_jenis", this.form.jenis.value)
-      this.dataLayanan.append("id_ukuran", this.form.ukuran.value)
-      this.dataLayanan.append("harga", this.form.harga.value)
-      this.dataLayanan.append("pic", this.$session.get('pegawai').id_pegawai)
-      
-      var uri = this.$api_baseUrl + "layanan";
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.dataLayanan.append("nama_layanan", this.form.nama_layanan.value)
+        this.dataLayanan.append("id_jenis", this.form.jenis.value)
+        this.dataLayanan.append("id_ukuran", this.form.ukuran.value)
+        this.dataLayanan.append("harga", this.form.harga.value)
+        this.dataLayanan.append("pic", this.$session.get('pegawai').id_pegawai)
+        
+        var uri = this.$api_baseUrl + "layanan";
 
-      this.$http.post(uri, this.dataLayanan).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: "Layanan" } )
-        this.snackbarMsg = response.data.message
-        this.snackbar(this.snackbarMsg, 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        console.log(this.errors)
-        this.isLoading = false // Biar berhenti loading
-        this.snackbar(this.errors, 'is-danger')
-      });
+        this.$http.post(uri, this.dataLayanan).then(response => {
+          this.$router.push( { name: "Layanan" } )
+          this.snackbarMsg = response.data.message
+          this.snackbar("Data berhasil ditambahkan!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          console.log(this.errors)
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
 
-      this.editDataLayanan.nama_layanan = this.form.nama_layanan.value
-      this.editDataLayanan.id_jenis = this.form.jenis.value
-      this.editDataLayanan.id_ukuran = this.form.ukuran.value
-      this.editDataLayanan.harga = this.form.harga.value
-      this.editDataLayanan.pic = this.$session.get('pegawai').id_pegawai
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.editDataLayanan.nama_layanan = this.form.nama_layanan.value
+        this.editDataLayanan.id_jenis = this.form.jenis.value
+        this.editDataLayanan.id_ukuran = this.form.ukuran.value
+        this.editDataLayanan.harga = this.form.harga.value
+        this.editDataLayanan.pic = this.$session.get('pegawai').id_pegawai
 
-      var uri = this.$api_baseUrl + "layanan/" + editId;
+        var uri = this.$api_baseUrl + "layanan/" + editId;
 
-      this.$http.put(uri, this.editDataLayanan).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: "Layanan" } )
-        this.snackbarMsg = response.data.message
-        this.snackbar(this.snackbarMsg, 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        this.snackbar(this.errors, 'is-danger')
-      });
+        this.$http.put(uri, this.editDataLayanan).then(response => {
+          this.$router.push( { name: "Layanan" } )
+          this.snackbarMsg = response.data.message
+          this.snackbar("Data berhasil diedit!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     confirm() {
       // Kalo editId masih default (0) berarti dia bakal addData.

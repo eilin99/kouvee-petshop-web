@@ -1,6 +1,6 @@
 <template>
   <section id="pegawai">
-
+  
     <b-table
       :data="datas"
       :columns="columns"
@@ -23,13 +23,11 @@
 
         <b-table-column 
             field="id_pegawai" 
-            label="ID" 
-            :searchable="true" 
-            :visible="false"
+            label="No." 
             width="50px"
             centered
             sortable>
-          {{ props.row.id_pegawai }}
+          {{ props.index + 1 }}
         </b-table-column>
 
         <b-table-column 
@@ -86,22 +84,20 @@
           </span>
         </b-table-column>
 
-        <b-table-column label="Action">
+        <b-table-column label="Action" width="100px">
           <span>
             <b-button 
-                type="is-primary" 
-                class="btn-action" 
+                type="is-text" 
                 tag="router-link"
                 :to="'/owner/form-pegawai/' + props.row.id_pegawai"
-                rounded>
-                  <b-icon icon="pencil" size="is-small"></b-icon>
+                >
+                  <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
             <b-button 
-                type="is-danger" 
-                class="btn-action" 
+                type="is-text"  
                 @click="confirmDelete(props.row.id_pegawai)" 
-                rounded>
-                  <b-icon icon="delete" size="is-small"></b-icon>
+                >
+                  <b-icon icon="delete" type="is-danger"></b-icon>
             </b-button>
           </span>
         </b-table-column>
@@ -273,10 +269,3 @@ export default {
   },
 }
 </script>
-
-
-<style scoped>
-.btn-action {
-  margin-right: 10px;
-}
-</style>
