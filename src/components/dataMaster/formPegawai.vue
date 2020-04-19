@@ -207,7 +207,7 @@ export default {
         this.form.username.message = "Username tidak boleh kosong!"
         count++
       }
-      if(this.form.password.value === "") {
+      if(this.editId == 0 && this.form.password.value === "") {
         this.form.password.type = 'is-danger'
         this.form.password.message = "Password tidak boleh kosong!"
         count++
