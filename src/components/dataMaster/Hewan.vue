@@ -230,7 +230,7 @@ export default {
         queue: false,
       })
     },
-    confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
+    confirmDelete(deleteId) { // Buat ngeluarin modal box Simpan delete
       this.$buefy.dialog.confirm({
         title: 'Hapus Data Hewan',
         message: 'Apa anda yakin ingin <b>menghapus</b> hewan?',
