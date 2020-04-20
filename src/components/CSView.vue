@@ -205,9 +205,9 @@ export default {
     ]
 
     const dataTransaksis = [
-      { 'label': "Penjualan Produk", 'icon':"cash", 'to':"/penjualan-produk", 'title': "Penjualan Produk" },
-      { 'label': "Penjualan Layanan", 'icon':"cash", 'to':"/penjualan-layanan", 'title': "Penjualan Layanan" },
-      { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
+      { 'label': "Penjualan Produk", 'icon':"cash", 'to':"/cs/penjualan-produk", 'title': "Penjualan Produk" },
+      { 'label': "Penjualan Layanan", 'icon':"cash", 'to':"/cs/penjualan-layanan", 'title': "Penjualan Layanan" },
+      { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/cs/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
     return {
