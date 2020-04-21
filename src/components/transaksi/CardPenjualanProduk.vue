@@ -13,16 +13,15 @@
         </div>
       </div>
       <div class="content">
-        <div v-if="data.stok == 0">
-          <p class="subtitle is-6 is-danger" >
-            Stok :<b>{{ data.stok }} {{ data.satuan }}</b>
-          </p>
-        </div>
-        <div v-else>
-          <p class="subtitle is-6" >
-            Stok : <b>{{ data.stok }} {{ data.satuan }}</b>
-          </p>
-        </div>
+        <p class="subtitle is-7">
+          Stok : 
+          <span v-if="data.stok == 0" class="subtitle is-7 has-text-danger">
+            <b>Kosong</b>
+          </span>
+          <span v-else class="subtitle is-7" >
+            <b>{{ data.stok }} {{ data.satuan }}</b>
+          </span>
+        </p>
       </div>
     </div>
     <footer class="card-footer" v-show="data.stok">
@@ -46,7 +45,7 @@
 .card {
   margin-right: 10px;
   margin-bottom: 10px;
-  max-width: 150px;
+  max-width: 160px;
 }
 .card-content {
   padding: 15px 10px;

@@ -55,7 +55,7 @@
               <b-select @input="clearError(form.jabatan)" v-model="form.jabatan.value" placeholder="Pilih jabatan">
                 <option value="Kasir">Kasir</option>
                 <option value="CS">CS</option>
-                <option value="CS">Owner</option>
+                <option value="Owner">Owner</option>
               </b-select>
         </b-field>
 

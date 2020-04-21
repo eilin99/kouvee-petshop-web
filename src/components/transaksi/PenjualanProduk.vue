@@ -2,29 +2,83 @@
   <section id="penjualan-produk">
     <h4 class="title is-4">Penjualan Produk</h4>
     <hr>
-    <div class="columns">
-      <div class="daftar-produk column is-8">
-        <!-- <b-field label="Find a name">
-            <b-autocomplete
-                v-model="data.nama_produk"
-                placeholder="Cari nama produk"
-                :keep-first="true"
-                :open-on-focus="true"
-                :data="filteredDataObj"
-                field="data.nama_produk"
-                @select="option => selected = option">
-            </b-autocomplete>
-        </b-field> -->
+    <div class="columns is-gapless">
+      <div class="column is-8">
         
-        <CardPenjualanProduk
-          v-for="data in datas"
-          :key="data.nama_produk"
-          :data="data"
-        />
+        <div class="search-bar">
+          <b-field>
+            <b-input
+                v-model="cari"
+                icon="magnify"
+                clearable
+                rounded
+                placeholder="Cari produk"
+                :open-on-focus="true">
+            </b-input>
+          </b-field>
+        </div>
+
+        <div class="daftar-produk">
+          <CardPenjualanProduk
+            v-for="data in filteredProduk"
+            :key="data.nama_produk"
+            :data="data"
+          />
+        </div>
+        
       </div>
 
-      <div class="daftar-beli column is-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique harum sint, necessitatibus, perferendis obcaecati error placeat dolor accusantium quidem tempore ut quod culpa quasi assumenda praesentium numquam veniam temporibus. Quasi.
+      <div class="column is-4">
+        <div class="daftar-beli has-background-white-ter">
+          <div class="member">
+            <div v-if="member.id_customer == 0">
+              <b-button
+                  icon-left="face"
+                  size="is-large"
+                  @click="isComponentModalActive = true"
+                  type="is-light has-text-primary"
+                  expanded>
+                    Pilih member
+              </b-button>
+            </div>
+            <div v-else>
+              <p>ID : {{member.id_customer}}</p>
+              <p>hewan : {{member.id_hewan}}</p>
+            </div>
+          </div>
+
+          <div>
+            <b-table
+                :data="tempBeli"
+                :paginated="true"
+                :per-page="5"
+                :sort-icon-size="sortIconSize"
+                default-sort="tempBeli.nama_produk"
+                aria-next-label="Next page"
+                aria-previous-label="Previous page"
+                aria-page-label="Page"
+                aria-current-label="Current page">
+
+                <template slot-scope="props">
+                    <b-table-column field="no" label="No." width="40" sortable numeric>
+                        {{ props.index }}
+                    </b-table-column>
+
+                    <b-table-column field="nama_produk" label="Nama Produk" sortable>
+                        {{ props.row.nama_produk }}
+                    </b-table-column>
+
+                    <b-table-column field="jumlah" label="Jumlah" sortable>
+                        {{ props.row.jumlah }}
+                    </b-table-column>
+                </template>
+            </b-table>
+          </div>
+
+          <footer class="footer">
+            lorem
+          </footer>
+        </div>
       </div>
     </div>
 
@@ -34,41 +88,62 @@
         :active.sync="isLoading" 
         :can-cancel="false">
     </b-loading>
+
+    <b-modal
+        :active.sync="isComponentModalActive"
+        has-modal-card
+        trap-focus
+        aria-role="dialog"
+        aria-modal>
+      <ModalAddMember></ModalAddMember>
+    </b-modal>
   
   </section>
 </template>
 
 <style scoped>
+.search-bar {
+  margin-bottom: 20px;
+}
 .daftar-produk {
   overflow-y: scroll;
   max-height: 700px;
   display: flex;
   flex-flow: row wrap;
 }
+.daftar-beli {
+  margin-left: 10px;
+  border-radius: 10px;
+  height: 100%;
+  padding: 10px;
+}
+.member {
+  margin-bottom: 10px;
+}
 </style>
 
 <script>
 import CardPenjualanProduk from "./CardPenjualanProduk.vue"
+import ModalAddMember from "./ModalAddCustomerDanHewan.vue"
 
 export default {
   components: {
-    CardPenjualanProduk
+    CardPenjualanProduk,
+    ModalAddMember
   },
   data() {
     return {
+      isComponentModalActive: false,
       isLoading: true,
-      gambarProduk:'',
-      // editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
-      // dataPenjualan: new FormData(), // Buat nampung isi form
-      datas: [],
-      form: {
-        nama_produk: { value: '', type: '', message: '' },
-        satuan: { value: '', type: '', message: '' },
-        harga_jual: { value: '', type: '', message: '' },
-        harga_beli: { value: '', type: '', message: '' },
-        stok: { value: 0, type: '', message: '' },
-        stok_minimum: { value: 0, type: '', message: '' },
-        gambar: { value: '', type: '', message: '' },
+      cari:'', // Penampung string cari
+      tempBeli: [ {nama_produk: 'asdf', jumlah: 3} ], // Temp produk yg mau dibeli
+      datas: [], // data produk yg tersedia
+      member: { // temp kalo pelanggannya member
+        id_customer: 0,
+        nama_customer: '',
+        id_hewan: 0,
+        nama_hewan: '',
+        jenis: '',
       },
       snackbarMsg: '',
     }
@@ -143,12 +218,9 @@ export default {
     },
   },
   computed: {
-    filteredDataObj() {
-      return this.data.filter((option) => {
-        return option.user.first_name
-          .toString()
-          .toLowerCase()
-          .indexOf(this.data.nama_produk.toLowerCase()) >= 0
+    filteredProduk: function() {
+      return this.datas.filter((data) => {
+        return data.nama_produk.toLowerCase().match(this.cari.toLowerCase())
       })
     }
   },
