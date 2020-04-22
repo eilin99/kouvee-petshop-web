@@ -3,7 +3,7 @@
     <h4 class="title is-4">Penjualan Produk</h4>
     <hr>
     <div class="columns is-gapless">
-      <div class="column is-8">
+      <div class="column">
         
         <div class="search-bar">
           <b-field>
@@ -23,13 +23,15 @@
             v-for="data in filteredProduk"
             :key="data.nama_produk"
             :data="data"
+            :tambahProduk="tambahProduk"
+            :kurangiProduk="kurangiProduk"
           />
         </div>
         
       </div>
 
-      <div class="column is-4">
-        <div class="daftar-beli has-background-white-ter">
+      <div class="column is-two-fifths">
+        <div class="box-detail-transaksi has-background-white-ter">
           <div class="member">
             <div v-if="member.id_customer == 0">
               <b-button
@@ -44,7 +46,6 @@
             <div v-else style="padding: 15px;">
               <div class="level is-mobile">
                 <div class="level-left">
-                  <!-- <div class="level-item"> -->
                     <div>
                       <p class="title is-4">
                         <b-icon icon="face" type="is-primary"></b-icon> {{ member.nama_customer }}
@@ -53,23 +54,21 @@
                         <b-icon icon="paw" type="is-primary"></b-icon> {{ member.nama_hewan }} ({{ member.jenis }})
                       </p>
                     </div>
-                  <!-- </div> -->
                 </div>
                 <div class="level-right">
                   <a @click="cancelMember">
-                    <b-icon icon="close" size="is-small" type="is-danger"></b-icon>
+                    <b-icon icon="close" type="is-danger"></b-icon>
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div>
+          <div class="daftar-beli">
             <b-table
                 :data="tempBeli"
                 :paginated="true"
                 :per-page="5"
-                :sort-icon-size="sortIconSize"
                 default-sort="tempBeli.nama_produk"
                 aria-next-label="Next page"
                 aria-previous-label="Previous page"
@@ -77,25 +76,49 @@
                 aria-current-label="Current page">
 
                 <template slot-scope="props">
-                    <b-table-column field="no" label="No." width="40" sortable numeric>
-                        {{ props.index + 1 }}
-                    </b-table-column>
 
-                    <b-table-column field="nama_produk" label="Nama Produk" sortable>
-                        {{ props.row.nama_produk }}
-                    </b-table-column>
+                  <b-table-column field="nama_produk" label="Produk"  width="190px" sortable>
+                    <p style="font-size: 1.15em"><b>{{ props.row.nama_produk }}<br/></b></p>
+                    <span class="title is-7">Rp {{ props.row.harga_jual }} / {{ props.row.satuan }}</span>
+                  </b-table-column>
 
-                    <b-table-column field="jumlah" label="Jumlah" sortable>
-                        {{ props.row.jumlah }}
-                    </b-table-column>
+                  <b-table-column field="jumlah" width="110px" label="Jml" sortable centered>
+                    <b-numberinput
+                        v-model="props.row.jumlah"
+                        size="is-small"
+                        controls-position="compact"
+                        controls-rounded
+                        min="1"
+                        :max="props.row.stok">
+                    </b-numberinput>
+                  </b-table-column>
+
+                  <b-table-column field="harga" label="Total" width="100px" sortable>
+                    Rp {{ props.row.harga_jual }}
+                  </b-table-column>
+                </template>
+
+                <template slot="empty">
+                  <section class="section">
+                    <div class="content has-text-grey has-text-centered">
+                      <p>
+                        <b-icon
+                          icon="shopping"
+                          size="is-large">
+                        </b-icon>
+                      </p>
+                      <p>Belum ada produk terpilih</p>
+                    </div>
+                  </section>
                 </template>
             </b-table>
           </div>
 
-          <footer class="footer">
+          <footer>
             lorem
           </footer>
         </div>
+
       </div>
     </div>
 
@@ -128,11 +151,11 @@
   display: flex;
   flex-flow: row wrap;
 }
-.daftar-beli {
+.box-detail-transaksi {
   margin-left: 10px;
   border-radius: 10px;
   height: 100%;
-  padding: 10px;
+  padding:  10px;
 }
 .member {
   border-radius: 7px;
@@ -155,7 +178,7 @@ export default {
       isComponentModalActive: false,
       isLoading: true,
       cari:'', // Penampung string cari
-      tempBeli: [ {nama_produk: 'asdf', jumlah: 3} ], // Temp produk yg mau dibeli
+      tempBeli: [], // Temp produk yg mau dibeli
       datas: [], // data produk yg tersedia
       member: { // temp kalo pelanggannya member
         id_customer: 0,
@@ -168,11 +191,17 @@ export default {
     }
   },
   methods: {
-    beli() {
-      window.alert("beli")
+    tambahProduk(produk) {
+      if(this.tempBeli) {
+        this.tempBeli.push(produk)
+      }
     },
-    batalBeli() {
-      window.alert("batal beli")
+    kurangiProduk(id_produk) {
+      return this.tempBeli.filter((produk) => {
+        if(produk.id_produk !== id_produk) {
+          return produk
+        }
+      })
     },
     cancelMember() {
       this.member.id_customer = 0,
@@ -244,7 +273,7 @@ export default {
     },
   },
   computed: {
-    filteredProduk: function() {
+    filteredProduk() {
       return this.datas.filter((data) => {
         return data.nama_produk.toLowerCase().match(this.cari.toLowerCase())
       })
@@ -253,7 +282,6 @@ export default {
   mounted() {
     this.isLoading = true
     this.getData()
-    console.log(this.datas)
     this.isLoading = false // page udah ter-load dan berhenti loading
   }
 }

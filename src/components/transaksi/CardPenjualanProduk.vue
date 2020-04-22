@@ -28,13 +28,13 @@
       <b-button 
           class="card-footer-item"
           type="is-text"
-          @click="batalBeli">
+          @click="kurangiProduk(data.id_produk)">
             <b-icon icon="minus" type="is-danger"></b-icon>
       </b-button>
       <b-button 
           class="card-footer-item"
           type="is-text"
-          @click="beli">
+          @click="tambahProduk(data)">
             <b-icon icon="plus" type="is-info"></b-icon>
       </b-button>
   </footer>
@@ -45,7 +45,7 @@
 .card {
   margin-right: 10px;
   margin-bottom: 10px;
-  max-width: 160px;
+  max-width: 143px;
 }
 .card-content {
   padding: 15px 10px;
@@ -62,6 +62,12 @@ export default {
   props: {
     data: {
       type: Object
+    },
+    tambahProduk: {
+      type: Function
+    },
+    kurangiProduk: {
+      type: Function
     }
   },
 }
