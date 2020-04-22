@@ -41,9 +41,26 @@
                     Pilih member
               </b-button>
             </div>
-            <div v-else>
-              <p>ID : {{member.id_customer}}</p>
-              <p>hewan : {{member.id_hewan}}</p>
+            <div v-else style="padding: 15px;">
+              <div class="level is-mobile">
+                <div class="level-left">
+                  <!-- <div class="level-item"> -->
+                    <div>
+                      <p class="title is-4">
+                        <b-icon icon="face" type="is-primary"></b-icon> {{ member.nama_customer }}
+                      </p>
+                      <p class="subtitle is-6">
+                        <b-icon icon="paw" type="is-primary"></b-icon> {{ member.nama_hewan }} ({{ member.jenis }})
+                      </p>
+                    </div>
+                  <!-- </div> -->
+                </div>
+                <div class="level-right">
+                  <a @click="cancelMember">
+                    <b-icon icon="close" size="is-small" type="is-danger"></b-icon>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -61,7 +78,7 @@
 
                 <template slot-scope="props">
                     <b-table-column field="no" label="No." width="40" sortable numeric>
-                        {{ props.index }}
+                        {{ props.index + 1 }}
                     </b-table-column>
 
                     <b-table-column field="nama_produk" label="Nama Produk" sortable>
@@ -95,7 +112,7 @@
         trap-focus
         aria-role="dialog"
         aria-modal>
-      <ModalAddMember></ModalAddMember>
+      <ModalAddMember :member="member" @konfirmasiMember="member = $event"></ModalAddMember>
     </b-modal>
   
   </section>
@@ -118,6 +135,8 @@
   padding: 10px;
 }
 .member {
+  border-radius: 7px;
+  border: 2px solid #e0d4ff;
   margin-bottom: 10px;
 }
 </style>
@@ -154,6 +173,13 @@ export default {
     },
     batalBeli() {
       window.alert("batal beli")
+    },
+    cancelMember() {
+      this.member.id_customer = 0,
+      this.member.nama_customer = '',
+      this.member.id_hewan = 0,
+      this.member.nama_hewan = '',
+      this.member.jenis = ''
     },
     getData() {
       var uri = this.$api_baseUrl + "produk"

@@ -5,29 +5,40 @@
       </header>
       <section class="modal-card-body">
 
-        <b-field label="Pelanggan">
+        <b-field
+            label="Pelanggan"
+            :message="formMember.nama_customer.message"
+            :type="formMember.nama_customer.type">
             <b-autocomplete
                 v-model="cariPelanggan"
                 icon="magnify"
                 placeholder="Nama pelanggan"
+                :value="member.nama_customer"
                 :open-on-focus="true"
                 :data="filteredDataPelanggan"
-                @select="option => {pelangganSelected = option.nama_customer; idPelanggan = option.id_customer}"
+                @select="option => {memberTemp.nama_customer = option.nama_customer; memberTemp.id_customer = option.id_customer}"
+                @input="clearError(formMember.nama_customer)"
                 field="nama_customer"
                 clearable>
             </b-autocomplete>
         </b-field>
 
-        <b-field label="Hewan">
+        <b-field
+            label="Hewan"
+            :message="formMember.hewan.message"
+            :type="formMember.hewan.type">
           <b-select 
               icon="paw"
-              :disabled="pelangganSelected == '' ? true : false"
+              :disabled="memberTemp.nama_customer == '' ? true : false"
               placeholder="Pilih hewan"
-              v-model="hewanSelected">
+              v-model="memberTemp.id_hewan"
+              :value="member.nama_hewan"
+              @input="clearError(formMember.hewan)">
                 <option 
                     v-for="hewan in filteredDataHewan"
                     :key="hewan.id_hewan"
                     :value="hewan.id_hewan"
+                    @click="memberTemp.nama_hewan = hewan.nama_hewan; memberTemp.jenis = hewan.jenis;"
                 >
                   {{ hewan.nama_hewan }} <span>({{ hewan.jenis }})</span>
                 </option>
@@ -36,25 +47,52 @@
 
       </section>
       <footer class="modal-card-foot">
-          <button class="button" type="button" @click="$parent.close()">Batal</button>
-          <button class="button is-primary">Konfirmasi</button>
+        <div class="footer-modal">
+          <div class="btn-right">
+            <button class="button" type="button" @click="$parent.close()">Batal</button>
+            <button class="button is-primary" @click="konfirmasiMember">Konfirmasi</button>
+          </div>
+        </div>
       </footer>
   </div>
 </template>
 
+<style scoped>
+.footer-modal {
+  height: 35px;
+  position: relative;
+}
+.btn-right {
+  width: 180px;
+  position: absolute;
+  left: 420px;
+}
+</style>
+
 <script>
   export default {
+    props: {
+      member: {
+        type: Object
+      }
+    },
     data() {
       return {
         cariPelanggan: '',
         cariHewan: '',
-        pelangganSelected: '',
-        idPelanggan: 0,
-        hewanSelected: '',
+        memberTemp: { // temp kalo pelanggannya member
+          id_customer: 0,
+          nama_customer: '',
+          id_hewan: 0,
+          nama_hewan: '',
+          jenis: '',
+        },
         dataPelanggan: [],
         dataHewan: [],
-        isImageModalActive: false,
-        isCardModalActive: false
+        formMember: {
+          nama_customer: { message: '', type: '' },
+          hewan: { message: '', type: '' },
+        },
       }
     },
     methods: {
@@ -80,11 +118,33 @@
           this.errors = error
         })
       },
-      changeHewanSelected(e) {
-        console.log(e)
-        // console.log(nama_hewan)
-        // console.log(jenis)
-        // this.hewanSelected = nama_hewan + ' (' + jenis + ')'
+      cekMember() {
+        let count = 0
+
+        if (this.memberTemp.id_customer == 0 ||
+            this.memberTemp.nama_customer == '') {
+              count++
+              this.formMember.nama_customer.message = 'Member belum terpilih dengan benar'
+              this.formMember.nama_customer.type = 'is-danger'
+        }
+        if (this.memberTemp.id_hewan == 0 ||
+            this.memberTemp.nama_hewan == '' ||
+            this.memberTemp.jenis == '') {
+              count++
+              this.formMember.hewan.message = 'Hewan belum terpilih'
+              this.formMember.hewan.type = 'is-danger'
+        }
+        return count
+      },
+      clearError(form) {
+        form.type = ''
+        form.message = '' 
+      },
+      konfirmasiMember() {
+        if (this.cekMember() == 0) {
+          this.$emit('konfirmasiMember', this.memberTemp)
+          this.$parent.close()
+        }
       }
     },
     computed: {
@@ -98,7 +158,7 @@
       filteredDataHewan() {
         return this.dataHewan.filter((hewan) => {
           return hewan.nama_customer
-            .indexOf(this.pelangganSelected) >= 0
+            .indexOf(this.memberTemp.nama_customer) >= 0
         })
       }
     },
