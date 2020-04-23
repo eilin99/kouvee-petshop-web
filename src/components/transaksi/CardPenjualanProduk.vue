@@ -28,14 +28,20 @@
       <b-button 
           class="card-footer-item"
           type="is-text"
+          :disabled="data.stok == 0"
           @click="kurangiProduk(data.id_produk)">
-            <b-icon icon="minus" type="is-danger"></b-icon>
+            <span class="icon is-small has-text-danger">
+              <i class="material-icons mdi">remove_shopping_cart</i>
+            </span>
       </b-button>
       <b-button 
           class="card-footer-item"
           type="is-text"
+          :disabled="data.stok == 0"
           @click="tambahProduk(data)">
-            <b-icon icon="plus" type="is-info"></b-icon>
+            <span class="icon is-small has-text-info">
+              <i class="material-icons mdi">add_shopping_cart</i>
+            </span>
       </b-button>
   </footer>
   </div>

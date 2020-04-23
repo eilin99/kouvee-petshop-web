@@ -93,7 +93,7 @@
                     </b-numberinput>
                   </b-table-column>
 
-                  <b-table-column field="harga" label="Total" width="100px" sortable>
+                  <b-table-column field="harga" label="Subtotal" width="100px centered" sortable>
                     Rp {{ props.row.harga_jual }}
                   </b-table-column>
                 </template>
@@ -114,8 +114,52 @@
             </b-table>
           </div>
 
-          <footer>
-            lorem
+          <footer class="box-detail-transaksi-footer">
+            <div class="pembayaran">
+              
+              <div class="level" style="margin-bottom: 0.5rem">
+                <div class="level-left">
+                  <p class="subtitle is-6">Member</p>
+                </div>
+                <div class="level-right">
+                  <h4 class="title is-6">
+                    <div v-if="member.nama_customer == ''">
+                      -
+                    </div>
+                    <div v-else>
+                      {{ member.nama_customer }}
+                    </div>
+                  </h4>
+                </div>
+              </div>
+              
+              <div class="level">
+                <div class="level-left">
+                  <p class="subtitle is-6">Hewan</p>
+                </div>
+                <div class="level-right">
+                  <h4 class="title is-6">
+                    <div v-if="member.nama_hewan == ''">
+                        -
+                    </div>
+                    <div v-else>
+                      {{ member.nama_hewan }} ({{ member.jenis }})
+                    </div>
+                  </h4>
+                </div>
+              </div>
+
+              <div class="level">
+                <div class="level-left">
+                  <p class="subtitle is-6">Total</p>
+                </div>
+                <div class="level-right">
+                  <h4 class="title is-4">Rp 50000</h4>
+                </div>
+              </div>
+              
+              <b-button type="is-primary" expanded>Selesai</b-button>
+            </div>
           </footer>
         </div>
 
@@ -147,11 +191,13 @@
 }
 .daftar-produk {
   overflow-y: scroll;
-  max-height: 700px;
+  height: 700px;
+  min-height: 700px;
   display: flex;
   flex-flow: row wrap;
 }
 .box-detail-transaksi {
+  position: relative;
   margin-left: 10px;
   border-radius: 10px;
   height: 100%;
@@ -161,6 +207,18 @@
   border-radius: 7px;
   border: 2px solid #e0d4ff;
   margin-bottom: 10px;
+}
+.box-detail-transaksi-footer {
+  width: 100%;
+  position: absolute;
+  margin-bottom: 10px;
+  bottom: 0;
+}
+.pembayaran {
+  padding: 10px;
+  width: 95%;
+  border-radius: 7px;
+  border: 2px solid #e0d4ff;
 }
 </style>
 
@@ -192,16 +250,29 @@ export default {
   },
   methods: {
     tambahProduk(produk) {
-      if(this.tempBeli) {
+      if (this.tempBeli.length === 0) {
+        produk.jumlah = 1
         this.tempBeli.push(produk)
+      } else {
+        if(this.cekProdukExistDaftarBeli(produk) === true) {
+          window.alert('dah ada')
+        } else {
+          produk.jumlah = 1
+          this.tempBeli.push(produk)
+        }
       }
     },
-    kurangiProduk(id_produk) {
-      return this.tempBeli.filter((produk) => {
-        if(produk.id_produk !== id_produk) {
-          return produk
+    cekProdukExistDaftarBeli(produk) {
+      this.tempBeli.forEach(e => {
+        if(e.id_produk == produk.id_produk) {
+          console.log('ada')
+          return true
         }
       })
+      return false
+    },
+    kurangiProduk(id_produk) {
+      this.tempBeli = this.tempBeli.filter(p => p.id_produk != id_produk)
     },
     cancelMember() {
       this.member.id_customer = 0,

@@ -2,7 +2,7 @@
   <div id="cs">
 
     <div class="columns is-fullheight">
-      <div class="column is-2 has-background-grey-lighter" style="overflow-y: scroll">
+      <div class="column is-2 has-background-grey-lighter">
         <div id="sidebar">
           <template>
             <b-menu class="is-sidebar-menu">
@@ -239,7 +239,7 @@ export default {
 .is-fullheight.columns {
     height: calc(100vh - ( 0rem - .75rem ) );
     /* height: 100%; */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .title-nama-data {
