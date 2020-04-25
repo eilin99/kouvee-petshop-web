@@ -1,6 +1,18 @@
 <template>
   <section id="penjualan-produk">
-    <h4 class="title is-4">Penjualan Produk</h4>
+    <div class="level">
+      <div class="level-left">
+        <h4 class="title is-4 has-text-centered">Tambah Penjualan Produk</h4>
+      </div>
+      <div class="level-right">
+        <b-button 
+            type="is-light has-text-primary"
+            tag="router-link" 
+            to="/cs/daftar-penjualan-produk">
+              Daftar Penjualan Produk
+        </b-button>
+      </div>
+    </div>
     <hr>
     <div class="columns is-gapless">
       <div class="column">
@@ -115,7 +127,7 @@
           </div>
 
           <footer class="box-detail-transaksi-footer">
-            <div class="pembayaran">
+            <div class="total">
               
               <div class="level" style="margin-bottom: 0.5rem">
                 <div class="level-left">
@@ -214,7 +226,7 @@
   margin-bottom: 10px;
   bottom: 0;
 }
-.pembayaran {
+.total {
   padding: 10px;
   width: 95%;
   border-radius: 7px;
@@ -254,8 +266,8 @@ export default {
         produk.jumlah = 1
         this.tempBeli.push(produk)
       } else {
-        if(this.cekProdukExistDaftarBeli(produk) === true) {
-          window.alert('dah ada')
+        if(this.cekProdukExistDaftarBeli(produk)) {
+          this.snackbar('Produk sudah dipilih', "is-info")
         } else {
           produk.jumlah = 1
           this.tempBeli.push(produk)
@@ -263,12 +275,10 @@ export default {
       }
     },
     cekProdukExistDaftarBeli(produk) {
-      this.tempBeli.forEach(e => {
-        if(e.id_produk == produk.id_produk) {
-          console.log('ada')
+      for(let i=0; i<this.tempBeli.length; i++) {
+        if(this.tempBeli[i].id_produk == produk.id_produk)
           return true
-        }
-      })
+      }
       return false
     },
     kurangiProduk(id_produk) {

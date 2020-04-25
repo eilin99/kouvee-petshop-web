@@ -60,27 +60,6 @@
 
                 </b-menu-item>
 
-                <!-- Laporan-laporan -->
-                <b-menu-item
-                    icon="book">
-                  <template slot="label" slot-scope="props">
-                    Laporan
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="laporan in laporans"
-                        :key="laporan.label"
-                        :icon="laporan.icon"
-                        :label="laporan.label"
-                        tag="router-link"
-                        :to="laporan.to">
-                    </b-menu-item>
-
-                </b-menu-item>
-
               </b-menu-list>
               <b-menu-list>
                 <b-menu-item
@@ -91,10 +70,7 @@
                   to="/expo">
                 </b-menu-item>
               </b-menu-list>
-
-              <!-- <b-menu-list label="Actions">
-                <b-menu-item label="Logout"></b-menu-item>
-              </b-menu-list> -->
+              
             </b-menu>
           </template>
         </div>

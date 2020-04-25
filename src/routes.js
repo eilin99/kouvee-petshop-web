@@ -28,6 +28,7 @@ import formHewan from './components/dataMaster/formHewan.vue'
 // Transaksi
 
 import PenjualanProduk from './components/transaksi/PenjualanProduk.vue'
+import DaftarPenjualanProduk from './components/transaksi/DaftarPenjualanProduk.vue'
 
 // Laporan
 // ......
@@ -214,7 +215,12 @@ export default [
                 name: 'PenjualanProduk',
                 path: '/cs/penjualan-produk',
                 component: PenjualanProduk
-             },
+            },
+            {
+                name: 'DaftarPenjualanProduk',
+                path: '/cs/daftar-penjualan-produk',
+                component: DaftarPenjualanProduk
+            },
         ] 
     },
 ]
