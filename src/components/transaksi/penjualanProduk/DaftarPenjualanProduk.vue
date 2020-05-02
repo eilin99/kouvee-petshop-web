@@ -13,18 +13,18 @@
       per-page="10"
       ref="table"
       detailed
-      detail-key="nama_produk"
+      detail-key="nomor_transaksi"
       :show-detail-icon="true"
       :opened-detailed="detailOpened"
       aria-previous-label="Previous page"
       aria-next-label="Next page"
       aria-page-label="Page"
-      aria-current-label="Current page">
+      aria-current-label="Current page"
+      narrowed>
 
       <template slot-scope="props">
 
-        <b-table-column 
-            field="id_produk" 
+        <b-table-column  
             label="No." 
             width="50px"
             centered
@@ -33,48 +33,44 @@
         </b-table-column>
 
         <b-table-column 
-            field="nama_produk" 
-            label="Nama Produk" 
+            field="nomor_transaksi" 
+            label="No. transaksi" 
+            width="150px"
             :searchable="true" 
             sortable>
-          {{ props.row.nama_produk }}
+          {{ props.row.nomor_transaksi }}
         </b-table-column>
 
         <b-table-column 
-            field="satuan" 
-            label="Satuan"
-            width="50px"
+            field="nama_customer" 
+            label="Nama pelanggan"
             :searchable="true">
-          {{ props.row.satuan }}
+          <p v-if="props.row.nama_customer == null">-</p>
+          <p v-else>{{ props.row.nama_customer }}</p>
         </b-table-column>
 
         <b-table-column 
-            field="stok" 
-            label="Stok"
-            width="70px"
-            sortable>
-              <div v-if="parseInt(props.row.stok) < parseInt(props.row.stok_minimum)">
-                <b-tag type="is-danger" size="is-medium" rounded>
-                  {{ props.row.stok }}
-                  </b-tag>
-              </div>
-              <div v-else>
-                {{ props.row.stok }}
-              </div>
+            field="nama_hewan" 
+            label="Nama hewan"
+            width="150px"
+            :searchable="true">
+          <p v-if="props.row.nama_hewan == null">-</p>
+          <p v-else>{{ props.row.nama_hewan }}</p>
         </b-table-column>
 
         <b-table-column 
-            field="harga_beli" 
-            label="Harga beli"
+            field="tgl_penjualan" 
+            label="Tanggal"
+            width="125px"
+            searchable
             sortable>
-          {{ 'Rp.' + props.row.harga_beli }}
+          {{ props.row.tgl_penjualan }}
         </b-table-column>
 
         <b-table-column 
-            field="harga_jual" 
-            label="Harga jual"
-            sortable>
-          {{ 'Rp.' + props.row.harga_jual }}
+            field="total" 
+            label="Total">
+          {{ 'Rp.' + props.row.total }}
         </b-table-column>
 
         <b-table-column label="Action" centered>
@@ -82,7 +78,12 @@
             <b-button 
                 type="is-text" 
                 tag="router-link"
-                :to="'/owner/form-produk/' + props.row.id_produk"
+                :to="'/cs/detail-penjualan-produk/' + props.row.nomor_transaksi"
+                rounded>
+                  <b-icon icon="note" type="is-primary"></b-icon>
+            </b-button>
+            <b-button 
+                type="is-text" 
                 rounded>
                   <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
@@ -100,39 +101,10 @@
         <article class="media">
           <div class="media-content">
             <div class="content">
-              <div class="columns">
-                <div class="column">
-                  <figure class="media-left">
-                    <p class="image is-128x128">
-                      <img :src="$api_baseUrl + 'produk/picture/' + props.row.gambar">
-                    </p>
-                  </figure>
-                </div>
-                <div class="column">
-                  <p>
-                    <strong>Created At : </strong><br/>
-                    <small>{{ props.row.created_at }}</small>
-                  </p>
-                </div>
-                <div class="column">
-                  <p>
-                    <strong>Updated At : </strong><br/>
-                    <small>{{ props.row.updated_at }}</small>
-                  </p>
-                </div>
-                <div class="column">
-                  <p>
-                    <strong>Deleted At : </strong><br/>
-                    <small>{{ props.row.deleted_at }}</small>
-                  </p>
-                </div>
-                <div class="column">
-                  <p>
-                    <strong>PIC : </strong><br/>
-                    <small>{{ props.row.nama_pegawai }}</small>
-                  </p>
-                </div>
-              </div>
+              <p>
+                <strong>CS : </strong>
+                <small>{{ props.row.customer_service }}</small>
+              </p>
             </div>
           </div>
       </article>
@@ -184,7 +156,7 @@ export default {
   methods: {
     getData() {
       this.isLoading = true
-      var uri = this.$api_baseUrl + "produk"
+      var uri = this.$api_baseUrl + "transaksi/produk"
 
       this.$http.get(uri).then(response => {
         this.datas = response.data.value
@@ -200,7 +172,7 @@ export default {
       })
     },
     deleteData(deleteId) {
-      var uri = this.$api_baseUrl + "produk/delete/" + deleteId;
+      var uri = this.$api_baseUrl + "transaksi/produk/delete/{" + deleteId;
       var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
       
       this.$http.post(uri, pic).then(response => {
@@ -227,7 +199,7 @@ export default {
     confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
       this.$buefy.dialog.confirm({
         title: 'Hapus Data Produk',
-        message: 'Apa anda yakin ingin <b>menghapus</b> produk?',
+        message: 'Apa anda yakin ingin <b>menghapus</b> transaksi?',
         confirmText: 'Hapus',
         cancelText: 'Batal',
         type: 'is-danger',

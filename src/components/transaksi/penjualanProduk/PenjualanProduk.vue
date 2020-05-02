@@ -79,13 +79,12 @@
           <div class="daftar-beli">
             <b-table
                 :data="tempBeli"
-                :paginated="true"
-                :per-page="5"
+                sticky-header
+                height="700px"
+                narrowed
                 default-sort="tempBeli.nama_produk"
-                aria-next-label="Next page"
-                aria-previous-label="Previous page"
-                aria-page-label="Page"
-                aria-current-label="Current page">
+                :checked-rows.sync="checkedRows"
+                hoverable>
 
                 <template slot-scope="props">
 
@@ -101,12 +100,13 @@
                         controls-position="compact"
                         controls-rounded
                         min="1"
-                        :max="props.row.stok">
+                        :max="props.row.stok"
+                        @input="updateSubtotal(props.row)">
                     </b-numberinput>
                   </b-table-column>
 
-                  <b-table-column field="harga" label="Subtotal" width="100px centered" sortable>
-                    Rp {{ props.row.harga_jual }}
+                  <b-table-column field="subtotal" label="Subtotal" width="100px centered" sortable>
+                    Rp {{ props.row.subtotal }}
                   </b-table-column>
                 </template>
 
@@ -166,11 +166,11 @@
                   <p class="subtitle is-6">Total</p>
                 </div>
                 <div class="level-right">
-                  <h4 class="title is-4">Rp 50000</h4>
+                  <h4 class="title is-4">Rp {{ tempTotal }}</h4>
                 </div>
               </div>
               
-              <b-button type="is-primary" expanded>Selesai</b-button>
+              <b-button type="is-primary" @click="beli" expanded>Selesai</b-button>
             </div>
           </footer>
         </div>
@@ -235,8 +235,8 @@
 </style>
 
 <script>
-import CardPenjualanProduk from "./CardPenjualanProduk.vue"
-import ModalAddMember from "./ModalAddCustomerDanHewan.vue"
+import CardPenjualanProduk from "../CardPenjualanProduk.vue"
+import ModalAddMember from "../ModalAddCustomerDanHewan.vue"
 
 export default {
   components: {
@@ -250,6 +250,7 @@ export default {
       cari:'', // Penampung string cari
       tempBeli: [], // Temp produk yg mau dibeli
       datas: [], // data produk yg tersedia
+      checkedRows: [], // nampung data yg dicentang
       member: { // temp kalo pelanggannya member
         id_customer: 0,
         nama_customer: '',
@@ -261,15 +262,20 @@ export default {
     }
   },
   methods: {
+    // --------------------
+    // Buat list produk yang mau dibeli
+    // --------------------
     tambahProduk(produk) {
       if (this.tempBeli.length === 0) {
         produk.jumlah = 1
+        produk.subtotal = produk.harga_jual
         this.tempBeli.push(produk)
       } else {
         if(this.cekProdukExistDaftarBeli(produk)) {
           this.snackbar('Produk sudah dipilih', "is-info")
         } else {
           produk.jumlah = 1
+          produk.subtotal = produk.harga_jual
           this.tempBeli.push(produk)
         }
       }
@@ -284,6 +290,9 @@ export default {
     kurangiProduk(id_produk) {
       this.tempBeli = this.tempBeli.filter(p => p.id_produk != id_produk)
     },
+    updateSubtotal(item) {
+      item.subtotal = item.jumlah * item.harga_jual
+    },
     cancelMember() {
       this.member.id_customer = 0,
       this.member.nama_customer = '',
@@ -291,7 +300,7 @@ export default {
       this.member.nama_hewan = '',
       this.member.jenis = ''
     },
-    getData() {
+    getProduk() {
       var uri = this.$api_baseUrl + "produk"
 
       this.$http.get(uri).then(response => {
@@ -301,47 +310,89 @@ export default {
         this.errors = error
       })
     },
-    clearError(form) {
-      console.log(form)
-      form.type = ''
-      form.message = '' 
+
+    // --------------------
+    // Tambah-tambah data
+    // --------------------
+    async addNewPenjualan() {
+      let penjualan = new FormData()
+
+      if (this.member.id_hewan != 0) {
+        penjualan.append("id_hewan", this.member.id_hewan)
+      }
+      penjualan.append("id_cs", this.$session.get('pegawai').id_pegawai)
+
+      var uri = this.$api_baseUrl + "transaksi/produk";
+
+      try {
+        await this.$http.post(uri, penjualan)
+      } catch (e) {
+        this.errors = e
+      }
     },
-    addData() {
+    async addNewDetail(produk, noTransaksi) {
+      let dataProduk = new FormData()
+
+      dataProduk.append("nomor_transaksi", noTransaksi)
+      dataProduk.append("id_produk", produk.id_produk)
+      dataProduk.append("jumlah", produk.jumlah)
+      dataProduk.append("subtotal", produk.subtotal)
+
+      var uri = this.$api_baseUrl + "transaksi/detail_produk";
+
+      try {
+        await this.$http.post(uri, dataProduk)
+      } catch (e) {
+        this.errors = e
+      }
+    },
+    async editTotalPenjualan(noTransaksi) {
+      let dataProduk = {}
+      dataProduk.total = this.tempTotal
+      console.log(dataProduk)
+
+      var uri = this.$api_baseUrl + "transaksi/produk/updateTotal/" + noTransaksi;
+      try {
+        await this.$http.put(uri, dataProduk, this.config)
+      } catch (e) {
+        this.errors = e
+      }
+    },
+    async getNoTransaksi() {
+      let asyncPenjualan = await this.$http.get(this.$api_baseUrl + "transaksi/produk")
+      let penjualan = asyncPenjualan.data.value
+      let panjangArray = penjualan.length
+
+      return penjualan[panjangArray-1].nomor_transaksi
+    },
+    async beli() {
       this.isLoading = true // Biar dia loading dulu
 
-      if(this.cekData() == false) {
-        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
-      } else {
-        this.dataProduk.append("nama_produk", this.form.nama_produk.value)
-        this.dataProduk.append("satuan", this.form.satuan.value)
-        this.dataProduk.append("harga_jual", this.form.harga_jual.value)
-        this.dataProduk.append("harga_beli", this.form.harga_beli.value)
-        this.dataProduk.append("stok", this.form.stok.value)
-        this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
-        this.dataProduk.append("gambar", this.form.gambar.value)
-        this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
+      await this.addNewPenjualan()
 
-        var uri = this.$api_baseUrl + "produk";
+      let noTransaksi = await this.getNoTransaksi()
 
-        this.$http.post(uri, this.dataProduk).then(response => {
-          this.$router.push( { name: 'Produk' } )
-          this.snackbarMsg = response.message
-          this.snackbar("Data berhasil ditambahkan!", 'is-success')
-        })
-        .catch(error => {
-          this.errors = error;
-          if (this.errors.message == "Request failed with status code 400") {
-            this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
-          } else {
-            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-          }
-        })
-      }
-      this.isLoading = false // Biar berhenti loading
+      this.tempBeli.forEach(item => {
+        this.addNewDetail(item, noTransaksi)
+      });
+
+      await this.editTotalPenjualan(noTransaksi)
+
+      this.isLoading = false // Biar berhenti loading  
+
+      this.$buefy.dialog.confirm({
+        title: 'Penjualan berhasil',
+        message: 'Penjualan sudah tercatat!',
+        confirmText: 'OK',
+        type: 'is-success',
+        hasIcon: true,
+        onConfirm: () => this.$buefy.toast.open('Yayy!')
+      })
     },
-    confirm() {
-      this.editId == 0 ? this.addData() : this.editData(this.editId)
-    },
+
+    // --------------------
+    // Lain-lain
+    // --------------------
     snackbar(snackbarMessage, type) {
       this.$buefy.snackbar.open({
         duration: 5000,
@@ -358,11 +409,20 @@ export default {
       return this.datas.filter((data) => {
         return data.nama_produk.toLowerCase().match(this.cari.toLowerCase())
       })
+    },
+    tempTotal() {
+      var temp = 0
+      
+      this.tempBeli.forEach(e => {
+        temp += parseFloat(e.subtotal)
+      });
+
+      return temp
     }
   },
   mounted() {
     this.isLoading = true
-    this.getData()
+    this.getProduk()
     this.isLoading = false // page udah ter-load dan berhenti loading
   }
 }
