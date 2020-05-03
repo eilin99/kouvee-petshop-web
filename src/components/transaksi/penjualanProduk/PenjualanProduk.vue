@@ -101,7 +101,8 @@
                         controls-rounded
                         min="1"
                         :max="props.row.stok"
-                        @input="updateSubtotal(props.row)">
+                        :editable="false"
+                        @input="updateSubtotal(props.index)">
                     </b-numberinput>
                   </b-table-column>
 
@@ -290,7 +291,9 @@ export default {
     kurangiProduk(id_produk) {
       this.tempBeli = this.tempBeli.filter(p => p.id_produk != id_produk)
     },
-    updateSubtotal(item) {
+    updateSubtotal(index) {
+      let item = this.tempBeli[index]
+      console.log(item)
       item.subtotal = item.jumlah * item.harga_jual
     },
     cancelMember() {
@@ -349,7 +352,6 @@ export default {
     async editTotalPenjualan(noTransaksi) {
       let dataProduk = {}
       dataProduk.total = this.tempTotal
-      console.log(dataProduk)
 
       var uri = this.$api_baseUrl + "transaksi/produk/updateTotal/" + noTransaksi;
       try {
@@ -386,7 +388,7 @@ export default {
         confirmText: 'OK',
         type: 'is-success',
         hasIcon: true,
-        onConfirm: () => this.$buefy.toast.open('Yayy!')
+        onConfirm: () => location.reload()
       })
     },
 

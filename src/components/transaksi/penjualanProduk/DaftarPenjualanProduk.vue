@@ -5,7 +5,6 @@
 
     <b-table
       :data="datas"
-      :columns="columns"
       :hoverable="true"
       :loading="isLoading" 
       :mobile-cards="true"
@@ -35,7 +34,7 @@
         <b-table-column 
             field="nomor_transaksi" 
             label="No. transaksi" 
-            width="150px"
+            width="140px"
             :searchable="true" 
             sortable>
           {{ props.row.nomor_transaksi }}
@@ -44,6 +43,7 @@
         <b-table-column 
             field="nama_customer" 
             label="Nama pelanggan"
+            width="200px"
             :searchable="true">
           <p v-if="props.row.nama_customer == null">-</p>
           <p v-else>{{ props.row.nama_customer }}</p>
@@ -73,6 +73,15 @@
           {{ 'Rp.' + props.row.total }}
         </b-table-column>
 
+        <b-table-column 
+            field="status_pembayaran" 
+            label="Stat"
+            width="50px">
+            <p v-if="props.row.status_pembayaran == 'Lunas'">
+              <b-icon size="is-medium" icon="check" type="is-success"></b-icon>
+            </p>
+        </b-table-column>
+
         <b-table-column label="Action" centered>
           <span>
             <b-button 
@@ -83,14 +92,17 @@
                   <b-icon icon="note" type="is-primary"></b-icon>
             </b-button>
             <b-button 
-                type="is-text" 
-                rounded>
+                type="is-text"
+                @click="openModalEdit(props.row)" 
+                rounded
+                :disabled="props.row.status_pembayaran == 'Lunas' ? true : false">
                   <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
             <b-button 
                 type="is-text"  
-                @click="confirmDelete(props.row.id_produk)" 
-                rounded>
+                @click="confirmDelete(props.row.id)" 
+                rounded
+                :disabled="props.row.status_pembayaran == 'Lunas' ? true : false">
                   <b-icon icon="delete" type="is-danger"></b-icon>
             </b-button>
           </span>
@@ -138,11 +150,24 @@
     </template>
 
     </b-table>
+    <b-modal
+        :active.sync="modalEdit"
+        has-modal-card
+        trap-focus
+        aria-role="dialog"
+        aria-modal>
+      <ModalAddMember tujuanModal="edit" :member="member" @ubahData="member = $event"></ModalAddMember>
+    </b-modal>
   </section>
 </template>
 
 <script>
+import ModalAddMember from "../ModalAddCustomerDanHewan.vue"
+
 export default {
+  components: {
+    ModalAddMember
+  },
   data() {
     return {
       datas: [],
@@ -151,6 +176,13 @@ export default {
       detailOpened: [],  // Buat nampung index dari detail yang kebuka di tabel
       isLoading: true,
       snackbarMsg: '',
+      member: { // temp member buat kalo diedit
+        id_customer: 0,
+        nama_customer: '',
+        id_hewan: 0,
+        nama_hewan: '',
+      },
+      modalEdit: false,
     }
   },
   methods: {
@@ -171,11 +203,11 @@ export default {
         this.isLoading = false
       })
     },
-    deleteData(deleteId) {
-      var uri = this.$api_baseUrl + "transaksi/produk/delete/{" + deleteId;
-      var pic = { pic: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
+    deletePenjualan(deleteId) {
+      var uri = this.$api_baseUrl + "transaksi/produk/delete/" + deleteId;
+      var id_cs = { id_cs: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
       
-      this.$http.post(uri, pic).then(response => {
+      this.$http.put(uri, id_cs).then(response => {
         this.getData();
         this.snackbarMsg = response
         this.snackbar('Data terhapus!', 'is-success')
@@ -204,8 +236,39 @@ export default {
         cancelText: 'Batal',
         type: 'is-danger',
         hasIcon: true,
-        onConfirm: () => this.deleteData(deleteId)
+        onConfirm: () => this.deletePenjualan(deleteId)
       })
+    },
+    editData() {
+      let dataEdit = {}
+      dataEdit.id_hewan = this.memberTemp.id_hewan
+      dataEdit.id_cs = this.$session.get('pegawai').id_pegawai
+
+      var uri = this.$api_baseUrl + "transaksi/produk/" + this.member.id;
+      
+      this.$http.put(uri, dataEdit, this.config).then(response => {
+        this.getData()
+        this.snackbarMsg = response.message
+        this.snackbar("Data berhasil diedit!", 'is-success')
+      })
+      .catch(error => {
+        this.errors = error;
+        if (this.errors.message == "Request failed with status code 400") {
+          this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+        } else {
+          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+        }
+      });
+    },
+    openModalEdit(penjualan) {
+      this.member.id_penjualan = penjualan.id
+      this.member.id_customer = penjualan.id_customer
+      this.member.nama_customer = penjualan.nama_customer
+      this.member.id_hewan = penjualan.id_hewan
+      this.member.nama_hewan = penjualan.nama_hewan
+      this.member.id = penjualan.id
+
+      this.modalEdit = true
     }
   },
   mounted() {
