@@ -3,12 +3,11 @@
 
     <b-table
       :data="datas"
-      :columns="columns"
       :hoverable="true"
       :loading="isLoading" 
       :mobile-cards="true"
       paginated
-      per-page="5"
+      per-page="10"
       ref="table"
       detailed
       detail-key="nomor_transaksi"
@@ -33,23 +32,10 @@
         <b-table-column 
             field="nomor_transaksi" 
             label="Nomor Transaksi" 
+            width="150px"
             :searchable="true" 
             sortable>
           {{ props.row.nomor_transaksi }}
-        </b-table-column>
-
-        <b-table-column 
-            field="id_kasir" 
-            label="ID Kasir"
-            sortable>
-          {{ props.row.id_kasir }}
-        </b-table-column>
-
-        <b-table-column 
-            field="id_hewan" 
-            label="ID hewan"
-            width="50px">
-          {{ props.row.id_hewan }}
         </b-table-column>
 
         <b-table-column 
@@ -105,6 +91,29 @@
           </span>
         </b-table-column>
       </template>
+
+      <template slot="detail" slot-scope="props">
+        <article class="media">
+          <div class="media-content">
+            <div class="content">
+              <div class="columns">
+                <div class="column">
+                  <p>
+                    <strong>Customer Service : </strong>
+                    <small>{{ props.row.customer_service }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>Kasir : </strong>
+                    <small>{{ props.row.kasir }}</small>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+      </article>
+    </template>
 
     <template slot="empty">
       <section class="section">
@@ -169,9 +178,11 @@ export default {
       })
     },
     deleteData(deleteId) {
-      var uri = this.$api_baseUrl + "transaksi/detail_produk/" + deleteId;
+      var pic = { id_kasir: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
+
+      var uri = this.$api_baseUrl + "transaksi/produk/" + deleteId;
       
-      this.$http.delete(uri).then(response => {
+      this.$http.put(uri, pic).then(response => {
         this.getData();
         this.snackbarMsg = response
         this.snackbar('Data terhapus!', 'is-success')

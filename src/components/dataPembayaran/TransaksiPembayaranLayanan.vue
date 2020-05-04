@@ -3,7 +3,6 @@
 
     <b-table
       :data="datas"
-      :columns="columns"
       :hoverable="true"
       :loading="isLoading" 
       :mobile-cards="true"
@@ -17,7 +16,8 @@
       aria-previous-label="Previous page"
       aria-next-label="Next page"
       aria-page-label="Page"
-      aria-current-label="Current page">
+      aria-current-label="Current page"
+      narrowed>
 
       <template slot-scope="props">
 
@@ -44,13 +44,13 @@
             sortable>
           {{ props.row.id_kasir }}
         </b-table-column>
-
+<!-- 
         <b-table-column 
             field="id_hewan" 
             label="ID hewan"
             width="50px">
           {{ props.row.id_hewan }}
-        </b-table-column>
+        </b-table-column> -->
 
         <b-table-column 
             field="tgl_penjualan" 

@@ -2,7 +2,7 @@
   <div id="kasir">
 
     <div class="columns is-fullheight">
-      <div class="column is-2 has-background-grey-lighter" style="overflow-y: scroll">
+      <div class="column is-2 has-background-grey-lighter">
         <div id="sidebar">
           <template>
             <b-menu class="is-sidebar-menu">
@@ -16,48 +16,6 @@
                     to="/kasir/dashboard"
                     :active="isActive"
                     @click="namaData = 'Dashboard'">
-                </b-menu-item>
-
-                <!-- Data Master -->
-                <b-menu-item
-                    icon="database">
-                  <template slot="label" slot-scope="props">
-                    Data Master
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item 
-                        v-for="dataMaster in dataMasters"
-                        :key="dataMaster.label"
-                        :icon="dataMaster.icon" 
-                        :label="dataMaster.label"
-                        tag="router-link"
-                        :to="dataMaster.to"
-                        @click="namaData = dataMaster.title;">
-                    </b-menu-item>
-                </b-menu-item>
-
-                <!-- Data Transaksi -->
-                <b-menu-item
-                    icon="cash-multiple">
-                  <template slot="label" slot-scope="props">
-                    Transaksi
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="dataTransaksi in dataTransaksis"
-                        :key="dataTransaksi.label"
-                        :icon="dataTransaksi.icon"
-                        :label="dataTransaksi.label"
-                        tag="router-link"
-                        :to="dataTransaksi.to">
-                    </b-menu-item>
-
                 </b-menu-item>
 
                 <!-- Data Pembayaran -->
@@ -77,27 +35,6 @@
                         :label="dataPembayaran.label"
                         tag="router-link"
                         :to="dataPembayaran.to">
-                    </b-menu-item>
-
-                </b-menu-item>
-
-                <!-- Laporan-laporan -->
-                <b-menu-item
-                    icon="book">
-                  <template slot="label" slot-scope="props">
-                    Laporan
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="laporan in laporans"
-                        :key="laporan.label"
-                        :icon="laporan.icon"
-                        :label="laporan.label"
-                        tag="router-link"
-                        :to="laporan.to">
                     </b-menu-item>
 
                 </b-menu-item>
@@ -220,28 +157,12 @@
 <script>
 export default {
   data() {
-    const dataMasters = [
-      { 'label': "Produk", 'icon':"gift", 'to':"/owner/produk", 'title': "Data Produk" },
-      { 'label': "Layanan", 'icon':"wrench", 'to':"/owner/layanan", 'title': "Data Layanan" },
-      { 'label': "Pegawai", 'icon':"worker", 'to':"/owner/pegawai", 'title': "Data Pegawai" },
-      { 'label': "Pelanggan", 'icon':"face", 'to':"/owner/pelanggan", 'title': "Data Pelanggan" },
-      { 'label': "Hewan", 'icon':"paw", 'to':"/owner/hewan", 'title': "Data Hewan" },
-    ]
-
-    const dataTransaksis = [
-      { 'label': "Penjualan Produk", 'icon':"cash", 'to':"/penjualan-produk", 'title': "Penjualan Produk" },
-      { 'label': "Penjualan Layanan", 'icon':"cash", 'to':"/penjualan-layanan", 'title': "Penjualan Layanan" },
-      { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
-    ]
-
     const dataPembayarans = [
       { 'label': "Pembayaran Produk", 'icon':"cash", 'to':"/kasir/transaksi-pembayaran-produk", 'title': "Transaksi Pembayaran Produk" },
       { 'label': "Pembayaran Layanan", 'icon':"cash", 'to':"/kasir/transaksi-pembayaran-layanan", 'title': "Transaksi Pembayaran Layanan" },
     ]
 
     return {
-      dataMasters,
-      dataTransaksis,
       dataPembayarans,
       activeUser: Object,
       isActive: true
@@ -265,12 +186,6 @@ export default {
 </script>
 
 <style scoped>
-.is-fullheight.columns {
-    height: calc(100vh - ( 0rem - .75rem ) );
-    /* height: 100%; */
-    overflow-y: scroll;
-}
-
 .title-nama-data {
   margin: 20px 10px;
 }
