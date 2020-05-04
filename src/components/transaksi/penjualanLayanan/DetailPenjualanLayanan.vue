@@ -49,7 +49,7 @@
               label="Harga"
               width="150px"
               :searchable="true">
-            {{ "Rp" + props.row.harga }}
+            {{ "Rp" + props.row.harga_layanan }}
           </b-table-column>
 
           <b-table-column 
@@ -240,7 +240,7 @@ export default {
         this.isLoading = false
       })
     },
-    getlayanan() {
+    getLayanan() {
       var uri = this.$api_baseUrl + "layanan"
 
       this.$http.get(uri).then(response => {
@@ -315,7 +315,6 @@ export default {
       
       this.datas.forEach(element => {
         total += parseInt(element.subtotal)
-        console.log(element.subtotal) 
       });
 
       data.total = total
@@ -384,9 +383,11 @@ export default {
         this.idDetailForEdit = layanan.id_detail
         this.form.id_layanan = layanan.id_layanan
         this.cari = layanan.nama_layanan
-        this.form.nama_layanan.value =layanan.nama_layanan
-        this.form.jumlah.value =  parseInt(layanan.jumlah)
-        this.form.harga = parseInt(layanan.harga)
+        this.form.nama_layanan.value = layanan.nama_layanan
+        this.form.jumlah.value = parseInt(layanan.jumlah)
+        this.subtotal = layanan.subtotal
+        console.log(typeof(this.subtotal))
+        this.form.harga = parseInt(layanan.harga_layanan)
         this.form.maxJumlah = 10
       }
 
@@ -445,6 +446,8 @@ export default {
       })
     },
     subtotal() {
+      console.log(this.form.harga) 
+      console.log(this.form.jumlah.value)
       return this.form.harga * this.form.jumlah.value
     }
   },

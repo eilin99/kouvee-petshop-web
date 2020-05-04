@@ -34,7 +34,7 @@
         <b-table-column 
             field="nomor_transaksi" 
             label="No. transaksi" 
-            width="140px"
+            width="130px"
             :searchable="true" 
             sortable>
           {{ props.row.nomor_transaksi }}
@@ -52,7 +52,7 @@
         <b-table-column 
             field="nama_hewan" 
             label="Nama hewan"
-            width="150px"
+            width="130px"
             :searchable="true">
           <p v-if="props.row.nama_hewan == null">-</p>
           <p v-else>{{ props.row.nama_hewan }}</p>
@@ -61,7 +61,7 @@
         <b-table-column 
             field="tgl_penjualan" 
             label="Tanggal"
-            width="125px"
+            width="110px"
             searchable
             sortable>
           {{ props.row.tgl_penjualan }}
@@ -94,14 +94,14 @@
                 type="is-text"
                 @click="openModalEdit(props.row)" 
                 rounded
-                :disabled="props.row.status_layanan == 'Lunas' ? true : false">
+                :disabled="props.row.status_layanan == 'Selesai' ? true : false">
                   <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
             <b-button 
                 type="is-text"  
                 @click="confirmDelete(props.row.id)" 
                 rounded
-                :disabled="props.row.status_layanan == 'Lunas' ? true : false">
+                :disabled="props.row.status_layanan == 'Selesai' ? true : false">
                   <b-icon icon="delete" type="is-danger"></b-icon>
             </b-button>
           </span>
