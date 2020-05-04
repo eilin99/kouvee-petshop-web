@@ -16,9 +16,31 @@
     </div>
     <hr>
     
-    <p class="subtitle is-5">
-      Nomor Transaksi : {{ noTransaksi }}
-    </p>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">No. Transaksi</p></div>
+      <div class="column">{{ transaksi.nomor_transaksi }}</div>
+    </div>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">Nama Pelanggan</p></div>
+      <div v-if="transaksi.nama_customer == null" class="column">-</div>
+      <div v-else class="column">{{ transaksi.nama_customer }}</div>
+    </div>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">Hewan</p></div>
+      <div v-if="transaksi.nama_hewan == null" class="column">-</div>
+      <div v-else class="column">{{ transaksi.nama_hewan }} ({{ transaksi.jenis }})</div>
+    </div>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">Total</p></div>
+      <div class="column">
+        Rp {{ transaksi.total }}
+        <b-icon
+            icon="check"
+            type="is-success"
+            v-show="transaksi.status_pembayaran == 'Lunas' ? true : false">
+        </b-icon>
+      </div>
+    </div>
     
     <div style="width:85%">
       <b-table
@@ -72,13 +94,15 @@
               <b-button 
                   type="is-text" 
                   @click="openModalForm(props.row)"
-                  rounded>
+                  rounded
+                  :disabled="transaksi.status_pembayaran == 'Lunas' ? true : false">
                     <b-icon icon="pencil" type="is-info"></b-icon>
               </b-button>
               <b-button 
                   type="is-text"  
                   @click="confirmDelete(props.row.id_detail)" 
-                  rounded>
+                  rounded
+                  :disabled="transaksi.status_pembayaran == 'Lunas' ? true : false">
                     <b-icon icon="delete" type="is-danger"></b-icon>
               </b-button>
             </span>
@@ -105,6 +129,7 @@
                 type="is-light" 
                 icon-left="plus" 
                 @click="openModalForm('')"
+                :disabled="transaksi.status_pembayaran == 'Lunas' ? true : false"
                 expanded>
               Tambah
             </b-button>
@@ -196,6 +221,21 @@
 export default {
   data() {
     return {
+      // DATA TRANSAKSI
+      dataTransaksi: [],
+      transaksi: {
+        id: '',
+        nomor_transaksi:	'',
+        nama_hewan: '',
+        jenis: '',
+        nama_customer: '',
+        tgl_penjualan: '',
+        total: '',
+        status_pembayaran: '',
+        customer_service: '',
+      },
+      
+      // DATA BUAT DETAIL TRANSAKSI
       datas: [],
       tableLoadingIcon: 'clock',
       tableMessage: 'Memuat Data',
@@ -204,7 +244,6 @@ export default {
       modalFormProduk: false,
       snackbarMsg: '',
       tempProduk: {},
-      noTransaksi: Number,
       idDetailForEdit: Number,
 
       // DATA DI MODAL FORM
@@ -225,7 +264,7 @@ export default {
     // -----------------------------------------------------------------
     async getData() {
       this.isLoading = true
-      var uri = this.$api_baseUrl + "transaksi/detail_produk/getByTransaction/" + this.noTransaksi
+      var uri = this.$api_baseUrl + "transaksi/detail_produk/getByTransaction/" + this.transaksi.nomor_transaksi
 
        await this.$http.get(uri).then(response => {
         this.datas = response.data.value
@@ -250,12 +289,28 @@ export default {
         this.errors = error
       })
     },
+    async getPenjualanProduk() {
+      var uri = this.$api_baseUrl + "transaksi/produk"
+
+      await this.$http.get(uri).then(response => {
+        this.dataTransaksi = response.data.value
+      })
+      .catch(error => {
+        this.errors = error
+      })
+    },
+    async filterTransaksi() {
+      this.dataTransaksi = await this.dataTransaksi.filter((transaksi) => {
+        return transaksi.nomor_transaksi.indexOf(this.transaksi.nomor_transaksi) >= 0
+      })
+    },
 
     // -----------------------------------------------------------------
     // ADD
     // -----------------------------------------------------------------
     async addNewDetail(noTransaksi) {
       await this.addData(noTransaksi)
+      this.modalFormProduk = false
       await this.getData()
       await this.editTotalPenjualan()
     },
@@ -287,6 +342,7 @@ export default {
     // -----------------------------------------------------------------
     async editDetail(idDetailForEdit) {
       await this.editData(idDetailForEdit)
+      this.modalFormProduk = false
       await this.getData()
       await this.editTotalPenjualan()
     },
@@ -320,7 +376,7 @@ export default {
 
       data.total = total
 
-      var uri = this.$api_baseUrl + "transaksi/produk/updateTotal/" + this.noTransaksi;
+      var uri = this.$api_baseUrl + "transaksi/produk/updateTotal/" + this.transaksi.nomor_transaksi;
       try {
         await this.$http.put(uri, data, this.config)
       } catch (e) {
@@ -367,6 +423,17 @@ export default {
     // -----------------------------------------------------------------
     // LAIN - LAIN
     // -----------------------------------------------------------------
+    setInfoTransaksi(transaksi) {
+      this.transaksi.id = transaksi.id
+      this.transaksi.nomor_transaksi = transaksi.nomor_transaksi
+      this.transaksi.nama_hewan = transaksi.nama_hewan
+      this.transaksi.jenis = transaksi.jenis
+      this.transaksi.nama_customer = transaksi.nama_customer
+      this.transaksi.tgl_penjualan = transaksi.tgl_penjualan
+      this.transaksi.total = transaksi.total
+      this.transaksi.status_pembayaran = transaksi.status_pembayaran
+      this.transaksi.customer_service = transaksi.customer_service
+    },
     openModalForm(produk) {
       if (produk === '') {
         this.modalTitle = "Tambah"
@@ -421,9 +488,14 @@ export default {
     },
     async simpan(tujuan) {
       if (this.cekData() == 0) {
-        tujuan == "Tambah" ? await this.addNewDetail(this.noTransaksi) : await this.editDetail(this.idDetailForEdit)
-        this.modalFormProduk = false
+        tujuan == "Tambah" ? await this.addNewDetail(this.transaksi.nomor_transaksi) : await this.editDetail(this.idDetailForEdit)
+        await this.refreshTransaksi()
       }
+    },
+    async refreshTransaksi() {
+      await this.getPenjualanProduk()
+      await this.filterTransaksi()
+      this.setInfoTransaksi(this.dataTransaksi[0])
     },
     snackbar(snackbarMessage, type) {
       this.$buefy.snackbar.open({
@@ -448,12 +520,13 @@ export default {
       return this.form.harga_jual * this.form.jumlah.value
     }
   },
-  mounted() {
+  async mounted() {
     if(this.$route.params.id) {           // Kalo di URL ada angka ID-nya,
-      this.noTransaksi = this.$route.params.id // berarti ID-nya akan dimasukin ke noTransaksi
-      this.getData(this.noTransaksi)           // Ngambil data lama sesuai ID
+      this.transaksi.nomor_transaksi = this.$route.params.id // berarti ID-nya akan dimasukin ke nomor_transaksi
+      this.getData(this.transaksi.nomor_transaksi)           // Ngambil data lama sesuai ID
     }
     this.getProduk()
+    await this.refreshTransaksi()
     this.isLoading = false // Page udah ter-load dan berhenti loading
   }
 }
