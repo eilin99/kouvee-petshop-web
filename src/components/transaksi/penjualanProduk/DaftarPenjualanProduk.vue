@@ -156,18 +156,69 @@
         trap-focus
         aria-role="dialog"
         aria-modal>
-      <ModalAddMember tujuanModal="edit" :member="member" @ubahData="member = $event"></ModalAddMember>
+          <div class="modal-card" style="height:500px">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Pelanggan & Hewan</p>
+            </header>
+            <section class="modal-card-body">
+
+              <b-field
+                  label="Pelanggan"
+                  :message="formMember.nama_customer.message"
+                  :type="formMember.nama_customer.type">
+                  <b-autocomplete
+                      v-model="cariPelanggan"
+                      icon="magnify"
+                      placeholder="Nama pelanggan"
+                      :value="formMember.nama_customer.value"
+                      :open-on-focus="true"
+                      :data="filteredDataPelanggan"
+                      @select="option => {formMember.nama_customer.value = option.nama_customer; formMember.id_customer = option.id_customer}"
+                      @input="clearError(formMember.nama_customer)"
+                      field="nama_customer"
+                      clearable>
+                  </b-autocomplete>
+              </b-field>
+
+              <b-field
+                  label="Hewan"
+                  :message="formMember.nama_hewan.message"
+                  :type="formMember.nama_hewan.type">
+                <b-select 
+                    icon="paw"
+                    :disabled="formMember.nama_customer == '' ? true : false"
+                    placeholder="Pilih hewan"
+                    v-model="formMember.id_hewan"
+                    :value="formMember.nama_hewan.value"
+                    @input="clearError(formMember.nama_hewan)">
+                      <option 
+                          v-for="hewan in filteredDataHewan"
+                          :key="hewan.id_hewan"
+                          :value="hewan.id_hewan"
+                          @click="formMember.nama_hewan.value = hewan.nama_hewan; formMember.jenis = hewan.jenis;"
+                      >
+                        {{ hewan.nama_hewan }} <span>({{ hewan.jenis }})</span>
+                      </option>
+                </b-select>
+              </b-field>
+
+            </section>
+            <footer class="modal-card-foot">
+              <div class="footer-modal">
+                <div class="btn-right">
+                  <button class="button" type="button" @click="modalEdit = false">Batal</button>
+                  <button class="button is-primary" @click="editData">Konfirmasi</button>
+                </div>
+              </div>
+            </footer>
+        </div>
     </b-modal>
   </section>
 </template>
 
 <script>
-import ModalAddMember from "../ModalAddCustomerDanHewan.vue"
 
 export default {
-  components: {
-    ModalAddMember
-  },
   data() {
     return {
       datas: [],
@@ -176,21 +227,29 @@ export default {
       detailOpened: [],  // Buat nampung index dari detail yang kebuka di tabel
       isLoading: true,
       snackbarMsg: '',
-      member: { // temp member buat kalo diedit
+
+      // Modal Edit Penjualan
+      dataPelanggan: [],
+      dataHewan: [],
+      formMember: { // temp member buat kalo diedit
         id_customer: 0,
-        nama_customer: '',
+        nama_customer: { value: '', message: '', type: '' },
         id_hewan: 0,
-        nama_hewan: '',
+        nama_hewan: { value: '', message: '', type: '' },
       },
+      cariPelanggan: '',
       modalEdit: false,
     }
   },
   methods: {
-    getData() {
+    // -----------------------------------------------------------
+    // GET
+    // -----------------------------------------------------------
+    async getData() {
       this.isLoading = true
       var uri = this.$api_baseUrl + "transaksi/produk"
 
-      this.$http.get(uri).then(response => {
+      await this.$http.get(uri).then(response => {
         this.datas = response.data.value
         this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
         this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
@@ -203,12 +262,39 @@ export default {
         this.isLoading = false
       })
     },
-    deletePenjualan(deleteId) {
+    async getDataPelanggan() {
+      var uri = this.$api_baseUrl + "customer"
+
+      await this.$http.get(uri).then(response => {
+        this.dataPelanggan = response.data.value
+      })
+      .catch(error => {
+        this.errors = error
+      })
+    },
+    async getDataHewan() {
+      var uri = this.$api_baseUrl + "hewan"
+
+      await this.$http.get(uri).then(response => {
+        this.dataHewan = response.data.value
+      })
+      .catch(error => {
+        this.errors = error
+      })
+    },
+
+    // -----------------------------------------------------------
+    // DELETE
+    // -----------------------------------------------------------
+    async deleteData(deleteId) {
+      await this.deletePenjualan(deleteId)
+      await this.getData();
+    },
+    async deletePenjualan(deleteId) {
       var uri = this.$api_baseUrl + "transaksi/produk/delete/" + deleteId;
       var id_cs = { id_cs: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
       
-      this.$http.put(uri, id_cs).then(response => {
-        this.getData();
+      await this.$http.put(uri, id_cs).then(response => {
         this.snackbarMsg = response
         this.snackbar('Data terhapus!', 'is-success')
       })
@@ -216,16 +302,6 @@ export default {
         this.errors = error
         this.snackbarMsg = "Terjadi kesalahan... Silahkan coba lagi"
         this.snackbar(this.snackbarMsg, 'is-danger')
-      })
-    },
-    snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak
-      this.$buefy.snackbar.open({
-        duration: 5000, // 5 detik
-        message: message, // pesannya
-        type: type, // tipe dapetnya dari parameter. Dia bisa 'is-danger' kalo gagal dan 'is-success' kalo berhasil
-        position: 'is-bottom-left', // posisi munculnya
-        actionText: 'OK',
-        queue: false,
       })
     },
     confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
@@ -236,18 +312,26 @@ export default {
         cancelText: 'Batal',
         type: 'is-danger',
         hasIcon: true,
-        onConfirm: () => this.deletePenjualan(deleteId)
+        onConfirm: () => this.deleteData(deleteId)
       })
     },
-    editData() {
+
+    // -----------------------------------------------------------
+    // EDIT dan MODAL EDIT
+    // -----------------------------------------------------------
+    async editData() {
+      await this.editPenjualan()
+      this.modalEdit = false
+      await this.getData()
+    },
+    async editPenjualan() {
       let dataEdit = {}
-      dataEdit.id_hewan = this.memberTemp.id_hewan
+      dataEdit.id_hewan = this.formMember.id_hewan
       dataEdit.id_cs = this.$session.get('pegawai').id_pegawai
 
-      var uri = this.$api_baseUrl + "transaksi/produk/" + this.member.id;
+      var uri = this.$api_baseUrl + "transaksi/produk/" + this.formMember.id;
       
-      this.$http.put(uri, dataEdit, this.config).then(response => {
-        this.getData()
+      await this.$http.put(uri, dataEdit, this.config).then(response => {
         this.snackbarMsg = response.message
         this.snackbar("Data berhasil diedit!", 'is-success')
       })
@@ -261,18 +345,72 @@ export default {
       });
     },
     openModalEdit(penjualan) {
-      this.member.id_penjualan = penjualan.id
-      this.member.id_customer = penjualan.id_customer
-      this.member.nama_customer = penjualan.nama_customer
-      this.member.id_hewan = penjualan.id_hewan
-      this.member.nama_hewan = penjualan.nama_hewan
-      this.member.id = penjualan.id
+      this.formMember.id_penjualan = penjualan.id
+      this.formMember.id_customer = penjualan.id_customer
+      this.formMember.nama_customer.value = penjualan.nama_customer
+      this.cariPelanggan = penjualan.nama_customer
+      this.formMember.id_hewan = penjualan.id_hewan
+      this.formMember.nama_hewan.value = penjualan.nama_hewan
+      this.formMember.id = penjualan.id
 
       this.modalEdit = true
+    },
+    cekMember() {
+      let count = 0
+
+      if (this.formMember.id_customer == 0 ||
+          this.cariPelanggan == '') {
+            count++
+            this.formMember.nama_customer.message = 'Member belum terpilih dengan benar'
+            this.formMember.nama_customer.type = 'is-danger'
+      }
+      if (this.formMember.id_hewan == 0 ||
+          this.formMember.nama_hewan == '' ||
+          this.formMember.jenis == '') {
+            count++
+            this.formMember.hewan.message = 'Hewan belum terpilih'
+            this.formMember.hewan.type = 'is-danger'
+      }
+      return count
+    },
+    clearError(form) {
+      form.type = ''
+      form.message = '' 
+    },
+
+    // -----------------------------------------------------------
+    // LAIN - LAIN
+    // -----------------------------------------------------------
+    snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak
+      this.$buefy.snackbar.open({
+        duration: 5000, // 5 detik
+        message: message, // pesannya
+        type: type, // tipe dapetnya dari parameter. Dia bisa 'is-danger' kalo gagal dan 'is-success' kalo berhasil
+        position: 'is-bottom-left', // posisi munculnya
+        actionText: 'OK',
+        queue: false,
+      })
+    },
+  },
+  computed: {
+    filteredDataPelanggan() {
+      return this.dataPelanggan.filter((pelanggan) => {
+        return pelanggan.nama_customer
+          .toLowerCase()
+          .indexOf(this.cariPelanggan.toLowerCase()) >= 0
+      })
+    },
+    filteredDataHewan() {
+      return this.dataHewan.filter((hewan) => {
+        return hewan.nama_customer
+          .indexOf(this.formMember.nama_customer.value) >= 0
+      })
     }
   },
-  mounted() {
-    this.getData()
+  async mounted() {
+    await this.getData()
+    await this.getDataPelanggan()
+    await this.getDataHewan()
   },
 }
 </script>

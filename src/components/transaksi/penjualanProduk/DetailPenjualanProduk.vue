@@ -185,7 +185,7 @@
 .btn-right {
   width: 180px;
   position: absolute;
-  left: 420px;
+  left: 450px;
 }
 .subtotal {
   margin-top: 50px;
