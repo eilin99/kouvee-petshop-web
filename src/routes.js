@@ -26,7 +26,10 @@ import Hewan from './components/dataMaster/Hewan.vue'
 import formHewan from './components/dataMaster/formHewan.vue'
 
 // Transaksi
-// ......
+
+import PenjualanProduk from './components/transaksi/penjualanProduk/PenjualanProduk.vue'
+import DaftarPenjualanProduk from './components/transaksi/penjualanProduk/DaftarPenjualanProduk.vue'
+import DetailPenjualanProduk from './components/transaksi/penjualanProduk/DetailPenjualanProduk.vue'
 
 // Laporan
 // ......
@@ -197,17 +200,33 @@ export default [
                name: 'Hewan',
                path: '/cs/hewan',
                component: Hewan
-           },
-           {
-               name: 'formHewan',
-               path: '/cs/form-hewan',
-               component: formHewan
-           },
-           {
-               name: 'formEditHewan',
-               path: '/cs/form-hewan/:id',
-               component: formHewan
-           },
+            },
+            {
+                name: 'formHewan',
+                path: '/cs/form-hewan',
+                component: formHewan
+            },
+            {
+                name: 'formEditHewan',
+                path: '/cs/form-hewan/:id',
+                component: formHewan
+            },
+            // ===== PENJUALAN PRODUK =====
+            {
+                name: 'PenjualanProduk',
+                path: '/cs/penjualan-produk',
+                component: PenjualanProduk
+            },
+            {
+                name: 'DaftarPenjualanProduk',
+                path: '/cs/daftar-penjualan-produk',
+                component: DaftarPenjualanProduk
+            },
+            {
+                name: 'DetailPenjualanProduk',
+                path: '/cs/detail-penjualan-produk/:id',
+                component: DetailPenjualanProduk
+            },
         ] 
     },
 ]

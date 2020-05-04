@@ -8,7 +8,7 @@
       :loading="isLoading" 
       :mobile-cards="true"
       paginated
-      per-page="5"
+      per-page="10"
       ref="table"
       detailed
       detail-key="id_customer"
@@ -211,7 +211,7 @@ export default {
         queue: false,
       })
     },
-    confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
+    confirmDelete(deleteId) { // Buat ngeluarin modal box Simpan delete
       this.$buefy.dialog.confirm({
         title: 'Hapus Data Customer',
         message: 'Apa anda yakin ingin <b>menghapus</b> customer?',

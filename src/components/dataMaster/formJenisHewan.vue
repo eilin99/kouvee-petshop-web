@@ -26,7 +26,7 @@
               type="is-success" 
               @click="confirm()"
               rounded>
-                Konfirmasi
+                Simpan
           </b-button>
         </div>
 
@@ -87,7 +87,6 @@ export default {
       return fixedDate
     },
     clearError(form) {
-      console.log(form)
       form.type = ''
       form.message = '' 
     },
