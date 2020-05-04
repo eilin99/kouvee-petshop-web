@@ -320,9 +320,10 @@ export default {
     // EDIT dan MODAL EDIT
     // -----------------------------------------------------------
     async editData() {
-      await this.editPenjualan()
-      this.modalEdit = false
-      await this.getData()
+      if (this.cekMember() === 0) {
+        await this.editPenjualan()
+        await this.getData()
+      }
     },
     async editPenjualan() {
       let dataEdit = {}
@@ -333,6 +334,7 @@ export default {
       
       await this.$http.put(uri, dataEdit, this.config).then(response => {
         this.snackbarMsg = response.message
+        this.modalEdit = false
         this.snackbar("Data berhasil diedit!", 'is-success')
       })
       .catch(error => {
