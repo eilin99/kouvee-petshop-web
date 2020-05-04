@@ -162,6 +162,14 @@
             </header>
             <section class="modal-card-body">
 
+              <b-field label="Guest">
+                <b-switch v-model="isGuest"
+                  true-value="Guest"
+                  false-value="">
+                  {{ isGuest }}
+                </b-switch>
+              </b-field>
+
               <b-field
                   label="Pelanggan"
                   :message="formMember.nama_customer.message"
@@ -176,7 +184,8 @@
                       @select="option => {formMember.nama_customer.value = option.nama_customer; formMember.id_customer = option.id_customer}"
                       @input="clearError(formMember.nama_customer)"
                       field="nama_customer"
-                      clearable>
+                      clearable
+                      :disabled="isGuest == 'Guest' ? true : false">
                   </b-autocomplete>
               </b-field>
 
@@ -186,7 +195,7 @@
                   :type="formMember.nama_hewan.type">
                 <b-select 
                     icon="paw"
-                    :disabled="formMember.nama_customer == '' ? true : false"
+                    :disabled="formMember.nama_customer.value == '' || isGuest == 'Guest' ? true : false"
                     placeholder="Pilih hewan"
                     v-model="formMember.id_hewan"
                     :value="formMember.nama_hewan.value"
@@ -207,7 +216,7 @@
               <div class="footer-modal">
                 <div class="btn-right">
                   <button class="button" type="button" @click="modalEdit = false">Batal</button>
-                  <button class="button is-primary" @click="editData">Konfirmasi</button>
+                  <button class="button is-primary" @click="editData">Simpan</button>
                 </div>
               </div>
             </footer>
@@ -215,6 +224,18 @@
     </b-modal>
   </section>
 </template>
+
+<style scoped>
+.footer-modal {
+  height: 35px;
+  position: relative;
+}
+.btn-right {
+  width: 180px;
+  position: absolute;
+  left: 450px;
+}
+</style>
 
 <script>
 
@@ -229,6 +250,7 @@ export default {
       snackbarMsg: '',
 
       // Modal Edit Penjualan
+      cariPelanggan: '',
       dataPelanggan: [],
       dataHewan: [],
       formMember: { // temp member buat kalo diedit
@@ -237,8 +259,8 @@ export default {
         id_hewan: 0,
         nama_hewan: { value: '', message: '', type: '' },
       },
-      cariPelanggan: '',
       modalEdit: false,
+      isGuest: '',
     }
   },
   methods: {
@@ -320,9 +342,17 @@ export default {
     // EDIT dan MODAL EDIT
     // -----------------------------------------------------------
     async editData() {
-      if (this.cekMember() === 0) {
+      if (this.isGuest == "Guest") {
+        this.formMember.id_hewan = null
         await this.editPenjualan()
+        this.modalEdit = false
         await this.getData()
+      } else {
+        if (this.cekMember() === 0) {
+          await this.editPenjualan()
+          this.modalEdit = false
+          await this.getData()
+        }
       }
     },
     async editPenjualan() {
@@ -334,7 +364,6 @@ export default {
       
       await this.$http.put(uri, dataEdit, this.config).then(response => {
         this.snackbarMsg = response.message
-        this.modalEdit = false
         this.snackbar("Data berhasil diedit!", 'is-success')
       })
       .catch(error => {
@@ -350,10 +379,11 @@ export default {
       this.formMember.id_penjualan = penjualan.id
       this.formMember.id_customer = penjualan.id_customer
       this.formMember.nama_customer.value = penjualan.nama_customer
-      this.cariPelanggan = penjualan.nama_customer
       this.formMember.id_hewan = penjualan.id_hewan
       this.formMember.nama_hewan.value = penjualan.nama_hewan
       this.formMember.id = penjualan.id
+
+      penjualan.nama_customer === null ? this.cariPelanggan = '' : this.cariPelanggan = penjualan.nama_customer
 
       this.modalEdit = true
     },
