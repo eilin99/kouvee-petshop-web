@@ -60,6 +60,27 @@
 
                 </b-menu-item>
 
+                <!-- Data Pembayaran -->
+                <b-menu-item
+                    icon="cash-multiple">
+                  <template slot="label" slot-scope="props">
+                    Pembayaran
+                    <b-icon
+                        class="is-pulled-right"
+                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
+                    </b-icon>
+                  </template>
+                    <b-menu-item
+                        v-for="dataPembayaran in dataPembayarans"
+                        :key="dataPembayaran.label"
+                        :icon="dataPembayaran.icon"
+                        :label="dataPembayaran.label"
+                        tag="router-link"
+                        :to="dataPembayaran.to">
+                    </b-menu-item>
+
+                </b-menu-item>
+
                 <!-- Laporan-laporan -->
                 <b-menu-item
                     icon="book">
@@ -213,9 +234,15 @@ export default {
       { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
+    const dataPembayarans = [
+      { 'label': "Pembayaran Produk", 'icon':"cash", 'to':"/kasir/transaksi-pembayaran-produk", 'title': "Transaksi Pembayaran Produk" },
+      { 'label': "Pembayaran Layanan", 'icon':"cash", 'to':"/kasir/transaksi-pembayaran-layanan", 'title': "Transaksi Pembayaran Layanan" },
+    ]
+
     return {
       dataMasters,
       dataTransaksis,
+      dataPembayarans,
       activeUser: Object,
       isActive: true
     }

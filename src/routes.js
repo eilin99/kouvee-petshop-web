@@ -19,6 +19,12 @@ import formSupplier from './components/dataMaster/formSupplier.vue'
 import UkuranHewan from './components/dataMaster/UkuranHewan.vue'
 import formUkuranHewan from './components/dataMaster/formUkuranHewan.vue'
 
+//Data Pembayaran
+import TransaksiPembayaranProduk from './components/dataPembayaran/TransaksiPembayaranProduk.vue'
+import formTransaksiPembayaranProduk from './components/dataPembayaran/formTransaksiPembayaranProduk.vue'
+import TransaksiPembayaranLayanan from './components/dataPembayaran/TransaksiPembayaranLayanan.vue'
+import formTransaksiPembayaranLayanan from './components/dataPembayaran/formTransaksiPembayaranLayanan.vue'
+
 // CS
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
 // import formPelanggan from './components/dataMaster/formPelanggan.vue'
@@ -160,6 +166,39 @@ export default [
                 name: 'KasirDashboard',
                 path: '/kasir/dashboard',
                 component: Dashboard
+            },
+            // ===== TRANSAKSI PEMBAYARAN PRODUK =====
+            {
+                name: 'TransaksiPembayaranProduk',
+                path: '/kasir/transaksi-pembayaran-produk',
+                component: TransaksiPembayaranProduk
+            },
+            {
+                name: 'formTransaksiPembayaranProduk',
+                path: '/kasir/form-transaksi-pembayaran-produk',
+                component: formTransaksiPembayaranProduk
+            },
+            {
+                name: 'formEditTransaksiPembayaranProduk',
+                path: '/kasir/form-transaksi-pembayaran-produk/:id',
+                component: formTransaksiPembayaranProduk
+            },
+
+            // ===== TRANSAKSI PEMBAYARAN LAYANAN =====
+            {
+                name: 'TransaksiPembayaranLayanan',
+                path: '/kasir/transaksi-pembayaran-layanan',
+                component: TransaksiPembayaranLayanan
+            },
+            {
+                name: 'formTransaksiPembayaranLayanan',
+                path: '/kasir/form-transaksi-pembayaran-layanan',
+                component: formTransaksiPembayaranLayanan
+            },
+            {
+                name: 'formEditTransaksiPembayaranLayanan',
+                path: '/kasir/form-transaksi-pembayaran-Layanan/:id',
+                component: formTransaksiPembayaranLayanan
             },
             
         ]
