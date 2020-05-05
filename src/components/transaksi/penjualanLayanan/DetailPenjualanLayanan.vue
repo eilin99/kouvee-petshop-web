@@ -44,14 +44,13 @@
             {{ props.row.nama_layanan }}
           </b-table-column>
 
-          <b-table-column 
-              field="harga" 
-              label="Harga"
-              width="150px"
-              :searchable="true">
-            {{ "Rp" + props.row.harga }}
-          </b-table-column>
 
+          <b-table-column 
+              field="subtotal" 
+              label="Harga">
+            {{ 'Rp.' + props.row.subtotal }}
+          </b-table-column>
+          
           <b-table-column 
               field="jumlah" 
               label="Jumlah"
@@ -61,11 +60,6 @@
             {{ props.row.jumlah }}
           </b-table-column>
 
-          <b-table-column 
-              field="subtotal" 
-              label="Subtotal">
-            {{ 'Rp.' + props.row.subtotal }}
-          </b-table-column>
 
           <b-table-column label="Action" centered>
             <span>
@@ -136,7 +130,7 @@
                       placeholder="Nama layanan"
                       :open-on-focus="true"
                       :data="filteredDataLayanan"
-                      @select="option => { form.nama_layanan.value = option.nama_layanan; form.harga = option.harga; form.maxJumlah = option.stok; form.id_layanan = option.id_layanan }"
+                      @select="option => { form.nama_layanan.value = option.nama_layanan; form.harga = option.harga; form.id_layanan = option.id_layanan }"
                       @input="clearError(form.nama_layanan)"
                       field="nama_layanan"
                       clearable>
@@ -160,7 +154,7 @@
 
               <div class="subtotal">
                 <p class="heading">Subtotal :</p>
-                <h4 class="title is-3">Rp{{ subtotal }}</h4>
+                <h4 class="title is-3">Rp 20000{{ harga }}</h4>
               </div>
 
             </section>
@@ -293,8 +287,8 @@ export default {
     async editData(idDetailForEdit) {
       let dataLayanan = {}
       dataLayanan.id_layanan = this.form.id_layanan
-      dataLayanan.jumlah = this.form.jumlah.value
-      dataLayanan.subtotal = this.subtotal
+      dataLayanan.harga = this.form.harga.value
+      dataLayanan.harga = this.harga
 
       var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + idDetailForEdit;
       try {
