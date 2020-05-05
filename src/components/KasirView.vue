@@ -49,10 +49,7 @@
                   to="/expo">
                 </b-menu-item>
               </b-menu-list>
-
-              <!-- <b-menu-list label="Actions">
-                <b-menu-item label="Logout"></b-menu-item>
-              </b-menu-list> -->
+              
             </b-menu>
           </template>
         </div>
@@ -186,14 +183,15 @@ export default {
 </script>
 
 <style scoped>
+.is-fullheight.columns {
+    height: calc(100vh - ( 0rem - .75rem ) );
+}
 .title-nama-data {
   margin: 20px 10px;
 }
-
 .is-sidebar-menu {
   margin: 10px 0 0 10px;
 }
-
 .profile-dropdown {
   width: 300px;
 }

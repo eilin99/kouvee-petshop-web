@@ -1,5 +1,7 @@
 <template>
   <section id="transaksi-pembayaran-produk">
+    <h4 class="title is-4">Transaksi Pembayaran Produk</h4>
+    <hr>
 
     <b-table
       :data="datas"
@@ -54,14 +56,20 @@
 
         <b-table-column 
             field="status_pembayaran" 
-            label="status pembayaran"
-            width="70px">
-          {{ props.row.status_pembayaran }}
+            label="Lunas"
+            width="50px">
+            <b-icon 
+                icon="check"
+                type="is-success"
+                size="is-medium"
+                v-show="props.row.status_pembayaran == 'Lunas'">
+            </b-icon>
         </b-table-column>
 
         <b-table-column 
             field="tgl_pembayaran" 
             label="tanggal pembayaran"
+            width="100px"
             sortable>
           {{ props.row.tgl_pembayaran }}
         </b-table-column>
@@ -80,13 +88,17 @@
                 tag="router-link"
                 :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
                 rounded>
-                  <b-icon icon="pencil" type="is-info"></b-icon>
+                  <b-icon icon="note" type="is-primary"></b-icon>
             </b-button>
+          </span>
+
+          <span>
             <b-button 
-                type="is-text"  
-                @click="confirmDelete(props.row.id)" 
+                type="is-text" 
+                tag="router-link"
+                :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
                 rounded>
-                  <b-icon icon="delete" type="is-danger"></b-icon>
+                  <b-icon icon="pencil" type="is-info"></b-icon>
             </b-button>
           </span>
         </b-table-column>
@@ -177,22 +189,6 @@ export default {
         this.isLoading = false
       })
     },
-    deleteData(deleteId) {
-      var pic = { id_kasir: this.$session.get('pegawai').id_pegawai } // PIC ngambil dari id_pegawai yg ada di session
-
-      var uri = this.$api_baseUrl + "transaksi/produk/" + deleteId;
-      
-      this.$http.put(uri, pic).then(response => {
-        this.getData();
-        this.snackbarMsg = response
-        this.snackbar('Data terhapus!', 'is-success')
-      })
-      .catch(error => {
-        this.errors = error
-        this.snackbarMsg = "Terjadi kesalahan... Silahkan coba lagi"
-        this.snackbar(this.snackbarMsg, 'is-danger')
-      })
-    },
     snackbar(message, type) { // Snackbar buat ngasih tau http request berhasil apa nggak
       this.$buefy.snackbar.open({
         duration: 5000, // 5 detik
@@ -203,17 +199,6 @@ export default {
         queue: false,
       })
     },
-    confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
-      this.$buefy.dialog.confirm({
-        title: 'Hapus Data Produk',
-        message: 'Apa anda yakin ingin <b>menghapus</b> pembayaran produk?',
-        confirmText: 'Hapus',
-        cancelText: 'Batal',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: () => this.deleteData(deleteId)
-      })
-    }
   },
   mounted() {
     this.getData()
