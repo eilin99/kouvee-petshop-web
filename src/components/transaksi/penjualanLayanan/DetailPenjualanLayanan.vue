@@ -16,9 +16,31 @@
     </div>
     <hr>
     
-    <p class="subtitle is-5">
-      Nomor Transaksi : {{ noTransaksi }}
-    </p>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">No. Transaksi</p></div>
+      <div class="column">{{ transaksi.nomor_transaksi }}</div>
+    </div>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">Nama Pelanggan</p></div>
+      <div v-if="transaksi.nama_customer == null" class="column">-</div>
+      <div v-else class="column">{{ transaksi.nama_customer }}</div>
+    </div>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">Hewan</p></div>
+      <div v-if="transaksi.nama_hewan == null" class="column">-</div>
+      <div v-else class="column">{{ transaksi.nama_hewan }} ({{ transaksi.jenis }})</div>
+    </div>
+    <div class="columns is-gapless is-mobile">
+      <div class="column is-2"><p class="title is-6">Total</p></div>
+      <div class="column">
+        Rp {{ transaksi.total }}
+        <b-icon
+            icon="check"
+            type="is-success"
+            v-show="transaksi.status_pembayaran == 'Lunas' ? true : false">
+        </b-icon>
+      </div>
+    </div>
     
     <div style="width:85%">
       <b-table
@@ -44,12 +66,12 @@
             {{ props.row.nama_layanan }}
           </b-table-column>
 
-
           <b-table-column 
               field="subtotal" 
               label="Harga">
             {{ 'Rp.' + props.row.subtotal }}
           </b-table-column>
+          
           
           <b-table-column 
               field="jumlah" 
@@ -154,7 +176,7 @@
 
               <div class="subtotal">
                 <p class="heading">Subtotal :</p>
-                <h4 class="title is-3">Rp 20000{{ harga }}</h4>
+                <h4 class="title is-3">Rp {{ subtotal }}</h4>
               </div>
 
             </section>
@@ -190,6 +212,21 @@
 export default {
   data() {
     return {
+      // DATA TRANSAKSI
+      dataTransaksi: [],
+      transaksi: {
+        id: '',
+        nomor_transaksi:	'',
+        nama_hewan: '',
+        jenis: '',
+        nama_customer: '',
+        tgl_penjualan: '',
+        total: '',
+        status_pembayaran: '',
+        customer_service: '',
+      },
+      
+      // DATA BUAT DETAIL TRANSAKSI
       datas: [],
       tableLoadingIcon: 'clock',
       tableMessage: 'Memuat Data',
@@ -198,7 +235,6 @@ export default {
       modalFormLayanan: false,
       snackbarMsg: '',
       tempLayanan: {},
-      noTransaksi: Number,
       idDetailForEdit: Number,
 
       // DATA DI MODAL FORM
@@ -208,7 +244,7 @@ export default {
         id_layanan: 0,
         nama_layanan: { value: '', message: '', type: '' },
         jumlah: { value: 0, message: '', type: '' },
-        harga: 0,
+        harga_jual: 0,
         maxJumlah: 0,
       },
     }
@@ -234,7 +270,7 @@ export default {
         this.isLoading = false
       })
     },
-    getlayanan() {
+     getLayanan() {
       var uri = this.$api_baseUrl + "layanan"
 
       this.$http.get(uri).then(response => {
@@ -242,6 +278,21 @@ export default {
       })
       .catch(error => {
         this.errors = error
+      })
+    },
+    async getPenjualanLayanan() {
+      var uri = this.$api_baseUrl + "transaksi/"
+
+      await this.$http.get(uri).then(response => {
+        this.dataTransaksi = response.data.value
+      })
+      .catch(error => {
+        this.errors = error
+      })
+    },
+    async filterTransaksi() {
+      this.dataTransaksi = await this.dataTransaksi.filter((transaksi) => {
+        return transaksi.nomor_transaksi.indexOf(this.transaksi.nomor_transaksi) >= 0
       })
     },
 
@@ -274,21 +325,23 @@ export default {
           this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
         }
       }
+      
     },
 
     // -----------------------------------------------------------------
     // EDIT
     // -----------------------------------------------------------------
-    async editDetail(idDetailForEdit) {
+     async editDetail(idDetailForEdit) {
       await this.editData(idDetailForEdit)
+      this.modalFormLayan = false
       await this.getData()
       await this.editTotalPenjualan()
     },
     async editData(idDetailForEdit) {
       let dataLayanan = {}
       dataLayanan.id_layanan = this.form.id_layanan
-      dataLayanan.harga = this.form.harga.value
-      dataLayanan.harga = this.harga
+      dataLayanan.jumlah = this.form.jumlah.value
+      dataLayanan.subtotal = this.subtotal
 
       var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + idDetailForEdit;
       try {
@@ -314,7 +367,7 @@ export default {
 
       data.total = total
 
-      var uri = this.$api_baseUrl + "transaksi/layanan/updateTotal/" + this.noTransaksi;
+      var uri = this.$api_baseUrl + "transaksi/layanan/updateTotal/" + this.transaksi.nomor_transaksi;
       try {
         await this.$http.put(uri, data, this.config)
       } catch (e) {
@@ -361,6 +414,17 @@ export default {
     // -----------------------------------------------------------------
     // LAIN - LAIN
     // -----------------------------------------------------------------
+    setInfoTransaksi(transaksi) {
+      this.transaksi.id = transaksi.id
+      this.transaksi.nomor_transaksi = transaksi.nomor_transaksi
+      this.transaksi.nama_hewan = transaksi.nama_hewan
+      this.transaksi.jenis = transaksi.jenis
+      this.transaksi.nama_customer = transaksi.nama_customer
+      this.transaksi.tgl_penjualan = transaksi.tgl_penjualan
+      this.transaksi.total = transaksi.total
+      this.transaksi.status_pembayaran = transaksi.status_pembayaran
+      this.transaksi.customer_service = transaksi.customer_service
+    },
     openModalForm(layanan) {
       if (layanan === '') {
         this.modalTitle = "Tambah"
@@ -370,8 +434,8 @@ export default {
         this.form.nama_layanan.value = ''
         this.form.jumlah.value =  ''
         this.form.harga = ''
-        this.form.jumlah.value = 0
-        this.form.maxJumlah = 0
+        this.form.jumlah.value = 1
+        this.form.maxJumlah = 2
       } else {
         this.modalTitle = "Ubah"
 
@@ -394,19 +458,7 @@ export default {
         this.form.nama_layanan.message = 'Layanan belum terpilih'
         this.form.nama_layanan.type = 'is-danger'
       }
-      if (this.form.maxJumlah == 0) {
-        count++
-        this.form.jumlah.message = 'Stok kosong'
-        this.form.jumlah.type = 'is-danger'
-      } else if (this.form.jumlah.value == 0) {
-        count++
-        this.form.jumlah.message = 'Jumlah tidak boleh 0'
-        this.form.jumlah.type = 'is-danger'
-      } else if (this.form.jumlah.value > this.form.maxJumlah) {
-        count++
-        this.form.jumlah.message = 'Jumlah melebihi stok yang tersedia'
-        this.form.jumlah.type = 'is-danger'
-      }
+     
       return count
     },
     clearError(form) {
