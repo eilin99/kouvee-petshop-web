@@ -30,7 +30,9 @@ import formHewan from './components/dataMaster/formHewan.vue'
 import PenjualanProduk from './components/transaksi/penjualanProduk/PenjualanProduk.vue'
 import DaftarPenjualanProduk from './components/transaksi/penjualanProduk/DaftarPenjualanProduk.vue'
 import DetailPenjualanProduk from './components/transaksi/penjualanProduk/DetailPenjualanProduk.vue'
-
+import PenjualanLayanan from './components/transaksi/penjualanLayanan/PenjualanLayanan.vue'
+import DaftarPenjualanLayanan from './components/transaksi/penjualanLayanan/DaftarPenjualanLayanan.vue'
+import DetailPenjualanLayanan from './components/transaksi/penjualanLayanan/DetailPenjualanLayanan.vue'
 // Laporan
 // ......
 
@@ -226,6 +228,22 @@ export default [
                 name: 'DetailPenjualanProduk',
                 path: '/cs/detail-penjualan-produk/:id',
                 component: DetailPenjualanProduk
+            },
+            // ===== PENJUALAN LAYANAN =====
+            {
+                name: 'PenjualanLayanan',
+                path: '/cs/penjualan-layanan',
+                component: PenjualanLayanan
+            },
+            {
+                name: 'DaftarPenjualanLayanan',
+                path: '/cs/daftar-penjualan-layanan',
+                component: DaftarPenjualanLayanan
+            },
+            {
+                name: 'DetailPenjualanLayanan',
+                path: '/cs/detail-penjualan-layanan/:id',
+                component: DetailPenjualanLayanan
             },
         ] 
     },
