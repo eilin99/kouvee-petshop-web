@@ -177,14 +177,9 @@ export default [
                 component: TransaksiPembayaranProduk
             },
             {
-                name: 'formTransaksiPembayaranProduk',
-                path: '/kasir/form-transaksi-pembayaran-produk',
-                component: formTransaksiPembayaranProduk
-            },
-            {
-                name: 'formEditTransaksiPembayaranProduk',
-                path: '/kasir/form-transaksi-pembayaran-produk/:id',
-                component: formTransaksiPembayaranProduk
+                name: 'DetailPenjualanProdukKasir',
+                path: '/kasir/detail-penjualan-produk/:id',
+                component: DetailPenjualanProduk
             },
 
             // ===== TRANSAKSI PEMBAYARAN LAYANAN =====
@@ -192,11 +187,6 @@ export default [
                 name: 'TransaksiPembayaranLayanan',
                 path: '/kasir/transaksi-pembayaran-layanan',
                 component: TransaksiPembayaranLayanan
-            },
-            {
-                name: 'formTransaksiPembayaranLayanan',
-                path: '/kasir/form-transaksi-pembayaran-layanan',
-                component: formTransaksiPembayaranLayanan
             },
             {
                 name: 'formEditTransaksiPembayaranLayanan',
