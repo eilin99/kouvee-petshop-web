@@ -177,6 +177,11 @@ export default [
                 component: TransaksiPembayaranProduk
             },
             {
+                name: 'formTransaksiPembayaranProduk',
+                path: '/kasir/form-transaksi-pembayaran-produk',
+                component: formTransaksiPembayaranProduk
+            },
+            {
                 name: 'DetailPenjualanProdukKasir',
                 path: '/kasir/detail-penjualan-produk/:id',
                 component: DetailPenjualanProduk
