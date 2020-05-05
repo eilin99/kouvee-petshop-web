@@ -88,17 +88,17 @@
                 tag="router-link"
                 :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
                 rounded>
-                  <b-icon icon="note" type="is-primary"></b-icon>
+                  <b-icon icon="coin" type="is-success"></b-icon>
             </b-button>
           </span>
-
+          
           <span>
             <b-button 
                 type="is-text" 
                 tag="router-link"
                 :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
                 rounded>
-                  <b-icon icon="pencil" type="is-info"></b-icon>
+                  <b-icon icon="note" type="is-primary"></b-icon>
             </b-button>
           </span>
         </b-table-column>
@@ -141,7 +141,7 @@
       </section>
     </template>
 
-    <template slot="footer">
+    <!-- <template slot="footer">
       <div class="has-text-centered">
         <b-button size="is-medium" 
             type="is-light" 
@@ -153,7 +153,7 @@
           Bayar
         </b-button>
       </div>
-    </template>
+    </template> -->
 
     </b-table>
   </section>

@@ -1,5 +1,7 @@
 <template>
-  <section id="transaksi-pembayaran-layanan">
+  <section id="transaksi-pembayaran-produk">
+    <h4 class="title is-4">Transaksi Pembayaran Layanan</h4>
+    <hr>
 
     <b-table
       :data="datas"
@@ -7,7 +9,7 @@
       :loading="isLoading" 
       :mobile-cards="true"
       paginated
-      per-page="5"
+      per-page="10"
       ref="table"
       detailed
       detail-key="nomor_transaksi"
@@ -16,8 +18,7 @@
       aria-previous-label="Previous page"
       aria-next-label="Next page"
       aria-page-label="Page"
-      aria-current-label="Current page"
-      narrowed>
+      aria-current-label="Current page">
 
       <template slot-scope="props">
 
@@ -33,24 +34,11 @@
         <b-table-column 
             field="nomor_transaksi" 
             label="Nomor Transaksi" 
+            width="150px"
             :searchable="true" 
             sortable>
           {{ props.row.nomor_transaksi }}
         </b-table-column>
-
-        <b-table-column 
-            field="id_kasir" 
-            label="ID Kasir"
-            sortable>
-          {{ props.row.id_kasir }}
-        </b-table-column>
-<!-- 
-        <b-table-column 
-            field="id_hewan" 
-            label="ID hewan"
-            width="50px">
-          {{ props.row.id_hewan }}
-        </b-table-column> -->
 
         <b-table-column 
             field="tgl_penjualan" 
@@ -68,21 +56,32 @@
 
         <b-table-column 
             field="status_layanan" 
-            label="Status Layanan"
-            width="70px">
-          {{ props.row.status_layanan }}
+            label="Selesai"
+            width="50px">
+            <b-icon 
+                icon="check"
+                type="is-success"
+                size="is-medium"
+                v-show="props.row.status_layanan == 'Selesai'">
+            </b-icon>
         </b-table-column>
 
         <b-table-column 
             field="status_pembayaran" 
-            label="status pembayaran"
-            width="70px">
-          {{ props.row.status_pembayaran }}
+            label="Lunas"
+            width="50px">
+            <b-icon 
+                icon="check"
+                type="is-success"
+                size="is-medium"
+                v-show="props.row.status_pembayaran == 'Lunas'">
+            </b-icon>
         </b-table-column>
 
         <b-table-column 
             field="tgl_pembayaran" 
             label="tanggal pembayaran"
+            width="100px"
             sortable>
           {{ props.row.tgl_pembayaran }}
         </b-table-column>
@@ -101,17 +100,44 @@
                 tag="router-link"
                 :to="'/kasir/form-transaksi-pembayaran-layanan/' + props.row.nomor_transaksi"
                 rounded>
-                  <b-icon icon="pencil" type="is-info"></b-icon>
+                  <b-icon icon="coin" type="is-success"></b-icon>
             </b-button>
+          </span>
+          
+          <span>
             <b-button 
-                type="is-text"  
-                @click="confirmDelete(props.row.id)" 
+                type="is-text" 
+                tag="router-link"
+                :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
                 rounded>
-                  <b-icon icon="delete" type="is-danger"></b-icon>
+                  <b-icon icon="note" type="is-primary"></b-icon>
             </b-button>
           </span>
         </b-table-column>
       </template>
+
+      <template slot="detail" slot-scope="props">
+        <article class="media">
+          <div class="media-content">
+            <div class="content">
+              <div class="columns">
+                <div class="column">
+                  <p>
+                    <strong>Customer Service : </strong>
+                    <small>{{ props.row.customer_service }}</small>
+                  </p>
+                </div>
+                <div class="column">
+                  <p>
+                    <strong>Kasir : </strong>
+                    <small>{{ props.row.kasir }}</small>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+      </article>
+    </template>
 
     <template slot="empty">
       <section class="section">
@@ -127,19 +153,19 @@
       </section>
     </template>
 
-    <template slot="footer">
+    <!-- <template slot="footer">
       <div class="has-text-centered">
         <b-button size="is-medium" 
             type="is-light" 
             icon-left="plus" 
             tag="router-link" 
-            to="/kasir/form-transaksi-pembayaran-layanan" 
+            to="/kasir/form-transaksi-pembayaran-produk" 
             @click="addData()"
             expanded>
           Bayar
         </b-button>
       </div>
-    </template>
+    </template> -->
 
     </b-table>
   </section>
@@ -199,17 +225,6 @@ export default {
         queue: false,
       })
     },
-    confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
-      this.$buefy.dialog.confirm({
-        title: 'Hapus Data Layanan',
-        message: 'Apa anda yakin ingin <b>menghapus</b> pembayaran layanan?',
-        confirmText: 'Hapus',
-        cancelText: 'Batal',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: () => this.deleteData(deleteId)
-      })
-    }
   },
   mounted() {
     this.getData()
