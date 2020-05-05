@@ -43,7 +43,7 @@
         <b-table-column 
             field="nama_customer" 
             label="Nama pelanggan"
-            width="200px"
+            width="170px"
             :searchable="true">
           <p v-if="props.row.nama_customer == null">-</p>
           <p v-else>{{ props.row.nama_customer }}</p>
@@ -52,7 +52,7 @@
         <b-table-column 
             field="nama_hewan" 
             label="Nama hewan"
-            width="150px"
+            width="140px"
             :searchable="true">
           <p v-if="props.row.nama_hewan == null">-</p>
           <p v-else>{{ props.row.nama_hewan }}</p>
@@ -61,7 +61,7 @@
         <b-table-column 
             field="tgl_penjualan" 
             label="Tanggal"
-            width="125px"
+            width="110px"
             searchable
             sortable>
           {{ props.row.tgl_penjualan }}
@@ -75,7 +75,16 @@
 
         <b-table-column 
             field="status_pembayaran" 
-            label="Stat"
+            label="Selesai"
+            width="50px">
+            <p v-if="props.row.status_layanan == 'Selesai'">
+              <b-icon size="is-medium" icon="check" type="is-success"></b-icon>
+            </p>
+        </b-table-column>
+
+        <b-table-column 
+            field="status_pembayaran" 
+            label="Lunas"
             width="50px">
             <p v-if="props.row.status_pembayaran == 'Lunas'">
               <b-icon size="is-medium" icon="check" type="is-success"></b-icon>
@@ -113,10 +122,22 @@
         <article class="media">
           <div class="media-content">
             <div class="content">
-              <p>
-                <strong>CS : </strong>
-                <small>{{ props.row.customer_service }}</small>
-              </p>
+              <div class="level">
+                <div class="level left">
+                  <strong>CS : </strong>
+                  <small>{{ props.row.customer_service }}</small>
+                </div>
+                <div class="level-right" v-show="props.row.status_layanan == 'Belum Selesai'">
+                  <b-button
+                      type="is-info" 
+                      icon-left="check"
+                      size="is-default"
+                      rounded
+                      @click="updateStatusLayanan(props.row.id)">
+                        Selesaikan layanan
+                  </b-button>
+                </div>
+              </div>
             </div>
           </div>
       </article>
@@ -226,6 +247,10 @@
 </template>
 
 <style scoped>
+.level {
+  padding: 0 !important;
+  height: 60px;
+}
 .footer-modal {
   height: 35px;
   position: relative;
@@ -341,6 +366,23 @@ export default {
     // -----------------------------------------------------------
     // EDIT dan MODAL EDIT
     // -----------------------------------------------------------
+    async updateStatusLayanan(id) {
+      let dataEdit = {}
+      dataEdit.status_layanan = "Selesai"
+      dataEdit.id_cs = this.$session.get('pegawai').id_pegawai
+
+      var uri = this.$api_baseUrl + "transaksi/layanan/changeStatus/" + id;
+      
+      await this.$http.put(uri, dataEdit, this.config).then(response => {
+        this.snackbarMsg = response.message
+        this.getData()
+        this.snackbar("Layanan selesai dikerjakan!", 'is-success')
+      })
+      .catch(error => {
+        this.errors = error;
+        this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+      });
+    },
     async editData() {
       if (this.isGuest == "Guest") {
         this.formMember.id_hewan = null
