@@ -180,7 +180,7 @@ export default [
             },
             {
                 name: 'formTransaksiPembayaranProduk',
-                path: '/kasir/form-transaksi-pembayaran-produk',
+                path: '/kasir/pembayaran-produk/:id',
                 component: formTransaksiPembayaranProduk
             },
             {
