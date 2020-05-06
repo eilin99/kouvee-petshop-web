@@ -108,7 +108,7 @@
             <b-button 
                 type="is-text" 
                 tag="router-link"
-                :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
+                :to="'/kasir/detail-penjualan-layanan-kasir/' + props.row.nomor_transaksi"
                 rounded>
                   <b-icon icon="note" type="is-primary"></b-icon>
             </b-button>

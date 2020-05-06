@@ -91,12 +91,12 @@
                   <b-icon icon="coin" type="is-success"></b-icon>
             </b-button>
           </span>
-          
+
           <span>
             <b-button 
                 type="is-text" 
                 tag="router-link"
-                :to="'/kasir/form-transaksi-pembayaran-produk/' + props.row.nomor_transaksi"
+                :to="'/kasir/detail-penjualan-produk-kasir/' + props.row.nomor_transaksi"
                 rounded>
                   <b-icon icon="note" type="is-primary"></b-icon>
             </b-button>

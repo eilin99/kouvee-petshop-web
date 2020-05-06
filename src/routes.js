@@ -24,6 +24,8 @@ import TransaksiPembayaranProduk from './components/dataPembayaran/TransaksiPemb
 import formTransaksiPembayaranProduk from './components/dataPembayaran/formTransaksiPembayaranProduk.vue'
 import TransaksiPembayaranLayanan from './components/dataPembayaran/TransaksiPembayaranLayanan.vue'
 import formTransaksiPembayaranLayanan from './components/dataPembayaran/formTransaksiPembayaranLayanan.vue'
+import DetailPenjualanProdukKasir from './components/dataPembayaran/DetailPenjualanProdukKasir.vue'
+import DetailPenjualanLayananKasir from './components/dataPembayaran/DetailPenjualanLayananKasir.vue'
 
 // CS
 // import Pelanggan from './components/dataMaster/Pelanggan.vue'
@@ -183,6 +185,11 @@ export default [
                 path: '/kasir/form-transaksi-pembayaran-produk/:id',
                 component: formTransaksiPembayaranProduk
             },
+            {
+                name: 'DetailPenjualanProdukKasir',
+                path: '/kasir/detail-penjualan-produk-Kasir/:id',
+                component: DetailPenjualanProdukKasir
+            },
 
             // ===== TRANSAKSI PEMBAYARAN LAYANAN =====
             {
@@ -199,6 +206,11 @@ export default [
                 name: 'formEditTransaksiPembayaranLayanan',
                 path: '/kasir/form-transaksi-pembayaran-Layanan/:id',
                 component: formTransaksiPembayaranLayanan
+            },
+            {
+                name: 'DetailPenjualanLayananKasir',
+                path: '/kasir/detail-penjualan-layanan-Kasir/:id',
+                component: DetailPenjualanLayananKasir
             },
             
         ]

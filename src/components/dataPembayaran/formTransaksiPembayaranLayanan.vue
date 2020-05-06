@@ -92,7 +92,6 @@ export default {
   methods: {
     getData(editId) {
       var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + editId
-
       this.$http.get(uri).then(response => {
         this.editDataPembayaranLayanan = response.data.value
         this.formEditHandler(this.editDataPembayaranLayanan)
@@ -109,27 +108,22 @@ export default {
       var year = formDate.getFullYear()        // Mengambil tahun
       var month = formDate.getMonth() + 1      // Mengambil bulan (ditambah 1 karena getMonth() itu returnnya array)
       var date = formDate.getDate()            // Mengambil tanggal
-
       // Yang tanda tanya (?) itu TERNARY. Konsepnya sama dengan if-else
       // Jika month/date kurang dari 10, nanti stringnya
       // ditambah 0 di depannya. Kalo enggak, ya biasa
       month = (month < 10) ? '0' + month : month
       date = (date < 10) ? '0' + date : date
-
       var fixedDate = year + '-' + month + '-' + date
-
       return fixedDate
     },
     addData() {
       this.isLoading = true // Biar dia loading dulu
-
       this.dataPembayaranLayanan.append("tgl_pembayaran", this.form.tgl_pembayaran.value)
       this.dataPembayaranLayanan.append("status_pembayaran", this.form.status_pembayaran.value)
       this.dataPembayaranLayanan.append("id_kasir", this.form.id_kasir.value)
       this.dataPembayaranLayanan.append("diskon", this.form.diskon.value)
       
       var uri = this.$api_baseUrl + "transaksi/detail_layanan/";
-
       this.$http.post(uri, this.dataPembayaranLayanan).then(response => {
         this.isLoading = false // Biar berhenti loading
         this.$router.push( { name: 'TransaksiPembayaranLayanan' } )
@@ -148,14 +142,11 @@ export default {
     },
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
-
       this.editDataPembayaranLayanan.tgl_pembayaran = this.form.tgl_pembayaran.value
       this.editDataPembayaranLayanan.status_pembayaran = this.form.status_pembayaran.value
       this.editDataPembayaranLayanan.id_kasir = this.form.id_kasir.value
       this.editDataPembayaranLayanan.diskon = this.form.diskon.value
-
       var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + editId;
-
       this.$http.put(uri, this.editDataPembayaranLayanan, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
         this.$router.push( { name: 'TransaksiPembayaranLayanan' } )
