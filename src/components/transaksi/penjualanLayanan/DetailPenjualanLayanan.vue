@@ -48,7 +48,7 @@
           <b-table-column 
               field="subtotal" 
               label="Harga">
-            {{ 'Rp.' + props.row.subtotal }}
+            {{ 'Rp.' + props.row.harga_layanan }}
           </b-table-column>
           
           <b-table-column 
@@ -60,6 +60,11 @@
             {{ props.row.jumlah }}
           </b-table-column>
 
+          <b-table-column 
+              field="subtotal" 
+              label="Subtotal">
+            {{ 'Rp.' + props.row.subtotal }}
+          </b-table-column>
 
           <b-table-column label="Action" centered>
             <span>
@@ -130,7 +135,7 @@
                       placeholder="Nama layanan"
                       :open-on-focus="true"
                       :data="filteredDataLayanan"
-                      @select="option => { form.nama_layanan.value = option.nama_layanan; form.harga = option.harga; form.id_layanan = option.id_layanan }"
+                      @select="option => { form.nama_layanan.value = option.nama_layanan; form.harga = option.harga_layanan; form.id_layanan = option.id_layanan }"
                       @input="clearError(form.nama_layanan)"
                       field="nama_layanan"
                       clearable>
@@ -146,7 +151,6 @@
                       controls-position="compact"
                       controls-rounded
                       min="1"
-                      :max="form.maxJumlah"
                       :editable="false"
                       @input="clearError(form.jumlah)">
                   </b-numberinput>
@@ -234,7 +238,7 @@ export default {
         this.isLoading = false
       })
     },
-    getlayanan() {
+    getLayanan() {
       var uri = this.$api_baseUrl + "layanan"
 
       this.$http.get(uri).then(response => {
@@ -252,6 +256,7 @@ export default {
       await this.addData(noTransaksi)
       await this.getData()
       await this.editTotalPenjualan()
+      this.modalTitle = false
     },
     async addData(noTransaksi) {
       let dataLayanan = new FormData()
@@ -281,14 +286,15 @@ export default {
     // -----------------------------------------------------------------
     async editDetail(idDetailForEdit) {
       await this.editData(idDetailForEdit)
+      this.modalTitle = false
       await this.getData()
       await this.editTotalPenjualan()
     },
     async editData(idDetailForEdit) {
       let dataLayanan = {}
       dataLayanan.id_layanan = this.form.id_layanan
-      dataLayanan.harga = this.form.harga.value
-      dataLayanan.harga = this.harga
+      dataLayanan.jumlah = this.form.jumlah.value
+      dataLayanan.subtotal = this.subtotal
 
       var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + idDetailForEdit;
       try {
@@ -370,8 +376,7 @@ export default {
         this.form.nama_layanan.value = ''
         this.form.jumlah.value =  ''
         this.form.harga = ''
-        this.form.jumlah.value = 0
-        this.form.maxJumlah = 0
+        this.form.jumlah.value = 1
       } else {
         this.modalTitle = "Ubah"
 
@@ -380,8 +385,7 @@ export default {
         this.cari = layanan.nama_layanan
         this.form.nama_layanan.value =layanan.nama_layanan
         this.form.jumlah.value =  parseInt(layanan.jumlah)
-        this.form.harga = parseInt(layanan.harga)
-        this.form.maxJumlah = 10
+        this.form.harga = parseInt(layanan.harga_layanan)
       }
 
       this.modalFormLayanan = true
@@ -393,18 +397,9 @@ export default {
         count++
         this.form.nama_layanan.message = 'Layanan belum terpilih'
         this.form.nama_layanan.type = 'is-danger'
-      }
-      if (this.form.maxJumlah == 0) {
-        count++
-        this.form.jumlah.message = 'Stok kosong'
-        this.form.jumlah.type = 'is-danger'
       } else if (this.form.jumlah.value == 0) {
         count++
         this.form.jumlah.message = 'Jumlah tidak boleh 0'
-        this.form.jumlah.type = 'is-danger'
-      } else if (this.form.jumlah.value > this.form.maxJumlah) {
-        count++
-        this.form.jumlah.message = 'Jumlah melebihi stok yang tersedia'
         this.form.jumlah.type = 'is-danger'
       }
       return count
