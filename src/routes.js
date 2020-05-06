@@ -200,6 +200,11 @@ export default [
                 path: '/kasir/form-transaksi-pembayaran-Layanan/:id',
                 component: formTransaksiPembayaranLayanan
             },
+            {
+                name: 'DetailPenjualanLayananKasir',
+                path: '/kasir/detail-penjualan-layanan/:id',
+                component: DetailPenjualanLayanan
+            },
             
         ]
             

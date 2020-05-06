@@ -216,11 +216,24 @@ export default {
     async bayar(idTransaksi) {
       this.isLoading = true // Biar dia loading dulu
       if (this.cekData() === 0) {
-        await this.editData(idTransaksi)
-        
-        this.detailTransaksi.forEach(async (detail) =>  {
-          await this.kurangiStok(detail.id_produk, detail.jumlah)
-        });
+        let kembalian = this.cekKembalian()
+
+        if (kembalian !== false) {
+          await this.editData(idTransaksi)
+          
+          this.detailTransaksi.forEach(async (detail) =>  {
+            await this.kurangiStok(detail.id_produk, detail.jumlah)
+          });
+
+          this.$buefy.dialog.confirm({
+            title: 'Pembayaran Berhasil!',
+            message: 'Pembayaran berhasil dilakukan! Kembalian Rp ' + kembalian,
+            confirmText: 'OK',
+            type: 'is-success',
+            hasIcon: true,
+            onConfirm: () => this.$router.push( { name: 'TransaksiPembayaranProduk' } )
+          })
+        }
       }
       this.isLoading = false
     },
@@ -233,9 +246,7 @@ export default {
 
       await this.$http.put(uri, pembayaran, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'TransaksiPembayaranProduk' } )
         this.snackbarMsg = response.message
-        this.snackbar("Pembayaran berhasil!", 'is-success')
       })
       .catch(error => {
         this.errors = error;
@@ -313,10 +324,29 @@ export default {
           this.form.diskon.type = 'is-danger'
           this.form.diskon.message = "Diskon harus angka!"
           count++
+        } else if (Number(this.form.diskon.value) > Number(this.form.total)) {
+          this.form.diskon.type = 'is-danger'
+          this.form.diskon.message = "Diskon tidak boleh lebih besar dari total!"
+          count++
         }
       }
 
       return count
+    },
+    cekKembalian() {
+      let diskon = this.isGuest === true ? Number(this.form.diskon.value) : 0
+      let jumlahBayar = Number(this.form.total) - diskon
+      let uang = Number(this.form.bayar.value)
+
+      if (uang < jumlahBayar) {
+        this.form.bayar.type = 'is-danger'
+        this.form.bayar.message = "Jumlah uang kurang"
+
+        return false
+      } else {
+        let kembalian = uang - jumlahBayar
+        return kembalian
+      }
     },
     snackbar(snackbarMessage, type) {
       this.$buefy.snackbar.open({

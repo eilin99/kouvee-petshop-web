@@ -86,7 +86,8 @@
             <b-button 
                 type="is-text" 
                 tag="router-link"
-                :to="'/kasir/pembayaran-produk/' + props.row.nomor_transaksi"
+                :to="'/kasir/pembayaran-produk/' + props.row.id"
+                :disabled="props.row.status_pembayaran == 'Lunas'"
                 rounded>
                   <b-icon icon="coin" type="is-success"></b-icon>
             </b-button>
@@ -140,20 +141,6 @@
         </div>
       </section>
     </template>
-
-    <!-- <template slot="footer">
-      <div class="has-text-centered">
-        <b-button size="is-medium" 
-            type="is-light" 
-            icon-left="plus" 
-            tag="router-link" 
-            to="/kasir/form-transaksi-pembayaran-produk" 
-            @click="addData()"
-            expanded>
-          Bayar
-        </b-button>
-      </div>
-    </template> -->
 
     </b-table>
   </section>
