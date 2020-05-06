@@ -154,7 +154,7 @@
 
               <div class="subtotal">
                 <p class="heading">Subtotal :</p>
-                <h4 class="title is-3">Rp 20000{{ harga }}</h4>
+                <h4 class="title is-3">Rp {{ subtotal }}</h4>
               </div>
 
             </section>
