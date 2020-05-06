@@ -98,7 +98,7 @@
             <b-button 
                 type="is-text" 
                 tag="router-link"
-                :to="'/kasir/pembayaran-layanan/' + props.row.nomor_transaksi"
+                :to="'/kasir/pembayaran-layanan/' + props.row.id"
                 :disabled="props.row.status_pembayaran == 'Lunas' || props.row.status_layanan == 'Belum Selesai'"
                 rounded>
                   <b-icon icon="coin" type="is-success"></b-icon>

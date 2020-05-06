@@ -197,7 +197,7 @@ export default [
             },
             {
                 name: 'formEditTransaksiPembayaranLayanan',
-                path: '/kasir/form-transaksi-pembayaran-Layanan/:id',
+                path: '/kasir/pembayaran-Layanan/:id',
                 component: formTransaksiPembayaranLayanan
             },
             {

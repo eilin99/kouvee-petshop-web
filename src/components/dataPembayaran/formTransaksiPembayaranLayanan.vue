@@ -43,11 +43,11 @@
           </b-table-column>
 
           <b-table-column 
-              field="harga_jual" 
+              field="harga_layanan" 
               label="Harga"
               width="150px"
               :searchable="true">
-            {{ "Rp" + props.row.harga_jual }}
+            {{ "Rp" + props.row.harga_layanan }}
           </b-table-column>
 
           <b-table-column 
@@ -62,7 +62,7 @@
           <b-table-column 
               field="subtotal" 
               label="Subtotal">
-            {{ 'Rp.' + props.row.subtotal }}
+            {{ "Rp" + props.row.subtotal }}
           </b-table-column>
         </template>
 
@@ -337,6 +337,7 @@ export default {
       await this.getData(this.idTransaksi)           // Ngambil data lama sesuai ID
       await this.getDetailTransaksi()
       this.formHandler(this.dataTransaksi)
+      console.log(this.form)
     }
     this.isLoading = false // Page udah ter-load dan berhenti loading
   }
