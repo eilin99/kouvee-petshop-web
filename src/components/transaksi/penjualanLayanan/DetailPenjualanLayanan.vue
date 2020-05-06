@@ -121,7 +121,7 @@
         aria-modal>
           <div class="modal-card" style="height:500px">
             <header class="modal-card-head">
-                <p class="modal-card-title">{{ modalTitle }} Item Pembelian</p>
+                <p class="modal-card-title">{{ modalTitle }} Layanan</p>
             </header>
             <section class="modal-card-body">
 
@@ -135,7 +135,7 @@
                       placeholder="Nama layanan"
                       :open-on-focus="true"
                       :data="filteredDataLayanan"
-                      @select="option => { form.nama_layanan.value = option.nama_layanan; form.harga = option.harga_layanan; form.id_layanan = option.id_layanan }"
+                      @select="option => { form.nama_layanan.value = option.nama_layanan; form.harga = option.harga; form.id_layanan = option.id_layanan }"
                       @input="clearError(form.nama_layanan)"
                       field="nama_layanan"
                       clearable>
@@ -256,7 +256,7 @@ export default {
       await this.addData(noTransaksi)
       await this.getData()
       await this.editTotalPenjualan()
-      this.modalTitle = false
+      this.modalFormLayanan = false
     },
     async addData(noTransaksi) {
       let dataLayanan = new FormData()
@@ -315,7 +315,6 @@ export default {
       
       this.datas.forEach(element => {
         total += parseInt(element.subtotal)
-        console.log(element.subtotal) 
       });
 
       data.total = total
@@ -375,7 +374,7 @@ export default {
         this.cari = ''
         this.form.nama_layanan.value = ''
         this.form.jumlah.value =  ''
-        this.form.harga = ''
+        this.form.harga = 0
         this.form.jumlah.value = 1
       } else {
         this.modalTitle = "Ubah"

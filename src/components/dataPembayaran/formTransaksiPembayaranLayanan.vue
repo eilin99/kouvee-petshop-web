@@ -306,7 +306,7 @@ export default {
       return count
     },
     cekKembalian() {
-      let diskon = this.isGuest === true ? Number(this.form.diskon.value) : 0
+      let diskon = this.isGuest === false ? Number(this.form.diskon.value) : 0
       let jumlahBayar = Number(this.form.total) - diskon
       let uang = Number(this.form.bayar.value)
 
