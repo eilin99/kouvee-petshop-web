@@ -69,7 +69,7 @@
           <b-table-column 
               field="subtotal" 
               label="Harga">
-            {{ 'Rp.' + props.row.subtotal }}
+            {{ 'Rp.' + props.row.harga_layanan }}
           </b-table-column>
           
           
@@ -82,6 +82,11 @@
             {{ props.row.jumlah }}
           </b-table-column>
 
+          <b-table-column 
+              field="subtotal" 
+              label="Subtotal">
+            {{ 'Rp.' + props.row.subtotal }}
+          </b-table-column>
 
           <b-table-column label="Action" centered>
             <span>
@@ -138,7 +143,7 @@
         aria-modal>
           <div class="modal-card" style="height:500px">
             <header class="modal-card-head">
-                <p class="modal-card-title">{{ modalTitle }} Item Pembelian</p>
+                <p class="modal-card-title">{{ modalTitle }} Layanan</p>
             </header>
             <section class="modal-card-body">
 
@@ -168,7 +173,6 @@
                       controls-position="compact"
                       controls-rounded
                       min="1"
-                      :max="form.maxJumlah"
                       :editable="false"
                       @input="clearError(form.jumlah)">
                   </b-numberinput>
@@ -270,7 +274,7 @@ export default {
         this.isLoading = false
       })
     },
-     getLayanan() {
+    getLayanan() {
       var uri = this.$api_baseUrl + "layanan"
 
       this.$http.get(uri).then(response => {
@@ -303,6 +307,7 @@ export default {
       await this.addData(noTransaksi)
       await this.getData()
       await this.editTotalPenjualan()
+      this.modalFormLayanan = false
     },
     async addData(noTransaksi) {
       let dataLayanan = new FormData()
@@ -333,7 +338,7 @@ export default {
     // -----------------------------------------------------------------
      async editDetail(idDetailForEdit) {
       await this.editData(idDetailForEdit)
-      this.modalFormLayan = false
+      this.modalFormLayanan = false
       await this.getData()
       await this.editTotalPenjualan()
     },
@@ -362,7 +367,6 @@ export default {
       
       this.datas.forEach(element => {
         total += parseInt(element.subtotal)
-        console.log(element.subtotal) 
       });
 
       data.total = total
@@ -433,9 +437,8 @@ export default {
         this.cari = ''
         this.form.nama_layanan.value = ''
         this.form.jumlah.value =  ''
-        this.form.harga = ''
+        this.form.harga = 0
         this.form.jumlah.value = 1
-        this.form.maxJumlah = 2
       } else {
         this.modalTitle = "Ubah"
 
@@ -444,8 +447,7 @@ export default {
         this.cari = layanan.nama_layanan
         this.form.nama_layanan.value =layanan.nama_layanan
         this.form.jumlah.value =  parseInt(layanan.jumlah)
-        this.form.harga = parseInt(layanan.harga)
-        this.form.maxJumlah = 10
+        this.form.harga = parseInt(layanan.harga_layanan)
       }
 
       this.modalFormLayanan = true
@@ -457,8 +459,11 @@ export default {
         count++
         this.form.nama_layanan.message = 'Layanan belum terpilih'
         this.form.nama_layanan.type = 'is-danger'
+      } else if (this.form.jumlah.value == 0) {
+        count++
+        this.form.jumlah.message = 'Jumlah tidak boleh 0'
+        this.form.jumlah.type = 'is-danger'
       }
-     
       return count
     },
     clearError(form) {
