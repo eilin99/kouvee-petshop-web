@@ -221,6 +221,7 @@ export default {
 
       if(this.cekData() == false) {
         this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+        this.isLoading = false
       } else {
         this.dataHewan.append("nama_hewan", this.form.nama_hewan.value)
         this.dataHewan.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
