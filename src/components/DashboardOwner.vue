@@ -134,14 +134,14 @@ export default {
       this.$http.get(uri).then(response => {
         this.datas = response.data.value
         this.datas = this.datas.filter(produk => parseInt(produk.stok) < parseInt(produk.stok_minimum))
-        this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+        this.tableLoadingIcon = "magnify"            // Buat kalo user search
         this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
         this.isLoading = false
       })
       .catch(error => {
         this.errors = error
-        this.tableLoadingIcon = "emoticon-sad"  // Tampilan kalo
-        this.tableMessage = 'Tidak ada data'    // ga ada data
+        this.tableLoadingIcon = "emoticon-happy"  // Tampilan kalo
+        this.tableMessage = 'Semua stok produk aman'    // ga ada data
         this.isLoading = false
       })
     },
