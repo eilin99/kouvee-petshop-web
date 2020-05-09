@@ -4,6 +4,7 @@ import Owner from './components/OwnerView.vue'
 import Kasir from './components/KasirView.vue'
 import CS from './components/CSView.vue'
 import Dashboard from './components/Dashboard.vue'
+import OwnerDashboard from './components/DashboardOwner.vue'
 
 // Data Master
 import Pegawai from './components/dataMaster/Pegawai.vue'
@@ -60,7 +61,7 @@ export default [
             {
                 name: 'OwnerDashboard',
                 path: '/owner/dashboard',
-                component: Dashboard
+                component: OwnerDashboard
             },
             // ===== PEGAWAI =====
             {
