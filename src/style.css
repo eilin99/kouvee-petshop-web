@@ -1,0 +1,96 @@
+.about-us-gambar-hewan, .review-wrapper, .produk-wrapper {
+  display: inline-flex;
+  flex-wrap: wrap; }
+
+#landing-page .title {
+  font-family: "Martel", serif; }
+#landing-page .main-title {
+  font-size: 54px;
+  font-weight: bold;
+  line-height: 1.19;
+  text-align: left; }
+#landing-page .section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1.17;
+  text-align: left;
+  margin-bottom: 3rem; }
+#landing-page .subtitle {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1.33; }
+#landing-page .color-slate {
+  color: #545871; }
+
+#landing-page #header {
+  background-image: url(assets/bg.webp);
+  background-position: bottom; }
+#landing-page .navbar-end .navbar-item {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.25;
+  color: #fff; }
+#landing-page .slogan {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  right: 0; }
+
+.about-us-text-container {
+  color: #545871;
+  width: 480px;
+  margin: 0 auto; }
+
+.about-us-gambar-hewan img {
+  width: 40%;
+  margin: 0 auto 34px auto; }
+
+.woman {
+  line-height: 0; }
+
+.beige {
+  background-color: #f7eceb;
+  position: relative; }
+
+.wrapper {
+  width: 415px;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+
+#review {
+  background-color: #545871; }
+
+.review-wrapper .title {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.33;
+  color: #545871;
+  margin-bottom: 2rem; }
+.review-wrapper .subtitle {
+  text-align: left;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.3;
+  color: #545871; }
+
+.ketersediaan-container {
+  width: 75%;
+  margin: 100px auto; }
+
+.produk-wrapper {
+  margin: 0 auto;
+  width: 100%;
+  height: 500px;
+  padding: 1px;
+  overflow-y: scroll; }
+
+#footer {
+  background-color: #545871; }
+
+/*# sourceMappingURL=style.css.map */
