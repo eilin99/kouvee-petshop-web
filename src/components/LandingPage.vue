@@ -228,7 +228,7 @@ export default {
   data() {
     let smoothScroll = {
       duration: 1500,
-      // offset: -50,
+      updateHistory: false,
     }
     let Reviews = [
       { name: 'Lindsay M.', msg: '“Pawtastic is awesome! They are passionate about pets and employ trustworthy, dependable staff. We love them!”', image: 'lindsay' },
