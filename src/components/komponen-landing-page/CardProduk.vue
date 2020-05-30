@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-image">
       <figure class="image is-fullwidth">
-        <img :src="$api_baseUrl + 'produk/picture/' + data.gambar">
+        <img class="gambar-produk" :src="$api_baseUrl + 'produk/picture/' + data.gambar">
       </figure>
     </div>
     <div class="card-content">
@@ -35,6 +35,19 @@
   margin-right: 10px;
   margin-bottom: 10px;
   max-width: 10rem;
+  box-shadow: none;
+  border: solid 1px #dadbe6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.card-image {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  position: relative;
+}
+.gambar-produk {
+  width: 100%;
 }
 .card-content {
   padding: 15px 10px;

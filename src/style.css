@@ -1,42 +1,97 @@
-.about-us-gambar-hewan, .review-wrapper, .produk-wrapper {
+.about-us-gambar-hewan, #review .review-wrapper, .produk-wrapper {
   display: inline-flex;
   flex-wrap: wrap; }
 
-#landing-page .title {
-  font-family: "Martel", serif; }
-#landing-page .main-title {
+.btn-landing-slate {
+  width: 256px;
+  height: 56px;
+  border-radius: 100px;
+  background-color: #545871;
+  color: #fff;
+  font-family: "Nunito", sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.25;
+  margin: 0 auto;
+  transition: 0.3s;
+  border: none; }
+
+.btn-landing-slate:hover {
+  color: #fff;
+  background-color: #7c80a0; }
+
+.img-with-text {
+  position: relative; }
+  .img-with-text span {
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    color: #ffffff;
+    font-family: "Karla", sans-serif;
+    font-weight: bolder; }
+
+.main-title {
+  font-family: "Martel", serif;
   font-size: 54px;
   font-weight: bold;
   line-height: 1.19;
   text-align: left; }
-#landing-page .section-title {
+
+.section-title {
+  font-family: "Martel", serif;
   font-size: 2.5rem;
   font-weight: bold;
   line-height: 1.17;
   text-align: left;
-  margin-bottom: 3rem; }
-#landing-page .subtitle {
+  margin-bottom: 3rem !important; }
+
+.paragraph {
   font-family: "Nunito", sans-serif;
   font-size: 1.4rem;
   font-weight: 300;
   line-height: 1.33; }
-#landing-page .color-slate {
+
+.color-slate {
   color: #545871; }
 
-#landing-page #header {
+#header {
   background-image: url(assets/bg.webp);
-  background-position: bottom; }
-#landing-page .navbar-end .navbar-item {
-  font-family: "Nunito", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1.25;
-  color: #fff; }
-#landing-page .slogan {
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  object-fit: contain;
+  opacity: 0.95; }
+
+.brand {
+  font-family: "Karla", sans-serif;
+  color: #fff !important; }
+
+#landing-page .navbar {
+  top: 50px; }
+#landing-page .navbar-brand i {
+  margin-right: 15px; }
+#landing-page .navbar-end {
+  margin-right: 165px; }
+  #landing-page .navbar-end .navbar-item {
+    font-family: "Nunito", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.25;
+    color: #fff;
+    transition: 0.5s;
+    animation-fill-mode: forwards;
+    padding-top: 50px;
+    padding-bottom: 0;
+    background-color: #00000000; }
+  #landing-page .navbar-end a.navbar-item:hover {
+    background-color: #00000000 !important;
+    transform: translateY(-5px); }
+
+.slogan {
   position: absolute;
   width: 500px;
   height: 500px;
-  top: -100px;
+  top: -180px;
   right: 0; }
 
 .about-us-text-container {
@@ -45,8 +100,7 @@
   margin: 0 auto; }
 
 .about-us-gambar-hewan img {
-  width: 40%;
-  margin: 0 auto 34px auto; }
+  margin: 0 20px 15px 0; }
 
 .woman {
   line-height: 0; }
@@ -65,32 +119,52 @@
 
 #review {
   background-color: #545871; }
-
-.review-wrapper .title {
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 1.33;
-  color: #545871;
-  margin-bottom: 2rem; }
-.review-wrapper .subtitle {
-  text-align: left;
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 1.3;
-  color: #545871; }
+  #review .review-wrapper .title {
+    font-family: "Martel", serif;
+    font-size: 24px !important;
+    font-weight: bold;
+    line-height: 1.33;
+    color: #545871;
+    margin-bottom: 2rem; }
+  #review .review-wrapper .subtitle {
+    font-family: "Nunito", sans-serif;
+    text-align: left;
+    font-size: 17px !important;
+    font-weight: 300;
+    line-height: 1.3;
+    color: #545871; }
 
 .ketersediaan-container {
-  width: 75%;
-  margin: 100px auto; }
+  width: 80%;
+  margin: 50px auto 0 auto;
+  padding: 20px;
+  border-radius: 10px; }
 
 .produk-wrapper {
   margin: 0 auto;
   width: 100%;
-  height: 500px;
-  padding: 1px;
-  overflow-y: scroll; }
+  padding: 1px; }
+  .produk-wrapper .title {
+    font-family: "Martel", serif; }
+  .produk-wrapper .subtitle {
+    font-family: "Nunito", sans-serif; }
+
+.jualan-wrapper {
+  margin: 0 auto;
+  width: 59.4%; }
 
 #footer {
   background-color: #545871; }
+  #footer .section-title {
+    margin-bottom: 35px !important; }
+  #footer .paragraph {
+    font-size: 20px !important; }
+
+.socmed {
+  margin-right: 25px; }
+
+.made-with-love {
+  padding: 5px;
+  background-color: #414455; }
 
 /*# sourceMappingURL=style.css.map */

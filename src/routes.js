@@ -1,4 +1,5 @@
 import LandingPage from './components/LandingPage.vue'
+import Ketersediaan from './components/Ketersediaan.vue'
 import Login from './components/Login.vue'
 import Owner from './components/OwnerView.vue'
 import Kasir from './components/KasirView.vue'
@@ -47,6 +48,10 @@ export default [
     {
         path: '/',
         component: LandingPage
+    },
+    {
+        path: '/ketersediaan-produk-layanan',
+        component: Ketersediaan
     },
     {
         path: '/login',
