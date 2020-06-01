@@ -74,7 +74,38 @@
               </template>
 
               <template slot="end">
-                <b-icon icon="bell" type="is-primary"></b-icon>
+                <b-dropdown
+                  aria-role="list"
+                  position="is-bottom-left"
+                >
+                  <a
+                    class="navbar-item"
+                    slot="trigger"
+                    role="button">
+                    <!-- <span>Notifikasi</span> -->
+                    <b-icon :type="warnaNotifikasi" icon="bell"></b-icon>
+                  </a>
+
+                  <b-dropdown-item custom aria-role="menuitem">
+                    <p class="subtitle is-5 has-text-danger">
+                      <b>Produk hampir habis</b>
+                    </p>
+                  </b-dropdown-item>
+
+                  <hr class="dropdown-divider">
+
+                  <b-dropdown-item 
+                    v-for="(notifikasi, index) in datas"
+                    :key="index"
+                    :value="notifikasi" aria-role="listitem">
+                    <div class="media">
+                      <!-- <b-icon class="media-left" :icon="menu.icon"></b-icon> -->
+                      <div class="media-content">
+                        <h3>{{notifikasi.nama_produk}} ({{notifikasi.stok}} {{notifikasi.satuan}})</h3>
+                      </div>
+                    </div>
+                  </b-dropdown-item>
+                </b-dropdown>
 
                 <b-dropdown
                     v-model="activeUser"
@@ -84,8 +115,8 @@
                         class="navbar-item"
                         slot="trigger"
                         role="button">
-                        <span>Profile</span>
                         <b-icon icon="account"></b-icon>
+                        <span>Profile</span>
                     </a>
 
                     <b-dropdown-item custom aria-role="menuitem">
@@ -169,23 +200,28 @@ export default {
       { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
-    // const laporans = [
-    //   { 'label': "Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
-    //   { 'label': "Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
-    //   { 'label': "Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
-    //   { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
-    // ]
-
     return {
+      datas: [],
+      warnaNotifikasi: '',
       dataMasters,
       dataTransaksis,
-      // laporans,
       activeUser: Object,
       isActive: true,
       menuExpanded:false
     }
   },
   methods: {
+    async getData() {
+      var uri = this.$api_baseUrl + "produk"
+
+      await this.$http.get(uri).then(response => {
+        this.datas = response.data.value
+        this.datas = this.datas.filter(produk => parseInt(produk.stok) < parseInt(produk.stok_minimum))
+      })
+      .catch(error => {
+        this.errors = error
+      })
+    },
     logout() {
       this.$session.destroy()
       this.$router.push('/login')
@@ -196,11 +232,15 @@ export default {
       this.$router.push('/login')
     }
   },
-  mounted() {
+  async mounted() {
     if (!this.$session.exists()) {
       this.$router.push('/login');
     } else {
       this.activeUser = this.$session.get('pegawai')
+      await this.getData()
+      if (this.datas) {
+        this.warnaNotifikasi = 'is-danger'
+      }
     }
   }
 }

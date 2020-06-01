@@ -10,7 +10,6 @@
       <h4 class="title is-4">Produk Hampir Habis</h4>
       <b-table
         :data="datas"
-        :columns="columns"
         :hoverable="true"
         :loading="isLoading" 
         :mobile-cards="true"
