@@ -34,30 +34,21 @@
                         :icon="dataMaster.icon" 
                         :label="dataMaster.label"
                         tag="router-link"
-                        :to="dataMaster.to"
-                        @click="console.log('hellooo')">
+                        :to="dataMaster.to">
                     </b-menu-item>
                 </b-menu-item>
 
                 <!-- Laporan-laporan -->
                 <b-menu-item
-                    icon="book">
-                  <template slot="label" slot-scope="props">
-                    Laporan
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="laporan in laporans"
-                        :key="laporan.label"
-                        :icon="laporan.icon"
-                        :label="laporan.label"
-                        tag="router-link"
-                        :to="laporan.to">
-                    </b-menu-item>
-
+                    icon="book"
+                    tag="router-link"
+                    to="surat-dan-laporan">
+                      <template slot="label">
+                        Laporan
+                        <b-icon
+                            class="is-pulled-right">
+                        </b-icon>
+                      </template>
                 </b-menu-item>
 
               </b-menu-list>
@@ -83,6 +74,7 @@
               </template>
 
               <template slot="end">
+                <b-icon icon="bell" type="is-primary"></b-icon>
 
                 <b-dropdown
                     v-model="activeUser"
@@ -123,13 +115,13 @@
 
                     <hr class="dropdown-divider" aria-role="menuitem">
 
-                    <b-dropdown-item
+                    <!-- <b-dropdown-item
                         value="logout"
                         aria-role="menuitem"
                         @click="ubahPassword">
                         <b-icon icon="settings"></b-icon>
                         Ubah password
-                    </b-dropdown-item>
+                    </b-dropdown-item> -->
                     
                     <b-dropdown-item
                         value="logout"
@@ -177,19 +169,18 @@ export default {
       { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
-    const laporans = [
-      { 'label': "Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
-      { 'label': "Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
-      { 'label': "Pendapatan Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Tahunan" },
-      { 'label': "Pendapatan Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Bulanan" },
-      { 'label': "Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
-      { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
-    ]
+    // const laporans = [
+    //   { 'label': "Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
+    //   { 'label': "Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
+    //   { 'label': "Pendapatan Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Tahunan" },
+    //   { 'label': "Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
+    //   { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
+    // ]
 
     return {
       dataMasters,
       dataTransaksis,
-      laporans,
+      // laporans,
       activeUser: Object,
       isActive: true,
       menuExpanded:false

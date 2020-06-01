@@ -41,8 +41,9 @@ import DetailPenjualanProduk from './components/transaksi/penjualanProduk/Detail
 import PenjualanLayanan from './components/transaksi/penjualanLayanan/PenjualanLayanan.vue'
 import DaftarPenjualanLayanan from './components/transaksi/penjualanLayanan/DaftarPenjualanLayanan.vue'
 import DetailPenjualanLayanan from './components/transaksi/penjualanLayanan/DetailPenjualanLayanan.vue'
+
 // Laporan
-// ......
+import SuratDanLaporan from './components/laporanOwner.vue'
 
 export default [
     {
@@ -164,6 +165,12 @@ export default [
                 path: '/owner/form-ukuran-hewan/:id',
                 component: formUkuranHewan
             },
+            // ===== SURAT DAN LAPORAN =====
+            {
+                name: 'SuratDanLaporan',
+                path: '/owner/surat-dan-laporan',
+                component: SuratDanLaporan
+            }
         ]
             
     },
