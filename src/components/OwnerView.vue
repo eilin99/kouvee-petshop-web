@@ -87,8 +87,8 @@
                   </a>
 
                   <b-dropdown-item custom aria-role="menuitem">
-                    <p class="subtitle is-5 has-text-danger">
-                      <b>Produk hampir habis</b>
+                    <p class="title is-6">
+                      <b>{{ pesanNotifikasi }}</b>
                     </p>
                   </b-dropdown-item>
 
@@ -203,6 +203,7 @@ export default {
     return {
       datas: [],
       warnaNotifikasi: '',
+      pesanNotifikasi: '',
       dataMasters,
       dataTransaksis,
       activeUser: Object,
@@ -238,8 +239,12 @@ export default {
     } else {
       this.activeUser = this.$session.get('pegawai')
       await this.getData()
-      if (this.datas) {
+      if (this.datas.length > 0) {
         this.warnaNotifikasi = 'is-danger'
+        this.pesanNotifikasi = 'Produk hampir habis'
+      } else {
+        this.warnaNotifikasi = ''
+        this.pesanNotifikasi = 'Stok semua produk aman'
       }
     }
   }
