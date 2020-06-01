@@ -172,7 +172,6 @@ export default {
     // const laporans = [
     //   { 'label': "Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
     //   { 'label': "Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
-    //   { 'label': "Pendapatan Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Tahunan" },
     //   { 'label': "Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
     //   { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
     // ]

@@ -4,30 +4,56 @@
       Surat dan Laporan
     </h3>
     <hr>
+
+    <!-- ============================================================== -->
+    <!-- ======================== PENDAPATAN ========================== -->
+    <!-- ============================================================== -->
     <div class="laporan-wrapper">
-      <!-- ============================================================== -->
-      <!-- ======================== PENDAPATAN ========================== -->
-      <!-- ============================================================== -->
       <h4 class="title is-4">Pendapatan</h4>
         <!-- Bulanan -->
-        <b-button 
+        <b-button
+          type="is-dark"
           class="btn-laporan has-text-left"
           size="is-medium"
           icon-left="file"
           @click="openModal('laporan', 'pendapatan', 'bulanan')"
+          outlined
         >
           Pendapatan Bulanan
         </b-button>
         <!-- Tahunan -->
-        <b-button 
-          class="btn-laporan has-text-left"
-          size="is-medium"
-          icon-left="file"
-          @click="openModal('laporan', 'pendapatan', 'tahunan')"
-        >
-          Pendapatan Tahunan
-        </b-button>
+        <!-- ... -->
     </div>
+
+    <hr class="pembatas-laporan">
+    <!-- ============================================================== -->
+    <!-- ======================== PENDAPATAN ========================== -->
+    <!-- ============================================================== -->
+    <div class="laporan-wrapper">
+      <h4 class="title is-4">Pengadaan</h4>
+    </div>
+
+
+    <hr class="pembatas-laporan">
+    <!-- ============================================================== -->
+    <!-- ======================== PENGADAAN =========================== -->
+    <!-- ============================================================== -->
+    <div class="laporan-wrapper">
+      <h4 class="title is-4">Pengadaan</h4>
+    </div>
+
+    <hr class="pembatas-laporan">
+    <!-- ============================================================== -->
+    <!-- ========================= TERLARIS =========================== -->
+    <!-- ============================================================== -->
+    <div class="laporan-wrapper">
+      <h4 class="title is-4">Terlaris</h4>
+    </div>
+
+
+
+
+
 
     <!-- ============================================================== -->
     <!-- =========================== MODAL ============================ -->
@@ -141,6 +167,11 @@
   width: 300px;
   position: absolute;
   left: 375px;
+}
+.pembatas-laporan {
+  width: 60%;
+  margin: 30px 0;
+  border: 1px solid #bbbbbb;
 }
 </style>
 
