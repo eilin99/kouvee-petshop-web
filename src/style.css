@@ -71,7 +71,7 @@
 #landing-page .navbar-brand i {
   margin-right: 15px; }
 #landing-page .navbar-end {
-  margin-right: 165px; }
+  margin-right: 125px; }
   #landing-page .navbar-end .navbar-item {
     font-family: "Nunito", sans-serif;
     font-size: 1.1rem;
@@ -161,7 +161,7 @@
     font-size: 20px !important; }
 
 .socmed {
-  margin-right: 25px; }
+  margin-left: 25px; }
 
 .made-with-love {
   padding: 5px;

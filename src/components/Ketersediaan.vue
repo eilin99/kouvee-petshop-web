@@ -116,25 +116,56 @@
       </div>
     </section>
 
-    <footer id="footer" class="footer is-dark">
+    <footer id="footer" class="footer">
       <div class="container">
         <div class="columns">
           <div class="column">
-            <h2 class="title is-4 has-text-white">
-              Follow Us
+            <h2 class="title is-4 section-title has-text-white">
+              Kunjungi kami
             </h2>
-
+            <a href="https://maps.google.com/maps?q=universitas%20atma%20jaya%20yog&t=&z=13&ie=UTF8&iwloc=&output=embed" class="subtitle paragraph has-text-white">
+              <b-icon icon="store"></b-icon>
+              Jl. Babarsari No.43, Janti, Sleman, DIY 
+            </a>
+            <p class="subtitle paragraph has-text-white" style="margin-top: 20px">
+              <b-icon icon="clock"></b-icon>
+              Senin-Minggu (09.00 - 20.00)
+            </p>
           </div>
-          <div class="column">
-            Follow Us
+          <div class="column has-text-centered">
+            <h2 class="title is-4 section-title has-text-white has-text-centered">
+              Hubungi kami
+            </h2>
+            <div>
+              <p class="subtitle paragraph has-text-white">
+                <b-icon icon="phone"></b-icon>
+                0274-123456
+              </p>
+              <p class="subtitle paragraph has-text-white">
+                <b-icon icon="phone"></b-icon>
+                089123456789
+              </p>
+            </div>
+          </div>
+          <div class="column has-text-right">
+            <h2 class="title is-4 section-title has-text-white has-text-right">
+              Follow kami
+            </h2>
+            <div class="socmed-wrapper">
+              <a>
+                <b-icon class="socmed has-text-white" icon="instagram" size="is-medium"></b-icon>
+              </a>
+              <a>
+                <b-icon class="socmed has-text-white" icon="facebook" size="is-medium"></b-icon>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </footer>
     <div class="made-with-love">
       <p class="subtitle is-6 paragraph has-text-centered has-text-grey-lighter">
-        Made with 💖 Kelompok 1 P3L Kelas C
-        <!-- <b>Made with 💖 Kelompok 1 P3L Kelas C</b> -->
+        Made with 💖 Kelompok 1 P3L Kelas C 2020
       </p>
     </div>
 
