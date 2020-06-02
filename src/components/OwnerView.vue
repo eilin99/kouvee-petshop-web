@@ -34,30 +34,21 @@
                         :icon="dataMaster.icon" 
                         :label="dataMaster.label"
                         tag="router-link"
-                        :to="dataMaster.to"
-                        @click="console.log('hellooo')">
+                        :to="dataMaster.to">
                     </b-menu-item>
                 </b-menu-item>
 
                 <!-- Laporan-laporan -->
                 <b-menu-item
-                    icon="book">
-                  <template slot="label" slot-scope="props">
-                    Laporan
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="laporan in laporans"
-                        :key="laporan.label"
-                        :icon="laporan.icon"
-                        :label="laporan.label"
-                        tag="router-link"
-                        :to="laporan.to">
-                    </b-menu-item>
-
+                    icon="book"
+                    tag="router-link"
+                    to="surat-dan-laporan">
+                      <template slot="label">
+                        Laporan
+                        <b-icon
+                            class="is-pulled-right">
+                        </b-icon>
+                      </template>
                 </b-menu-item>
 
               </b-menu-list>
@@ -83,6 +74,38 @@
               </template>
 
               <template slot="end">
+                <b-dropdown
+                  aria-role="list"
+                  position="is-bottom-left"
+                >
+                  <a
+                    class="navbar-item"
+                    slot="trigger"
+                    role="button">
+                    <!-- <span>Notifikasi</span> -->
+                    <b-icon :type="warnaNotifikasi" icon="bell"></b-icon>
+                  </a>
+
+                  <b-dropdown-item custom aria-role="menuitem">
+                    <p class="title is-6">
+                      <b>{{ pesanNotifikasi }}</b>
+                    </p>
+                  </b-dropdown-item>
+
+                  <hr class="dropdown-divider">
+
+                  <b-dropdown-item 
+                    v-for="(notifikasi, index) in datas"
+                    :key="index"
+                    :value="notifikasi" aria-role="listitem">
+                    <div class="media">
+                      <!-- <b-icon class="media-left" :icon="menu.icon"></b-icon> -->
+                      <div class="media-content">
+                        <h3>{{notifikasi.nama_produk}} ({{notifikasi.stok}} {{notifikasi.satuan}})</h3>
+                      </div>
+                    </div>
+                  </b-dropdown-item>
+                </b-dropdown>
 
                 <b-dropdown
                     v-model="activeUser"
@@ -92,8 +115,8 @@
                         class="navbar-item"
                         slot="trigger"
                         role="button">
-                        <span>Profile</span>
                         <b-icon icon="account"></b-icon>
+                        <span>Profile</span>
                     </a>
 
                     <b-dropdown-item custom aria-role="menuitem">
@@ -123,13 +146,13 @@
 
                     <hr class="dropdown-divider" aria-role="menuitem">
 
-                    <b-dropdown-item
+                    <!-- <b-dropdown-item
                         value="logout"
                         aria-role="menuitem"
                         @click="ubahPassword">
                         <b-icon icon="settings"></b-icon>
                         Ubah password
-                    </b-dropdown-item>
+                    </b-dropdown-item> -->
                     
                     <b-dropdown-item
                         value="logout"
@@ -177,25 +200,29 @@ export default {
       { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
-    const laporans = [
-      { 'label': "Layanan Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Layanan Terlaris" },
-      { 'label': "Produk Terlaris", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Produk Terlaris" },
-      { 'label': "Pendapatan Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Tahunan" },
-      { 'label': "Pendapatan Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pendapatan Bulanan" },
-      { 'label': "Pengadaan Produk Tahunan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Tahunan" },
-      { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
-    ]
-
     return {
+      datas: [],
+      warnaNotifikasi: '',
+      pesanNotifikasi: '',
       dataMasters,
       dataTransaksis,
-      laporans,
       activeUser: Object,
       isActive: true,
       menuExpanded:false
     }
   },
   methods: {
+    async getData() {
+      var uri = this.$api_baseUrl + "produk"
+
+      await this.$http.get(uri).then(response => {
+        this.datas = response.data.value
+        this.datas = this.datas.filter(produk => parseInt(produk.stok) < parseInt(produk.stok_minimum))
+      })
+      .catch(error => {
+        this.errors = error
+      })
+    },
     logout() {
       this.$session.destroy()
       this.$router.push('/login')
@@ -206,11 +233,19 @@ export default {
       this.$router.push('/login')
     }
   },
-  mounted() {
+  async mounted() {
     if (!this.$session.exists()) {
       this.$router.push('/login');
     } else {
       this.activeUser = this.$session.get('pegawai')
+      await this.getData()
+      if (this.datas.length > 0) {
+        this.warnaNotifikasi = 'is-danger'
+        this.pesanNotifikasi = 'Produk hampir habis'
+      } else {
+        this.warnaNotifikasi = ''
+        this.pesanNotifikasi = 'Stok semua produk aman'
+      }
     }
   }
 }

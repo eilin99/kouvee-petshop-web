@@ -1,9 +1,11 @@
 import LandingPage from './components/LandingPage.vue'
+import Ketersediaan from './components/Ketersediaan.vue'
 import Login from './components/Login.vue'
 import Owner from './components/OwnerView.vue'
 import Kasir from './components/KasirView.vue'
 import CS from './components/CSView.vue'
 import Dashboard from './components/Dashboard.vue'
+import OwnerDashboard from './components/DashboardOwner.vue'
 
 // Data Master
 import Pegawai from './components/dataMaster/Pegawai.vue'
@@ -39,13 +41,18 @@ import DetailPenjualanProduk from './components/transaksi/penjualanProduk/Detail
 import PenjualanLayanan from './components/transaksi/penjualanLayanan/PenjualanLayanan.vue'
 import DaftarPenjualanLayanan from './components/transaksi/penjualanLayanan/DaftarPenjualanLayanan.vue'
 import DetailPenjualanLayanan from './components/transaksi/penjualanLayanan/DetailPenjualanLayanan.vue'
+
 // Laporan
-// ......
+import SuratDanLaporan from './components/laporanOwner.vue'
 
 export default [
     {
         path: '/',
         component: LandingPage
+    },
+    {
+        path: '/ketersediaan-produk-layanan',
+        component: Ketersediaan
     },
     {
         path: '/login',
@@ -60,7 +67,7 @@ export default [
             {
                 name: 'OwnerDashboard',
                 path: '/owner/dashboard',
-                component: Dashboard
+                component: OwnerDashboard
             },
             // ===== PEGAWAI =====
             {
@@ -158,6 +165,12 @@ export default [
                 path: '/owner/form-ukuran-hewan/:id',
                 component: formUkuranHewan
             },
+            // ===== SURAT DAN LAPORAN =====
+            {
+                name: 'SuratDanLaporan',
+                path: '/owner/surat-dan-laporan',
+                component: SuratDanLaporan
+            }
         ]
             
     },
