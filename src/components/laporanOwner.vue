@@ -22,24 +22,49 @@
           Pendapatan Bulanan
         </b-button>
         <!-- Tahunan -->
+        <b-button
+          type="is-dark"
+          class="btn-laporan has-text-left"
+          size="is-medium"
+          icon-left="file"
+          @click="openModal('laporan', 'pendapatan', 'tahunan')"
+          outlined
+        >
+          Pendapatan Tahunan
+        </b-button>
         <!-- ... -->
     </div>
 
     <hr class="pembatas-laporan">
-    <!-- ============================================================== -->
-    <!-- ======================== PENDAPATAN ========================== -->
-    <!-- ============================================================== -->
-    <div class="laporan-wrapper">
-      <h4 class="title is-4">Pengadaan</h4>
-    </div>
-
-
-    <hr class="pembatas-laporan">
+    
     <!-- ============================================================== -->
     <!-- ======================== PENGADAAN =========================== -->
     <!-- ============================================================== -->
     <div class="laporan-wrapper">
       <h4 class="title is-4">Pengadaan</h4>
+      <!-- Bulanan -->
+        <b-button
+          type="is-dark"
+          class="btn-laporan has-text-left"
+          size="is-medium"
+          icon-left="file"
+          @click="openModal('laporan', 'pengadaan', 'bulanan')"
+          outlined
+        >
+          Pengadaan Bulanan
+        </b-button>
+        <!-- Tahunan -->
+        <b-button
+          type="is-dark"
+          class="btn-laporan has-text-left"
+          size="is-medium"
+          icon-left="file"
+          @click="openModal('laporan', 'pengadaan', 'tahunan')"
+          outlined
+        >
+          Pengadaan Tahunan
+        </b-button>
+        <!-- ... -->
     </div>
 
     <hr class="pembatas-laporan">
@@ -68,10 +93,10 @@
       :on-cancel="closeModal">
         <div class="modal-card" style="height:500px">
           <header class="modal-card-head">
-            <p class="modal-card-title">Tanggal dan Tahun</p>
+            <p class="modal-card-title">Bulan dan Tahun</p>
           </header>
           <section class="modal-card-body">
-            <p class="title is-5">Pilih Bulan dan Tahun</p>
+            <p class="title is-5">Pilih Tahun</p>
 
             <b-field
               label="Bulan"
