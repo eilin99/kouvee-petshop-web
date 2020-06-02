@@ -177,7 +177,11 @@
             <h2 class="title is-4 section-title has-text-white">
               Kunjungi kami
             </h2>
-            <a href="https://maps.google.com/maps?q=universitas%20atma%20jaya%20yog&t=&z=13&ie=UTF8&iwloc=&output=embed" class="subtitle paragraph has-text-white">
+            <a
+              href="https://www.google.com/maps/place/Universitas+Atma+Jaya+Yogyakarta+-+Kampus+3+Gedung+Bonaventura+Babarsari/@-7.7804061,110.4120387,17z/data=!4m12!1m6!3m5!1s0x2e7a59efe143b3d9:0x48def21d296c3765!2sAtma+Jaya+University,+Yogyakarta!8m2!3d-7.7804061!4d110.4142274!3m4!1s0x2e7a59f1fb2f2b45:0x20986e2fe9c79cdd!8m2!3d-7.7794198!4d110.4161288"
+              target="_blank"
+              class="subtitle paragraph has-text-white"
+            >
               <b-icon icon="store"></b-icon>
               Jl. Babarsari No.43, Janti, Sleman, DIY 
             </a>
