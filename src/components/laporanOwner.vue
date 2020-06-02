@@ -96,7 +96,7 @@
             <p class="modal-card-title">Bulan dan Tahun</p>
           </header>
           <section class="modal-card-body">
-            <p class="title is-5">Pilih Tahun</p>
+            <p class="title is-5">Pilih tahun</p>
 
             <b-field
               label="Bulan"
@@ -160,7 +160,7 @@
           <footer class="modal-card-foot">
             <div class="footer-modal">
               <div class="btn-right">
-                <button class="button" type="button" @click="closeModal()">Batal</button>
+                <button class="button" type="button" @click="closeModal">Batal</button>
                 <button
                   class="button is-info"
                   @click="openLaporan(laporan.jenis, laporan.tipe, laporan.rentang, 'show')">
@@ -237,8 +237,8 @@ export default {
         action: '', // action itu bisa show atau print
         disableBulan: false, // ini TRUE kalo mau print laporan yg TAHUNAN
       },
-      selectedBulan: { namaBulan: 'Pilih Bulan', noBulan: 0 },
-      selectedTahun: 'Pilih Tahun',
+      selectedBulan: { namaBulan: 'Pilih bulan', noBulan: 0 },
+      selectedTahun: 'Pilih tahun',
       form: {
         bulan: { message: '', type: '' },
         tahun: { message: '', type: '' },
@@ -260,6 +260,8 @@ export default {
       this.selectedTahun = 'Pilih tahun'
       this.selectedBulan.namaBulan = 'Pilih bulan'
       this.selectedBulan.noBulan = 0
+      this.clearError(this.form.bulan)
+      this.clearError(this.form.tahun)
       this.modalActive = false
     },
     openLaporan(jenis, tipe, rentang, action) {
@@ -274,21 +276,21 @@ export default {
         this.modalActive = false
       }
     },
-
     cekData() {
       let count = 0
-
-      if (!this.laporan.disableBulan && this.selectedBulan.namaBulan == 'Pilih Bulan') {
+      if (!this.laporan.disableBulan && this.selectedBulan.noBulan == 0) {
         count++
         this.form.bulan.message = 'Bulan belum terpilih'
         this.form.bulan.type = 'is-danger'
       }
 
-      if (this.selectedTahun == 'Pilih Tahun') {
+      if (this.selectedTahun == 'Pilih tahun') {
         count++
         this.form.tahun.message = 'Tahun belum terpilih'
         this.form.tahun.type = 'is-danger'
       }
+
+      console.log(this.selectedTahun)
 
       return count
     },
