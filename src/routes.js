@@ -39,6 +39,13 @@ import DetailPenjualanProduk from './components/transaksi/penjualanProduk/Detail
 import PenjualanLayanan from './components/transaksi/penjualanLayanan/PenjualanLayanan.vue'
 import DaftarPenjualanLayanan from './components/transaksi/penjualanLayanan/DaftarPenjualanLayanan.vue'
 import DetailPenjualanLayanan from './components/transaksi/penjualanLayanan/DetailPenjualanLayanan.vue'
+
+// Pengadaan Produk
+
+import PengadaanProduk from './components/pengadaanProduk/PengadaanProduk.vue'
+import formPengadaanProduk from './components/pengadaanProduk/formPengadaanProduk.vue'
+import DetailPengadaanProduk from './components/pengadaanProduk/DetailPengadaanProduk.vue'
+
 // Laporan
 // ......
 
@@ -157,6 +164,22 @@ export default [
                 name: 'formEditUkuranHewan',
                 path: '/owner/form-ukuran-hewan/:id',
                 component: formUkuranHewan
+            },
+            // ===== PENGADAAN =====
+            {
+                name: 'PengadaanProduk',
+                path: '/owner/pengadaan-produk',
+                component: PengadaanProduk
+            },
+            {
+                name: 'formPengadaanProduk',
+                path: '/owner/form-pengadaan-produk',
+                component: formPengadaanProduk
+            },
+            {
+                name: 'DetailPengadaanProduk',
+                path: '/owner/detail-pengadaan-produk/:id',
+                component: DetailPengadaanProduk
             },
         ]
             

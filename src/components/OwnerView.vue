@@ -39,6 +39,19 @@
                     </b-menu-item>
                 </b-menu-item>
 
+                <!-- Pengadaan -->
+
+                <b-menu-list>
+                  <b-menu-item
+                    label="Pengadaan Produk"
+                    icon="dolly"
+                    tag="router-link"
+                    to="/owner/pengadaan-produk"
+                    :active="isActive"
+                    @click="namaData = 'Pengadaan Produk'">
+                  </b-menu-item>
+                </b-menu-list>
+
                 <!-- Laporan-laporan -->
                 <b-menu-item
                     icon="book">
@@ -61,6 +74,7 @@
                 </b-menu-item>
 
               </b-menu-list>
+
               <b-menu-list>
                 <b-menu-item
                   label="Landing Page"
@@ -186,10 +200,15 @@ export default {
       { 'label': "Pengadaan Produk Bulanan", 'icon':"file", 'to':"/owner/laporan-", 'title': "Laporan Pengadaan Produk Bulanan" },
     ]
 
+    const pengadaans = [
+      { 'label': "Pengadaan", 'icon':"file", 'to':"/owner/pengadaan", 'title': "Pengadaan Produk" },
+    ]
+
     return {
       dataMasters,
       dataTransaksis,
       laporans,
+      pengadaans,
       activeUser: Object,
       isActive: true,
       menuExpanded:false
