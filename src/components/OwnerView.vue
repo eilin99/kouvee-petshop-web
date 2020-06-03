@@ -38,6 +38,16 @@
                     </b-menu-item>
                 </b-menu-item>
 
+                <!-- Pengadaan -->
+                <b-menu-list>
+                  <b-menu-item
+                    label="Pengadaan Produk"
+                    icon="dolly"
+                    tag="router-link"
+                    to="/owner/pengadaan-produk">
+                  </b-menu-item>
+                </b-menu-list>
+
                 <!-- Laporan-laporan -->
                 <b-menu-item
                     icon="book"

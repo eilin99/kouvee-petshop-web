@@ -45,6 +45,10 @@ import DetailPenjualanLayanan from './components/transaksi/penjualanLayanan/Deta
 // Laporan
 import SuratDanLaporan from './components/laporanOwner.vue'
 
+// Pengadaan Produk
+import PengadaanProduk from './components/pengadaanProduk/Pengadaan.vue'
+import formPengadaanProduk from './components/pengadaanProduk/FormPengadaan.vue'
+
 export default [
     {
         path: '/',
@@ -170,7 +174,23 @@ export default [
                 name: 'SuratDanLaporan',
                 path: '/owner/surat-dan-laporan',
                 component: SuratDanLaporan
-            }
+            },
+            // ===== PENGADAAN =====
+            {
+                name: 'PengadaanProduk',
+                path: '/owner/pengadaan-produk',
+                component: PengadaanProduk
+            },
+            // {
+            //     name: 'formPengadaanProduk',
+            //     path: '/owner/form-pengadaan-produk',
+            //     component: formPengadaanProduk
+            // },
+            {
+                name: 'formPengadaanProduk',
+                path: '/owner/form-pengadaan-produk/:id',
+                component: formPengadaanProduk
+            },
         ]
             
     },
