@@ -9,7 +9,7 @@
             :type="form.nama_produk.type"
             :message="form.nama_produk.message"
             horizontal>
-              <b-input v-model="form.nama_produk.value"></b-input>
+              <b-input @input="clearError(form.nama_produk)" v-model="form.nama_produk.value"></b-input>
         </b-field>
 
         <b-field 
@@ -17,7 +17,7 @@
             :type="form.satuan.type"
             :message="form.satuan.message"
             horizontal>
-              <b-input v-model="form.satuan.value"></b-input>
+              <b-input @input="clearError(form.satuan)" v-model="form.satuan.value"></b-input>
         </b-field>
 
         <b-field 
@@ -34,6 +34,7 @@
               </b-upload>
               <input 
                   type="file" 
+                  @input="clearError(form.gambar)"
                   @change="previewImage" 
                   accept="image/jpg, image/png, image/jpeg" 
                   ref="inputFile"
@@ -41,9 +42,6 @@
         </b-field>
 
         <div class="image-preview" v-if="form.gambar.value">
-          <!-- <span class="tag" v-if="form.gambar.value">
-            {{ form.gambar.value.name }}
-          </span> -->
           <img class="preview" :src="gambarProduk">
         </div>
 
@@ -55,6 +53,7 @@
             horizontal>
               <b-numberinput 
                   min="0" 
+                  @input="clearError(form.stok_minimum)"
                   v-model="form.stok_minimum.value" 
                   controls-position="compact"
                   controls-rounded>
@@ -69,6 +68,7 @@
             horizontal>
               <b-numberinput 
                   min="0" 
+                  @input="clearError(form.stok)"
                   v-model="form.stok.value"
                   controls-position="compact"
                   controls-rounded>
@@ -85,7 +85,7 @@
               <b-field>
                 <b-select placeholder="Rp" disabled>
                 </b-select>
-                <b-input v-model="form.harga_beli.value" type="number" placeholder="0,00" expanded></b-input>
+                <b-input @input="clearError(form.harga_beli)" v-model="form.harga_beli.value" type="number" placeholder="0,00" expanded></b-input>
               </b-field>
         </b-field>
 
@@ -99,7 +99,7 @@
               <b-field>
                 <b-select placeholder="Rp" disabled>
                 </b-select>
-                <b-input v-model="form.harga_jual.value" type="number" placeholder="0,00" expanded></b-input>
+                <b-input @input="clearError(form.harga_jual)" v-model="form.harga_jual.value" type="number" placeholder="0,00" expanded></b-input>
               </b-field>
         </b-field>
 
@@ -119,7 +119,7 @@
               type="is-success" 
               @click="confirm()"
               rounded>
-                Konfirmasi
+                Simpan
           </b-button>
         </div>
 
@@ -201,79 +201,148 @@ export default {
       // biar ngambil preview gambar produk yang ada di database
       this.gambarProduk = this.$api_baseUrl + 'produk/picture/' + dataProduk.gambar
     },
+    clearError(form) {
+      console.log(form)
+      form.type = ''
+      form.message = '' 
+    },
+    cekData() {
+      let count = 0
+      let regex = new RegExp(/^\d+$/)
+
+      if(this.form.nama_produk.value === "") {
+        this.form.nama_produk.type = 'is-danger'
+        this.form.nama_produk.message = "Nama produk tidak boleh kosong!"
+        count++
+      }
+      if(this.form.satuan.value === "") {
+        this.form.satuan.type = 'is-danger'
+        this.form.satuan.message = "Satuan tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.gambar.value === "") {
+        this.form.gambar.type = 'is-danger'
+        this.form.gambar.message = "Gambar tidak boleh kosong!"
+        count++
+      } 
+
+      if(this.form.harga_beli.value === "") {
+        this.form.harga_beli.type = 'is-danger'
+        this.form.harga_beli.message = "Harga beli tidak boleh kosong!"
+        count++
+      } else if(!regex.test(this.form.harga_beli.value) || this.form.harga_beli.value < 1) {
+        this.form.harga_beli.type = 'is-danger'
+        this.form.harga_beli.message = "Harga beli tidak valid!"
+        count++
+      } 
+
+      if(this.form.harga_jual.value === "") {
+        this.form.harga_jual.type = 'is-danger'
+        this.form.harga_jual.message = "Harga jual tidak boleh kosong!"
+        count++
+      } else if(!regex.test(this.form.harga_jual.value) || this.form.harga_jual.value < 1) {
+        this.form.harga_jual.type = 'is-danger'
+        this.form.harga_jual.message = "Harga jual tidak valid!"
+        count++
+      }
+      if (this.form.harga_jual.value <= this.form.harga_beli.value) {
+        this.form.harga_jual.type = 'is-danger'
+        this.form.harga_jual.message = "Harga jual harus lebih besar dari harga beli!"
+        count++
+      }
+
+      if(this.form.stok_minimum.value === "") {
+        this.form.stok_minimum.type = 'is-danger'
+        this.form.stok_minimum.message = "Stok minimum tidak boleh kosong!"
+        count++
+      } else if(!regex.test(this.form.stok_minimum.value) || this.form.stok_minimum.value < 0) {
+        this.form.stok_minimum.type = 'is-danger'
+        this.form.stok_minimum.message = "Stok minimum tidak valid!"
+        count++
+      } 
+
+      if(this.form.stok.value === "") {
+        this.form.stok.type = 'is-danger'
+        this.form.stok.message = "Stok tidak boleh kosong!"
+        count++
+      } else if(!regex.test(this.form.stok.value) || this.form.stok.value < 0) {
+        this.form.stok.type = 'is-danger'
+        this.form.stok.message = "Stok tidak valid!"
+        count++
+      }
+
+      if(count > 0)
+        return false
+    },
     addData() {
       this.isLoading = true // Biar dia loading dulu
 
-      this.dataProduk.append("nama_produk", this.form.nama_produk.value)
-      this.dataProduk.append("satuan", this.form.satuan.value)
-      this.dataProduk.append("harga_jual", this.form.harga_jual.value)
-      this.dataProduk.append("harga_beli", this.form.harga_beli.value)
-      this.dataProduk.append("stok", this.form.stok.value)
-      this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
-      this.dataProduk.append("gambar", this.form.gambar.value)
-      this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.dataProduk.append("nama_produk", this.form.nama_produk.value)
+        this.dataProduk.append("satuan", this.form.satuan.value)
+        this.dataProduk.append("harga_jual", this.form.harga_jual.value)
+        this.dataProduk.append("harga_beli", this.form.harga_beli.value)
+        this.dataProduk.append("stok", this.form.stok.value)
+        this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
+        this.dataProduk.append("gambar", this.form.gambar.value)
+        this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
 
-      var uri = this.$api_baseUrl + "produk";
+        var uri = this.$api_baseUrl + "produk";
 
-      this.$http.post(uri, this.dataProduk).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'Produk' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil ditambahkan!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-        }
-      })
+        this.$http.post(uri, this.dataProduk).then(response => {
+          this.$router.push( { name: 'Produk' } )
+          this.snackbarMsg = response.message
+          this.snackbar("Data berhasil ditambahkan!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        })
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
 
-      console.log(this.form.gambar.value)
-      // this.editDataProduk.nama_produk = this.form.nama_produk.value
-      // this.editDataProduk.satuan = this.form.satuan.value
-      // this.editDataProduk.harga_jual = this.form.harga_jual.value
-      // this.editDataProduk.harga_beli = this.form.harga_beli.value
-      // this.editDataProduk.stok = this.form.stok.value
-      // this.editDataProduk.stok_minimum = this.form.stok_minimum.value
-      // this.editDataProduk.gambar = this.form.gambar.value
-      // this.editDataProduk.pic = this.$session.get('pegawai').id_pegawai
-
-      this.dataProduk.append("nama_produk", this.form.nama_produk.value)
-      this.dataProduk.append("satuan", this.form.satuan.value)
-      this.dataProduk.append("harga_jual", this.form.harga_jual.value)
-      this.dataProduk.append("harga_beli", this.form.harga_beli.value)
-      this.dataProduk.append("stok", this.form.stok.value)
-      this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
-      if(typeof(this.form.gambar.value) != 'string') { // Kalo gak ganti gambar, isi this.form.gambar itu string. Kalo ganti gambar, jadi objek.
-        this.dataProduk.append("gambar", this.form.gambar.value) // Jadi kalo dia masih string, dia gak akan ganti gambarnya
-      }
-      this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
-
-      console.log(this.dataProduk)
-
-      var uri = this.$api_baseUrl + "produk/" + editId;
-
-      this.$http.post(uri, this.dataProduk, this.config).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'Produk' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil diedit!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.dataProduk.append("nama_produk", this.form.nama_produk.value)
+        this.dataProduk.append("satuan", this.form.satuan.value)
+        this.dataProduk.append("harga_jual", this.form.harga_jual.value)
+        this.dataProduk.append("harga_beli", this.form.harga_beli.value)
+        this.dataProduk.append("stok", this.form.stok.value)
+        this.dataProduk.append("stok_minimum", this.form.stok_minimum.value)
+        if(typeof(this.form.gambar.value) != 'string') { // Kalo gak ganti gambar, isi this.form.gambar itu string. Kalo ganti gambar, jadi objek.
+          this.dataProduk.append("gambar", this.form.gambar.value) // Jadi kalo dia masih string, dia gak akan ganti gambarnya
         }
-      })
+        this.dataProduk.append("pic", this.$session.get('pegawai').id_pegawai)
+
+        console.log(this.dataProduk)
+
+        var uri = this.$api_baseUrl + "produk/" + editId;
+
+        this.$http.post(uri, this.dataProduk, this.config).then(response => {
+          this.$router.push( { name: 'Produk' } )
+          this.snackbarMsg = response.message
+          this.snackbar("Data berhasil diedit!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        })
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     confirm() {
       this.editId == 0 ? this.addData() : this.editData(this.editId)

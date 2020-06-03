@@ -2,7 +2,7 @@
   <div id="cs">
 
     <div class="columns is-fullheight">
-      <div class="column is-2 has-background-grey-lighter" style="overflow-y: scroll">
+      <div class="column is-2 has-background-grey-lighter">
         <div id="sidebar">
           <template>
             <b-menu class="is-sidebar-menu">
@@ -60,41 +60,8 @@
 
                 </b-menu-item>
 
-                <!-- Laporan-laporan -->
-                <b-menu-item
-                    icon="book">
-                  <template slot="label" slot-scope="props">
-                    Laporan
-                    <b-icon
-                        class="is-pulled-right"
-                        :icon="props.expanded ? 'menu-down' : 'menu-up'">
-                    </b-icon>
-                  </template>
-                    <b-menu-item
-                        v-for="laporan in laporans"
-                        :key="laporan.label"
-                        :icon="laporan.icon"
-                        :label="laporan.label"
-                        tag="router-link"
-                        :to="laporan.to">
-                    </b-menu-item>
-
-                </b-menu-item>
-
               </b-menu-list>
-              <b-menu-list>
-                <b-menu-item
-                  label="Landing Page"
-                  icon="link"
-                  tag="router-link"
-                  target="_blank"
-                  to="/expo">
-                </b-menu-item>
-              </b-menu-list>
-
-              <!-- <b-menu-list label="Actions">
-                <b-menu-item label="Logout"></b-menu-item>
-              </b-menu-list> -->
+              
             </b-menu>
           </template>
         </div>
@@ -205,9 +172,9 @@ export default {
     ]
 
     const dataTransaksis = [
-      { 'label': "Penjualan Produk", 'icon':"cash", 'to':"/penjualan-produk", 'title': "Penjualan Produk" },
-      { 'label': "Penjualan Layanan", 'icon':"cash", 'to':"/penjualan-layanan", 'title': "Penjualan Layanan" },
-      { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/pengadaan-produk", 'title': "Pengadaan Produk" },
+      { 'label': "Penjualan Produk", 'icon':"cash", 'to':"/cs/penjualan-produk", 'title': "Penjualan Produk" },
+      { 'label': "Penjualan Layanan", 'icon':"cash", 'to':"/cs/penjualan-layanan", 'title': "Penjualan Layanan" },
+      { 'label': "Pengadaan Produk", 'icon':"truck", 'to':"/cs/pengadaan-produk", 'title': "Pengadaan Produk" },
     ]
 
     return {
@@ -239,7 +206,7 @@ export default {
 .is-fullheight.columns {
     height: calc(100vh - ( 0rem - .75rem ) );
     /* height: 100%; */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .title-nama-data {

@@ -1,6 +1,6 @@
 <template>
   <section id="pegawai">
-
+  
     <b-table
       :data="datas"
       :columns="columns"
@@ -8,7 +8,7 @@
       :loading="isLoading" 
       :mobile-cards="true"
       paginated
-      per-page="5"
+      per-page="10"
       ref="table"
       detailed
       detail-key="id_pegawai"

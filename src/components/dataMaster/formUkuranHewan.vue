@@ -9,7 +9,7 @@
             :type="form.ukuran.type"
             :message="form.ukuran.message"
             horizontal>
-              <b-input v-model="form.ukuran.value"></b-input>
+              <b-input @input="clearError(form.ukuran)" v-model="form.ukuran.value"></b-input>
         </b-field>
 
         <div class="has-text-right">
@@ -26,7 +26,7 @@
               type="is-success" 
               @click="confirm()"
               rounded>
-                Konfirmasi
+                Simpan
           </b-button>
         </div>
 
@@ -86,53 +86,76 @@ export default {
 
       return fixedDate
     },
+    clearError(form) {
+      console.log(form)
+      form.type = ''
+      form.message = '' 
+    },
+    cekData() {
+      let count = 0
+
+      if(this.form.ukuran.value === "") {
+        this.form.ukuran.type = 'is-danger'
+        this.form.ukuran.message = "Ukuran hewan tidak boleh kosong!"
+        count++
+      }
+
+      if(count > 0)
+        return false
+    },
     addData() {
       this.isLoading = true // Biar dia loading dulu
 
-      this.dataUkuranHewan.append("ukuran", this.form.ukuran.value)
-      this.dataUkuranHewan.append("pic", this.$session.get('pegawai').id_pegawai)
-      
-      var uri = this.$api_baseUrl + "ukuranhewan";
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.dataUkuranHewan.append("ukuran", this.form.ukuran.value)
+        this.dataUkuranHewan.append("pic", this.$session.get('pegawai').id_pegawai)
+        
+        var uri = this.$api_baseUrl + "ukuranhewan";
 
-      this.$http.post(uri, this.dataUkuranHewan).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'UkuranHewan' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil ditambahkan!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-        }
-      });
+        this.$http.post(uri, this.dataUkuranHewan).then(response => {
+          this.$router.push( { name: 'UkuranHewan' } )
+          this.snackbarMsg = response.message
+          this.snackbar("Data berhasil ditambahkan!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
 
-      this.editDataUkuranHewan.ukuran = this.form.ukuran.value
-      this.editDataUkuranHewan.pic = this.$session.get('pegawai').id_pegawai
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.editDataUkuranHewan.ukuran = this.form.ukuran.value
+        this.editDataUkuranHewan.pic = this.$session.get('pegawai').id_pegawai
 
-      var uri = this.$api_baseUrl + "ukuranhewan/" + editId;
+        var uri = this.$api_baseUrl + "ukuranhewan/" + editId;
 
-      this.$http.put(uri, this.editDataUkuranHewan, this.config).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'UkuranHewan' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil diedit!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-        }
-      });
+        this.$http.put(uri, this.editDataUkuranHewan, this.config).then(response => {
+          this.$router.push( { name: 'UkuranHewan' } )
+          this.snackbarMsg = response.message
+          this.snackbar("Data berhasil diedit!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     confirm() {
       // Kalo editId masih default (0) berarti dia bakal addData.

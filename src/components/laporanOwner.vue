@@ -22,24 +22,49 @@
           Pendapatan Bulanan
         </b-button>
         <!-- Tahunan -->
-        <!-- ... -->
+        <b-button
+          type="is-dark"
+          class="btn-laporan has-text-left"
+          size="is-medium"
+          icon-left="file"
+          @click="openModal('laporan', 'pendapatan', 'tahunan')"
+          outlined
+        >
+          Pendapatan Tahunan
+        </b-button>
     </div>
 
     <hr class="pembatas-laporan">
-    <!-- ============================================================== -->
-    <!-- ======================== PENDAPATAN ========================== -->
-    <!-- ============================================================== -->
-    <div class="laporan-wrapper">
-      <h4 class="title is-4">Pengadaan</h4>
-    </div>
-
-
-    <hr class="pembatas-laporan">
+    
     <!-- ============================================================== -->
     <!-- ======================== PENGADAAN =========================== -->
     <!-- ============================================================== -->
     <div class="laporan-wrapper">
       <h4 class="title is-4">Pengadaan</h4>
+
+      <!-- Bulanan -->
+        <b-button
+          type="is-dark"
+          class="btn-laporan has-text-left"
+          size="is-medium"
+          icon-left="file"
+          @click="openModal('laporan', 'pengadaan', 'bulanan')"
+          outlined
+        >
+          Pengadaan Bulanan
+        </b-button>
+        <!-- Tahunan -->
+        <b-button
+          type="is-dark"
+          class="btn-laporan has-text-left"
+          size="is-medium"
+          icon-left="file"
+          @click="openModal('laporan', 'pengadaan', 'tahunan')"
+          outlined
+        >
+          Pengadaan Tahunan
+        </b-button>
+        <!-- ... -->
     </div>
 
     <hr class="pembatas-laporan">
@@ -48,29 +73,6 @@
     <!-- ============================================================== -->
     <div class="laporan-wrapper">
       <h4 class="title is-4">Terlaris</h4>
-        <!-- Produk -->
-        <b-button
-          type="is-dark"
-          class="btn-laporan has-text-left"
-          size="is-medium"
-          icon-left="file"
-          @click="openModal('laporan', 'produk', 'terlaris')"
-          outlined
-        >
-          Produk Terlaris Tahunan
-        </b-button>
-
-        <!-- Layanan -->
-        <b-button
-          type="is-dark"
-          class="btn-laporan has-text-left"
-          size="is-medium"
-          icon-left="file"
-          @click="openModal('laporan', 'layanan', 'terlaris')"
-          outlined
-        >
-          Layanan Terlaris Tahunan
-        </b-button>
     </div>
 
 
@@ -91,10 +93,39 @@
       :on-cancel="closeModal">
         <div class="modal-card" style="height:500px">
           <header class="modal-card-head">
-            <p class="modal-card-title">Tahun</p>
+            <p class="modal-card-title">Bulan dan Tahun</p>
           </header>
           <section class="modal-card-body">
-            <p class="title is-5">Pilih Tahun</p>
+            <p class="title is-5">Pilih tahun</p>
+
+            <b-field
+              label="Bulan"
+              :message="form.bulan.message"
+              :type="form.bulan.type"
+            >
+              <b-dropdown
+                hoverable
+                aria-role="list"
+                max-height="100px"
+                v-model="selectedBulan"
+                @input="clearError(form.bulan)"
+                scrollable
+                :disabled="laporan.disableBulan">
+                <button class="button is-light" type="button" slot="trigger">
+                  <span>{{ selectedBulan.namaBulan }}</span>
+                  <b-icon icon="menu-down"></b-icon>
+                </button>
+
+                <b-dropdown-item
+                  v-for="(bulan, index) in bulans"
+                  :key="index"
+                  aria-role="listitem"
+                  :value="bulan"
+                >
+                  {{bulan.namaBulan}}
+                </b-dropdown-item>
+              </b-dropdown>
+            </b-field>
 
             <b-field
               label="Tahun"
@@ -129,15 +160,15 @@
           <footer class="modal-card-foot">
             <div class="footer-modal">
               <div class="btn-right">
-                <button class="button" type="button" @click="closeModal()">Batal</button>
+                <button class="button" type="button" @click="closeModal">Batal</button>
                 <button
                   class="button is-info"
-                  @click="openLaporan(laporan.jenis, laporan.tentang, laporan.tipe, 'show')">
+                  @click="openLaporan(laporan.jenis, laporan.tipe, laporan.rentang, 'show')">
                     Show
                 </button>
                 <button
                   class="button is-primary"
-                  @click="openLaporan(laporan.jenis, laporan.tentang, laporan.tipe, 'print')">
+                  @click="openLaporan(laporan.jenis, laporan.tipe, laporan.rentang, 'print')">
                     Simpan
                 </button>
               </div>
@@ -201,13 +232,20 @@ export default {
       tahun,
       laporan: {
         jenis: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
-        tentang: ' ', //produk atau laporan
+        tipe: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
+        rentang: '', // rentang itu bisa bulanan/tahunan
+        action: '', // action itu bisa show atau print
+        disableBulan: false, // ini TRUE kalo mau print laporan yg TAHUNAN
+      },
+      laporanTerlaris: {
+        jenis: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
+        tentang: ' ', //produk atau layanan
         tipe: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
         action: '', // action itu bisa show atau print
         disableBulan: true, // ini TRUE kalo mau print laporan yg TAHUNAN
       },
-      selectedBulan: { namaBulan: 'Pilih Bulan', noBulan: 0 },
-      selectedTahun: 'Pilih Tahun',
+      selectedBulan: { namaBulan: 'Pilih bulan', noBulan: 0 },
+      selectedTahun: 'Pilih tahun',
       form: {
         bulan: { message: '', type: '' },
         tahun: { message: '', type: '' },
@@ -216,19 +254,47 @@ export default {
     }
   },
   methods: {
-    openModal(jenis, tentang, tipe) {
+    openModal(jenis, tipe, rentang) {
+      // scroll ke data() utk lihat penjelasan data ini
+      this.laporan.jenis = jenis
+      this.laporan.tipe = tipe
+      this.laporan.rentang = rentang
+      this.laporan.disableBulan = rentang == 'tahunan' ? true : false
+      this.modalActive = true
+    },
+    openModalTerlaris(jenis, tentang, tipe) {
       // scroll ke data() utk lihat penjelasan data ini
       this.laporan.jenis = jenis
       this.laporan.tentang = tentang
       this.laporan.tipe = tipe
       this.modalActive = true
     },
+    
+    
     closeModal() {
       this.laporan = {}
-      this.selectedTahun = 'Pilih tahun'
+      this.selectedTahun = 'Pilih tahun
+      this.selectedBulan.namaBulan = 'Pilih bulan'
+      this.selectedBulan.noBulan = 0
+      this.clearError(this.form.bulan)
+      this.clearError(this.form.tahun)
       this.modalActive = false
     },
+    
+    
     openLaporan(jenis, tipe, rentang, action) {
+      if (this.cekData() == 0) {
+        let waktu = rentang == "bulanan" ? `${this.selectedBulan.noBulan}/${this.selectedTahun}` : this.selectedTahun
+        
+        let link = `http://tugasbesarkami.com/api/${jenis}/${tipe}/${rentang}/${action}/${waktu}`
+        console.log(link)
+        
+        window.open(link)
+        this.closeModal()
+        this.modalActive = false
+      }
+    },
+    openLaporanTerlaris(jenis, tipe, rentang, action) {
       if (this.cekData() == 0) {
         let waktu = this.selectedTahun
         
@@ -240,17 +306,17 @@ export default {
         this.modalActive = false
       }
     },
-
+    
+    
     cekData() {
       let count = 0
-
-      if (!this.laporan.disableBulan && this.selectedBulan.namaBulan == 'Pilih Bulan') {
+      if (!this.laporan.disableBulan && this.selectedBulan.noBulan == 0) {
         count++
         this.form.bulan.message = 'Bulan belum terpilih'
         this.form.bulan.type = 'is-danger'
       }
 
-      if (this.selectedTahun == 'Pilih Tahun') {
+      if (this.selectedTahun == 'Pilih tahun') {
         count++
         this.form.tahun.message = 'Tahun belum terpilih'
         this.form.tahun.type = 'is-danger'

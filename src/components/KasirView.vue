@@ -40,15 +40,6 @@
                 </b-menu-item>
 
               </b-menu-list>
-              <b-menu-list>
-                <b-menu-item
-                  label="Landing Page"
-                  icon="link"
-                  tag="router-link"
-                  target="_blank"
-                  to="/expo">
-                </b-menu-item>
-              </b-menu-list>
               
             </b-menu>
           </template>

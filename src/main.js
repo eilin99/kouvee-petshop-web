@@ -2,13 +2,16 @@ import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+import '@mdi/font/css/materialdesignicons.css'
 import VueRouter from 'vue-router'
 import Routes from './routes'
 import Axios from 'axios'
 import VueSession from 'vue-session'
+import vueSmoothScroll from 'vue2-smooth-scroll'
 
 Vue.use(Buefy)
 Vue.use(VueRouter)
+Vue.use(vueSmoothScroll)
 
 var options = {
   persist: true

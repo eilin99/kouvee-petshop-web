@@ -8,7 +8,7 @@
       :loading="isLoading" 
       :mobile-cards="true"
       paginated
-      per-page="5"
+      per-page="10"
       ref="table"
       detailed
       detail-key="id_jenis"
@@ -202,7 +202,7 @@ export default {
         queue: false,
       })
     },
-    confirmDelete(deleteId) { // Buat ngeluarin modal box konfirmasi delete
+    confirmDelete(deleteId) { // Buat ngeluarin modal box Konfirmasi delete
       this.$buefy.dialog.confirm({
         title: 'Hapus Data Jenis Hewan',
         message: 'Apa anda yakin ingin <b>menghapus</b> jenis hewan ini?',

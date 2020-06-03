@@ -9,7 +9,7 @@
             :type="form.nama_pegawai.type"
             :message="form.nama_pegawai.message"
             horizontal>
-              <b-input v-model="form.nama_pegawai.value"></b-input>
+              <b-input @input="clearError(form.nama_pegawai)" v-model="form.nama_pegawai.value"></b-input>
         </b-field>
 
         <b-field 
@@ -17,7 +17,7 @@
             :type="form.alamat.type"
             :message="form.alamat.message"
             horizontal>
-              <b-input v-model="form.alamat.value"></b-input>
+              <b-input @input="clearError(form.alamat)" v-model="form.alamat.value"></b-input>
         </b-field>
 
         <b-field 
@@ -25,7 +25,7 @@
             :type="form.no_telp.type"
             :message="form.no_telp.message"
             horizontal>
-              <b-input v-model="form.no_telp.value"></b-input>
+              <b-input @input="clearError(form.no_telp)" v-model="form.no_telp.value"></b-input>
         </b-field>
 
         <b-field 
@@ -35,6 +35,7 @@
             horizontal>
           <b-datepicker
               ref="datepicker"
+              @input="clearError(form.tgl_lahir)"
               expanded
               placeholder="Pilih Tanggal Lahir"
               v-model="form.tgl_lahir.value">
@@ -46,12 +47,16 @@
           </b-button>
         </b-field>
 
-        <b-field label="Jabatan" horizontal>
-          <b-select v-model="form.jabatan.value" placeholder="Pilih jabatan">
-            <option value="Kasir">Kasir</option>
-            <option value="CS">CS</option>
-            <option value="CS">Owner</option>
-          </b-select>
+        <b-field 
+            label="Jabatan"
+            :type="form.jabatan.type"
+            :message="form.jabatan.message"
+            horizontal>
+              <b-select @input="clearError(form.jabatan)" v-model="form.jabatan.value" placeholder="Pilih jabatan">
+                <option value="Kasir">Kasir</option>
+                <option value="CS">CS</option>
+                <option value="Owner">Owner</option>
+              </b-select>
         </b-field>
 
         <hr>
@@ -61,11 +66,12 @@
             :type="form.username.type"
             :message="form.username.message"
             horizontal>
-              <b-input v-model="form.username.value" maxlength="30"></b-input>
+              <b-input @input="clearError(form.username)" v-model="form.username.value" maxlength="30"></b-input>
         </b-field>
 
-        <b-field label="Password" :message="form.password.message" horizontal>
+        <b-field label="Password" :type="form.password.type" :message="form.password.message" horizontal>
           <b-input id="password"
+              @input="clearError(form.password)"
               type="password"
               v-model="form.password.value"
               password-reveal
@@ -87,7 +93,7 @@
               type="is-success" 
               @click="confirm()"
               rounded>
-                Konfirmasi
+                Simpan
           </b-button>
         </div>
 
@@ -159,64 +165,122 @@ export default {
 
       return fixedDate
     },
+    clearError(form) {
+      form.type = ''
+      form.message = '' 
+    },
+    cekData() {
+      let count = 0
+      let regex = new RegExp(/^\d+$/)
+
+      if(this.form.nama_pegawai.value === "") {
+        this.form.nama_pegawai.type = 'is-danger'
+        this.form.nama_pegawai.message = "Nama tidak boleh kosong!"
+        count++
+      }
+      if(this.form.alamat.value === "") {
+        this.form.alamat.type = 'is-danger'
+        this.form.alamat.message = "Alamat tidak boleh kosong!"
+        count++
+      } 
+      if(this.form.tgl_lahir.value === "") {
+        this.form.tgl_lahir.type = 'is-danger'
+        this.form.tgl_lahir.message = "Tanggal lahir tidak boleh kosong!"
+        count++
+      }
+      if(this.form.no_telp.value === "") {
+        this.form.no_telp.type = 'is-danger'
+        this.form.no_telp.message = "Nomor telepon tidak boleh kosong!"
+        count++
+      } else if (!regex.test(this.form.no_telp.value)) {
+        this.form.no_telp.type = 'is-danger'
+        this.form.no_telp.message = "Nomor telepon tidak valid!"
+        count++
+      }
+      if(this.form.jabatan.value === "") {
+        this.form.jabatan.type = 'is-danger'
+        this.form.jabatan.message = "Jabatan tidak boleh kosong!"
+        count++
+      }
+      if(this.form.username.value === "") {
+        this.form.username.type = 'is-danger'
+        this.form.username.message = "Username tidak boleh kosong!"
+        count++
+      }
+      if(this.editId == 0 && this.form.password.value === "") {
+        this.form.password.type = 'is-danger'
+        this.form.password.message = "Password tidak boleh kosong!"
+        count++
+      }
+
+      if(count > 0)
+        return false
+    },
     addData() {
       this.isLoading = true // Biar dia loading dulu
 
-      this.dataPegawai.append("nama_pegawai", this.form.nama_pegawai.value)
-      this.dataPegawai.append("alamat", this.form.alamat.value)
-      this.dataPegawai.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
-      this.dataPegawai.append("no_telp", this.form.no_telp.value)
-      this.dataPegawai.append("jabatan", this.form.jabatan.value)
-      this.dataPegawai.append("username", this.form.username.value)
-      this.dataPegawai.append("password", this.form.password.value)
-      this.dataPegawai.append("pic", this.$session.get('pegawai').id_pegawai)
-      
-      var uri = this.$api_baseUrl + "pegawai";
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.dataPegawai.append("nama_pegawai", this.form.nama_pegawai.value)
+        this.dataPegawai.append("alamat", this.form.alamat.value)
+        this.dataPegawai.append("tgl_lahir", this.convertTgl(this.form.tgl_lahir.value))
+        this.dataPegawai.append("no_telp", this.form.no_telp.value)
+        this.dataPegawai.append("jabatan", this.form.jabatan.value)
+        this.dataPegawai.append("username", this.form.username.value)
+        this.dataPegawai.append("password", this.form.password.value)
+        this.dataPegawai.append("pic", this.$session.get('pegawai').id_pegawai)
+        
+        var uri = this.$api_baseUrl + "pegawai";
 
-      this.$http.post(uri, this.dataPegawai).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'Pegawai' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil ditambahkan!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-        }
-      });
+        this.$http.post(uri, this.dataPegawai).then(response => {
+          this.$router.push( { name: 'Pegawai' } )
+          this.snackbarMsg = response
+          this.snackbar("Data berhasil ditambahkan!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          console.log(this.errors)
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     editData(editId) {
       this.isLoading = true // Biar dia loading dulu
 
-      this.editDataPegawai.nama_pegawai = this.form.nama_pegawai.value
-      this.editDataPegawai.alamat = this.form.alamat.value
-      this.editDataPegawai.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
-      this.editDataPegawai.no_telp = this.form.no_telp.value
-      this.editDataPegawai.jabatan = this.form.jabatan.value
-      this.editDataPegawai.username = this.form.username.value
-      this.editDataPegawai.pic = this.$session.get('pegawai').id_pegawai
+      if(this.cekData() == false) {
+        this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+      } else {
+        this.editDataPegawai.nama_pegawai = this.form.nama_pegawai.value
+        this.editDataPegawai.alamat = this.form.alamat.value
+        this.editDataPegawai.tgl_lahir = this.convertTgl(this.form.tgl_lahir.value)
+        this.editDataPegawai.no_telp = this.form.no_telp.value
+        this.editDataPegawai.jabatan = this.form.jabatan.value
+        this.editDataPegawai.username = this.form.username.value
+        this.editDataPegawai.pic = this.$session.get('pegawai').id_pegawai
 
-      var uri = this.$api_baseUrl + "pegawai/" + editId;
+        var uri = this.$api_baseUrl + "pegawai/" + editId;
 
-      this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'Pegawai' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil diedit!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-        }
-      });
+        this.$http.put(uri, this.editDataPegawai, this.config).then(response => {
+          this.$router.push( { name: 'Pegawai' } )
+          this.snackbarMsg = response.message
+          this.snackbar("Data berhasil diedit!", 'is-success')
+        })
+        .catch(error => {
+          this.errors = error;
+          if (this.errors.message == "Request failed with status code 400") {
+            this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
+          } else {
+            this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
+          }
+        });
+      }
+      this.isLoading = false // Biar berhenti loading
     },
     confirm() {
       // Kalo editId masih default (0) berarti dia bakal addData.

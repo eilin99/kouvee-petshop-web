@@ -1,64 +1,139 @@
 <template>
   <section id="form-transaksi-pembayaran-layanan">
-    <h4 class="title is-5">{{ actionTitle }} Data Pembayaran Layanan</h4>
+    <h4 class="title is-4">Pembayaran Layanan</h4>
     <hr>
-    <div class="columns">
-      <div class="column is-8">
+    <div style="width: 70%">
+
+      <div class="columns is-gapless is-mobile">
+        <div class="column is-3"><p class="title is-6">No. Transaksi</p></div>
+        <div class="column">{{ form.nomor_transaksi }}</div>
+      </div>
+      <div class="columns is-gapless is-mobile">
+        <div class="column is-3"><p class="title is-6">Nama Pelanggan</p></div>
+        <div v-if="form.nama_customer == null" class="column">-</div>
+        <div v-else class="column">{{ form.nama_customer }}</div>
+      </div>
+      <div class="columns is-gapless is-mobile">
+        <div class="column is-3"><p class="title is-6">Hewan</p></div>
+        <div v-if="form.nama_hewan == null" class="column">-</div>
+        <div v-else class="column">{{ form.nama_hewan }}</div>
+      </div>
+
+      <b-table
+        :data="detailTransaksi"
+        :hoverable="true"
+        :loading="isLoading"
+        ref="table">
+
+        <template slot-scope="props">
+
+          <b-table-column  
+              label="No." 
+              width="50px"
+              centered
+              sortable>
+            {{ props.index + 1 }}
+          </b-table-column>
+
+          <b-table-column 
+              field="nama_layanan" 
+              label="Nama layanan"
+              :searchable="true">
+            {{ props.row.nama_layanan }}
+          </b-table-column>
+
+          <b-table-column 
+              field="harga_layanan" 
+              label="Harga"
+              width="150px"
+              :searchable="true">
+            {{ "Rp" + props.row.harga_layanan }}
+          </b-table-column>
+
+          <b-table-column 
+              field="jumlah" 
+              label="Jumlah"
+              width="125px"
+              searchable
+              sortable>
+            {{ props.row.jumlah }}
+          </b-table-column>
+
+          <b-table-column 
+              field="subtotal" 
+              label="Subtotal">
+            {{ "Rp" + props.row.subtotal }}
+          </b-table-column>
+        </template>
+
+        <template slot="empty">
+          <section class="section">
+            <div class="content has-text-grey has-text-centered">
+              <p>
+                <b-icon
+                  :icon="tableLoadingIcon"
+                  size="is-large">
+                </b-icon>
+              </p>
+              <p>{{ tableMessage }}</p>
+            </div>
+          </section>
+        </template>
+      </b-table>
+
+      <div class="level" style="margin-top: 50px">
+        <div class="level-left"></div>
+        <div class="level-right">
+          <div class="level-item">
+            <h4 class="title is-4">Total : Rp{{ form.total }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-pembayaran">
         <b-field 
-            label="Tanggal Pembayaran" 
-            :type="form.tgl_pembayaran.type"
-            :message="form.tgl_pembayaran.message"
+            label="Jumlah Bayar" 
+            :type="form.bayar.type"
+            :message="form.bayar.message"
             horizontal>
-              <b-input v-model="form.tgl_pembayaran.value"></b-input>
+              <b-input 
+                  v-model="form.bayar.value" 
+                  @input="clearError(form.bayar)"
+                  required></b-input>
         </b-field>
 
         <b-field 
-            label="Status Pembayaran" 
-            :type="form.status_pembayaran.type"
-            :message="form.status_pembayaran.message"
-            horizontal>
-              <b-input v-model="form.status_pembayaran.value"></b-input>
-        </b-field>
-
-        <b-field 
-            label="ID Kasir" 
-            :type="form.id_kasir.type"
-            :message="form.id_kasir.message"
-            horizontal>
-              <b-input v-model="form.id_kasir.value"></b-input>
-        </b-field>
-
-        <b-field 
-            label="diskon" 
+            label="Diskon" 
             :type="form.diskon.type"
             :message="form.diskon.message"
             horizontal>
-              <b-input v-model="form.diskon.value"
-                required
-                validation-message="Only number is allowed"
-                pattern="[0-9]*">
+              <b-input 
+                  v-model="form.diskon.value"
+                  @input="clearError(form.diskon)"
+                  :disabled="isGuest"
+                  required>
               </b-input>
         </b-field>
-
-        <div class="has-text-right">
-          <b-button size="is-medium" 
-              class="btn-form" 
-              type="is-dark" 
-              tag="router-link" 
-              to="/kasir/transaksi-pembayaran-layanan" 
-              rounded>
-                Kembali
-          </b-button>
-          <b-button size="is-medium" 
-              class="btn-form" 
-              type="is-success" 
-              @click="confirm()"
-              rounded>
-                Konfirmasi
-          </b-button>
-        </div>
-
       </div>
+
+      <div class="has-text-right">
+        <b-button size="is-medium" 
+            class="btn-form" 
+            type="is-dark" 
+            tag="router-link" 
+            to="/kasir/transaksi-pembayaran-layanan" 
+            rounded>
+              Kembali
+        </b-button>
+        <b-button size="is-medium" 
+            class="btn-form" 
+            type="is-success" 
+            @click="bayar(idTransaksi)"
+            rounded>
+              Bayar
+        </b-button>
+      </div>
+
     </div>
     
     <!-- Buat loading page waktu awal load sama submit data -->
@@ -71,102 +146,179 @@
   </section>
 </template>
 
+<style>
+.field-pembayaran {
+  margin: 50px 0;
+}
+.btn-form {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+</style>
+
 <script>
 export default {
   data() {
     return {
       isLoading: true,
-      actionTitle: '',
-      editId: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
-      dataPembayaranLayanan: new FormData(), // Buat nampung isi form
-      editDataPembayaranLayanan: {}, // Buat nampung data yg mau diedit kalo ada
+      idTransaksi: 0, // Dibikin default 0 buat bedain dia edit data atau add data. Lebih jelasnya baca method confirm()
+      dataTransaksi: {},
+      detailTransaksi: [],
+      isGuest: false,
       form: {
-        tgl_pembayaran: { value: '', type: '', message: '' },
-        status_pembayaran: { value: '', type: '', message: '' },
-        id_kasir: { value: '', type: '', message: '' },
+        id: 0,
+        nomor_transaksi: '',
+        nama_hewan: '',
+        nama_customer: '',
+        tgl_penjualan: '',
+        total: '',
+        bayar: { value: '', type: '', message: '' },
         diskon: { value: '', type: '', message: '' },
       },
       snackbarMsg: '',
+      tempProduk: {},
     }
   },
   methods: {
-    getData(editId) {
-      var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + editId
-      this.$http.get(uri).then(response => {
-        this.editDataPembayaranLayanan = response.data.value
-        this.formEditHandler(this.editDataPembayaranLayanan)
+    // ----------------------------------------------------------------
+    // GET
+    // ----------------------------------------------------------------
+    async getData(idTransaksi) {
+      var uri = this.$api_baseUrl + "transaksi/pembayaran_layanan/" + idTransaksi
+
+      await this.$http.get(uri).then(response => {
+        this.dataTransaksi = response.data.value
+      }).catch(e => {
+        this.errors = e
       })
     },
-    formEditHandler(dataPembayaranLayanan) {
-      this.form.tgl_pembayaran.value = dataPembayaranLayanan.tgl_pembayaran
-      this.form.status_pembayaran.value = dataPembayaranLayanan.status_pembayaran
-      this.form.id_kasir.value = dataPembayaranLayanan.id_kasir
-      this.form.diskon.value = dataPembayaranLayanan.diskon
+    async getDetailTransaksi() {
+      this.isLoading = true
+      var uri = this.$api_baseUrl + "transaksi/detail_layanan/getByTransaction/" + this.dataTransaksi.nomor_transaksi
+
+       await this.$http.get(uri).then(response => {
+        this.detailTransaksi = response.data.value
+        this.tableLoadingIcon = "emoticon-sad"            // Buat kalo user search
+        this.tableMessage = 'Tidak ada data yang sesuai'  // Tapi ga ada data sesuai
+        this.isLoading = false
+      })
+      .catch(error => {
+        this.errors = error
+        this.tableLoadingIcon = "emoticon-sad"  // Tampilan kalo
+        this.tableMessage = 'Tidak ada data'    // ga ada data
+        this.isLoading = false
+      })
     },
-    convertTgl(tglLahir) {
-      var formDate = tglLahir // Mengambil FULL date dari datepicker
-      var year = formDate.getFullYear()        // Mengambil tahun
-      var month = formDate.getMonth() + 1      // Mengambil bulan (ditambah 1 karena getMonth() itu returnnya array)
-      var date = formDate.getDate()            // Mengambil tanggal
-      // Yang tanda tanya (?) itu TERNARY. Konsepnya sama dengan if-else
-      // Jika month/date kurang dari 10, nanti stringnya
-      // ditambah 0 di depannya. Kalo enggak, ya biasa
-      month = (month < 10) ? '0' + month : month
-      date = (date < 10) ? '0' + date : date
-      var fixedDate = year + '-' + month + '-' + date
-      return fixedDate
-    },
-    addData() {
+
+    // ----------------------------------------------------------------
+    // EDIT
+    // ----------------------------------------------------------------
+    async bayar(idTransaksi) {
       this.isLoading = true // Biar dia loading dulu
-      this.dataPembayaranLayanan.append("tgl_pembayaran", this.form.tgl_pembayaran.value)
-      this.dataPembayaranLayanan.append("status_pembayaran", this.form.status_pembayaran.value)
-      this.dataPembayaranLayanan.append("id_kasir", this.form.id_kasir.value)
-      this.dataPembayaranLayanan.append("diskon", this.form.diskon.value)
-      
-      var uri = this.$api_baseUrl + "transaksi/detail_layanan/";
-      this.$http.post(uri, this.dataPembayaranLayanan).then(response => {
+      if (this.cekData() === 0) {
+        let kembalian = this.cekKembalian()
+
+        if (kembalian !== false) {
+          await this.editData(idTransaksi)
+
+          this.$buefy.dialog.confirm({
+            title: 'Pembayaran Berhasil!',
+            message: 'Pembayaran berhasil dilakukan! Kembalian Rp ' + kembalian,
+            confirmText: 'OK',
+            type: 'is-success',
+            hasIcon: true,
+            onConfirm: () => this.$router.push( { name: 'TransaksiPembayaranLayanan' } )
+          })
+        }
+      }
+      this.isLoading = false
+    },
+    async editData(idTransaksi) {
+      let pembayaran = {}
+      pembayaran.id_kasir = this.$session.get('pegawai').id_pegawai
+      pembayaran.diskon = this.isGuest === true ? 0 : this.form.diskon.value
+
+      var uri = this.$api_baseUrl + "transaksi/pembayaran_layanan/" + idTransaksi;
+
+      await this.$http.put(uri, pembayaran, this.config).then(response => {
         this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'TransaksiPembayaranLayanan' } )
+        this.$router.push( { name: 'TransaksiPembayaranProduk' } )
         this.snackbarMsg = response.message
-        this.snackbar("Data berhasil ditambahkan!", 'is-success')
+        this.snackbar("Pembayaran berhasil!", 'is-success')
       })
       .catch(error => {
         this.errors = error;
         this.isLoading = false // Biar berhenti loading
         if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Gagal tambah data. Sepertinya inputan salah...", 'is-danger')
+          this.snackbar("Pembayaran gagal. Sepertinya inputan salah...", 'is-danger')
         } else {
           this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
         }
       });
     },
-    editData(editId) {
-      this.isLoading = true // Biar dia loading dulu
-      this.editDataPembayaranLayanan.tgl_pembayaran = this.form.tgl_pembayaran.value
-      this.editDataPembayaranLayanan.status_pembayaran = this.form.status_pembayaran.value
-      this.editDataPembayaranLayanan.id_kasir = this.form.id_kasir.value
-      this.editDataPembayaranLayanan.diskon = this.form.diskon.value
-      var uri = this.$api_baseUrl + "transaksi/detail_layanan/" + editId;
-      this.$http.put(uri, this.editDataPembayaranLayanan, this.config).then(response => {
-        this.isLoading = false // Biar berhenti loading
-        this.$router.push( { name: 'TransaksiPembayaranLayanan' } )
-        this.snackbarMsg = response.message
-        this.snackbar("Data berhasil diedit!", 'is-success')
-      })
-      .catch(error => {
-        this.errors = error;
-        this.isLoading = false // Biar berhenti loading
-        if (this.errors.message == "Request failed with status code 400") {
-          this.snackbar("Edit gagal. Sepertinya inputan salah...", 'is-danger')
-        } else {
-          this.snackbar("Terjadi kesalahan. Silahkan coba lagi", 'is-danger')
-        }
-      });
+
+    // ----------------------------------------------------------------
+    // LAIN - LAIN
+    // ----------------------------------------------------------------
+    formHandler(dataTransaksi) {
+      this.form.id = dataTransaksi.id
+      this.form.nomor_transaksi = dataTransaksi.nomor_transaksi
+      this.form.nama_hewan = dataTransaksi.nama_hewan
+      this.form.nama_customer = dataTransaksi.nama_customer
+      this.form.tgl_penjualan = dataTransaksi.tgl_penjualan
+      this.form.total = dataTransaksi.total
+      this.isGuest = dataTransaksi.nama_hewan === null ? true : false
     },
-    confirm() {
-      // Kalo editId masih default (0) berarti dia bakal addData.
-      // Kalo nggak 0, berarti dia editData
-      this.editId == 0 ? this.addData() : this.editData(this.editId)
+    clearError(form) {
+      form.type = ''
+      form.message = '' 
+    },
+    cekData() {
+      let count = 0
+      let regex = new RegExp(/^\d+$/)
+
+      if (this.form.bayar.value === '' || this.form.bayar.value == 0) {
+        this.form.bayar.type = 'is-danger'
+        this.form.bayar.message = "Nominal pembayaran harus diisi!"
+        count++
+      }else if (!regex.test(this.form.bayar.value)) {
+        this.form.bayar.type = 'is-danger'
+        this.form.bayar.message = "Nominal pembayaran harus angka!"
+        count++
+      }
+
+      if (!this.isGuest) {
+        if (this.form.diskon.value === '' || this.form.diskon.value == 0) {
+          this.form.diskon.type = 'is-danger'
+          this.form.diskon.message = "Diskon harus diisi!"
+          count++
+        } else if (!regex.test(this.form.diskon.value)) {
+          this.form.diskon.type = 'is-danger'
+          this.form.diskon.message = "Diskon harus angka!"
+          count++
+        } else if (Number(this.form.diskon.value) > Number(this.form.total)) {
+          this.form.diskon.type = 'is-danger'
+          this.form.diskon.message = "Diskon tidak boleh lebih besar dari total!"
+          count++
+        }
+      }
+
+      return count
+    },
+    cekKembalian() {
+      let diskon = this.isGuest === false ? Number(this.form.diskon.value) : 0
+      let jumlahBayar = Number(this.form.total) - diskon
+      let uang = Number(this.form.bayar.value)
+
+      if (uang < jumlahBayar) {
+        this.form.bayar.type = 'is-danger'
+        this.form.bayar.message = "Jumlah uang kurang"
+
+        return false
+      } else {
+        let kembalian = uang - jumlahBayar
+        return kembalian
+      }
     },
     snackbar(snackbarMessage, type) {
       this.$buefy.snackbar.open({
@@ -179,31 +331,15 @@ export default {
       })
     },
   },
-  mounted() {
+  async mounted() {
     if(this.$route.params.id) {           // Kalo di URL ada angka ID-nya,
-      this.editId = this.$route.params.id // berarti ID-nya akan dimasukin ke editId
-      this.actionTitle = 'Ubah'           // Title di atas jadi 'Ubah Data
-      this.getData(this.editId)           // Ngambil data lama sesuai ID
-    } else {                      // Ini kalo gak ada param ID di URL
-      this.actionTitle = 'Tambah' // berarti dia nambah data
+      this.idTransaksi = this.$route.params.id // berarti ID-nya akan dimasukin ke idTransaksi
+      await this.getData(this.idTransaksi)           // Ngambil data lama sesuai ID
+      await this.getDetailTransaksi()
+      this.formHandler(this.dataTransaksi)
+      console.log(this.form)
     }
     this.isLoading = false // Page udah ter-load dan berhenti loading
   }
 }
 </script>
-
-<style>
-.btn-form {
-  margin-top: 10px;
-  margin-left: 10px;
-}
-</style>
-
-// {
-//   "message":"Validation Error",
-//   "value":{
-//     "no_telp":["The no telp has already been taken."],
-//     "jabatan":["The jabatan may only contain letters."],
-//     "username":["The username has already been taken."]
-//   }
-// }

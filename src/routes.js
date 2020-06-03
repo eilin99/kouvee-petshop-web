@@ -1,9 +1,11 @@
 import LandingPage from './components/LandingPage.vue'
+import Ketersediaan from './components/Ketersediaan.vue'
 import Login from './components/Login.vue'
 import Owner from './components/OwnerView.vue'
 import Kasir from './components/KasirView.vue'
 import CS from './components/CSView.vue'
 import Dashboard from './components/Dashboard.vue'
+import OwnerDashboard from './components/DashboardOwner.vue'
 
 // Data Master
 import Pegawai from './components/dataMaster/Pegawai.vue'
@@ -28,13 +30,19 @@ import DetailPenjualanProdukKasir from './components/dataPembayaran/DetailPenjua
 import DetailPenjualanLayananKasir from './components/dataPembayaran/DetailPenjualanLayananKasir.vue'
 
 // CS
-// import Pelanggan from './components/dataMaster/Pelanggan.vue'
-// import formPelanggan from './components/dataMaster/formPelanggan.vue'
+import Pelanggan from './components/dataMaster/Customer.vue'
+import formPelanggan from './components/dataMaster/formCustomer.vue'
 import Hewan from './components/dataMaster/Hewan.vue'
 import formHewan from './components/dataMaster/formHewan.vue'
 
 // Transaksi
-// ......
+
+import PenjualanProduk from './components/transaksi/penjualanProduk/PenjualanProduk.vue'
+import DaftarPenjualanProduk from './components/transaksi/penjualanProduk/DaftarPenjualanProduk.vue'
+import DetailPenjualanProduk from './components/transaksi/penjualanProduk/DetailPenjualanProduk.vue'
+import PenjualanLayanan from './components/transaksi/penjualanLayanan/PenjualanLayanan.vue'
+import DaftarPenjualanLayanan from './components/transaksi/penjualanLayanan/DaftarPenjualanLayanan.vue'
+import DetailPenjualanLayanan from './components/transaksi/penjualanLayanan/DetailPenjualanLayanan.vue'
 
 // Laporan
 import SuratDanLaporan from './components/laporanOwner.vue'
@@ -43,6 +51,10 @@ export default [
     {
         path: '/',
         component: LandingPage
+    },
+    {
+        path: '/ketersediaan-produk-layanan',
+        component: Ketersediaan
     },
     {
         path: '/login',
@@ -57,7 +69,7 @@ export default [
             {
                 name: 'OwnerDashboard',
                 path: '/owner/dashboard',
-                component: Dashboard
+                component: OwnerDashboard
             },
             // ===== PEGAWAI =====
             {
@@ -183,13 +195,13 @@ export default [
             },
             {
                 name: 'formTransaksiPembayaranProduk',
-                path: '/kasir/form-transaksi-pembayaran-produk',
+                path: '/kasir/pembayaran-produk/:id',
                 component: formTransaksiPembayaranProduk
             },
             {
-                name: 'formEditTransaksiPembayaranProduk',
-                path: '/kasir/form-transaksi-pembayaran-produk/:id',
-                component: formTransaksiPembayaranProduk
+                name: 'DetailPenjualanProdukKasir',
+                path: '/kasir/detail-penjualan-produk/:id',
+                component: DetailPenjualanProduk
             },
             {
                 name: 'DetailPenjualanProdukKasir',
@@ -204,14 +216,14 @@ export default [
                 component: TransaksiPembayaranLayanan
             },
             {
-                name: 'formTransaksiPembayaranLayanan',
-                path: '/kasir/form-transaksi-pembayaran-layanan',
+                name: 'formEditTransaksiPembayaranLayanan',
+                path: '/kasir/pembayaran-Layanan/:id',
                 component: formTransaksiPembayaranLayanan
             },
             {
-                name: 'formEditTransaksiPembayaranLayanan',
-                path: '/kasir/form-transaksi-pembayaran-Layanan/:id',
-                component: formTransaksiPembayaranLayanan
+                name: 'DetailPenjualanLayananKasir',
+                path: '/kasir/detail-penjualan-layanan/:id',
+                component: DetailPenjualanLayanan
             },
             {
                 name: 'DetailPenjualanLayananKasir',
@@ -222,6 +234,7 @@ export default [
         ]
             
     },
+    // Routes untuk CS
     {
         path: '/CS',
         component: CS,
@@ -233,26 +246,26 @@ export default [
                 component: Dashboard
             },
             // ===== PELANGGAN =====
-            // {
-            //     name: 'Pelanggan',
-            //     path: '/cs/pelanggan',
-            //     component: Pelanggan
-            // },
-            // {
-            //     name: 'formPelanggan',
-            //     path: '/cs/form-pelanggan',
-            //     component: formPelanggan
-            // },
-            // {
-            //     name: 'formEditPelanggan',
-            //     path: '/cs/form-pelanggan/:id',
-            //     component: formPelanggan
-            // },
+            {
+                name: 'Pelanggan',
+                path: '/cs/pelanggan',
+                component: Pelanggan
+            },
+            {
+                name: 'formPelanggan',
+                path: '/cs/form-pelanggan',
+                component: formPelanggan
+            },
+            {
+                name: 'formEditPelanggan',
+                path: '/cs/form-pelanggan/:id',
+                component: formPelanggan
+            },
             // ===== HEWAN =====
             {
-                name: 'Hewan',
-                path: '/cs/hewan',
-                component: Hewan
+               name: 'Hewan',
+               path: '/cs/hewan',
+               component: Hewan
             },
             {
                 name: 'formHewan',
@@ -263,6 +276,38 @@ export default [
                 name: 'formEditHewan',
                 path: '/cs/form-hewan/:id',
                 component: formHewan
+            },
+            // ===== PENJUALAN PRODUK =====
+            {
+                name: 'PenjualanProduk',
+                path: '/cs/penjualan-produk',
+                component: PenjualanProduk
+            },
+            {
+                name: 'DaftarPenjualanProduk',
+                path: '/cs/daftar-penjualan-produk',
+                component: DaftarPenjualanProduk
+            },
+            {
+                name: 'DetailPenjualanProduk',
+                path: '/cs/detail-penjualan-produk/:id',
+                component: DetailPenjualanProduk
+            },
+            // ===== PENJUALAN LAYANAN =====
+            {
+                name: 'PenjualanLayanan',
+                path: '/cs/penjualan-layanan',
+                component: PenjualanLayanan
+            },
+            {
+                name: 'DaftarPenjualanLayanan',
+                path: '/cs/daftar-penjualan-layanan',
+                component: DaftarPenjualanLayanan
+            },
+            {
+                name: 'DetailPenjualanLayanan',
+                path: '/cs/detail-penjualan-layanan/:id',
+                component: DetailPenjualanLayanan
             },
         ] 
     },
