@@ -32,7 +32,6 @@
         >
           Pendapatan Tahunan
         </b-button>
-        <!-- ... -->
     </div>
 
     <hr class="pembatas-laporan">
@@ -42,6 +41,7 @@
     <!-- ============================================================== -->
     <div class="laporan-wrapper">
       <h4 class="title is-4">Pengadaan</h4>
+
       <!-- Bulanan -->
         <b-button
           type="is-dark"
@@ -237,6 +237,13 @@ export default {
         action: '', // action itu bisa show atau print
         disableBulan: false, // ini TRUE kalo mau print laporan yg TAHUNAN
       },
+      laporanTerlaris: {
+        jenis: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
+        tentang: ' ', //produk atau layanan
+        tipe: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
+        action: '', // action itu bisa show atau print
+        disableBulan: true, // ini TRUE kalo mau print laporan yg TAHUNAN
+      },
       selectedBulan: { namaBulan: 'Pilih bulan', noBulan: 0 },
       selectedTahun: 'Pilih tahun',
       form: {
@@ -255,15 +262,26 @@ export default {
       this.laporan.disableBulan = rentang == 'tahunan' ? true : false
       this.modalActive = true
     },
+    openModalTerlaris(jenis, tentang, tipe) {
+      // scroll ke data() utk lihat penjelasan data ini
+      this.laporan.jenis = jenis
+      this.laporan.tentang = tentang
+      this.laporan.tipe = tipe
+      this.modalActive = true
+    },
+    
+    
     closeModal() {
       this.laporan = {}
-      this.selectedTahun = 'Pilih tahun'
+      this.selectedTahun = 'Pilih tahun
       this.selectedBulan.namaBulan = 'Pilih bulan'
       this.selectedBulan.noBulan = 0
       this.clearError(this.form.bulan)
       this.clearError(this.form.tahun)
       this.modalActive = false
     },
+    
+    
     openLaporan(jenis, tipe, rentang, action) {
       if (this.cekData() == 0) {
         let waktu = rentang == "bulanan" ? `${this.selectedBulan.noBulan}/${this.selectedTahun}` : this.selectedTahun
@@ -276,6 +294,20 @@ export default {
         this.modalActive = false
       }
     },
+    openLaporanTerlaris(jenis, tipe, rentang, action) {
+      if (this.cekData() == 0) {
+        let waktu = this.selectedTahun
+        
+        let link = `http://tugasbesarkami.com/api/${jenis}/${tipe}/${rentang}/${action}/${waktu}`
+        console.log(link)
+        
+        window.open(link)
+        this.closeModal()
+        this.modalActive = false
+      }
+    },
+    
+    
     cekData() {
       let count = 0
       if (!this.laporan.disableBulan && this.selectedBulan.noBulan == 0) {
@@ -289,8 +321,6 @@ export default {
         this.form.tahun.message = 'Tahun belum terpilih'
         this.form.tahun.type = 'is-danger'
       }
-
-      console.log(this.selectedTahun)
 
       return count
     },
