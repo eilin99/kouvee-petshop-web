@@ -273,7 +273,7 @@ export default {
     
     closeModal() {
       this.laporan = {}
-      this.selectedTahun = 'Pilih tahun
+      this.selectedTahun = 'Pilih tahun'
       this.selectedBulan.namaBulan = 'Pilih bulan'
       this.selectedBulan.noBulan = 0
       this.clearError(this.form.bulan)
