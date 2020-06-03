@@ -37,7 +37,7 @@ import formHewan from './components/dataMaster/formHewan.vue'
 // ......
 
 // Laporan
-// ......
+import SuratDanLaporan from './components/laporanOwner.vue'
 
 export default [
     {
@@ -155,6 +155,12 @@ export default [
                 path: '/owner/form-ukuran-hewan/:id',
                 component: formUkuranHewan
             },
+            // ===== SURAT DAN LAPORAN =====
+            {
+                name: 'SuratDanLaporan',
+                path: '/owner/surat-dan-laporan',
+                component: SuratDanLaporan
+            }
         ]
             
     },
