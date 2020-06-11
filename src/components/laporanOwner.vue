@@ -64,7 +64,6 @@
         >
           Pengadaan Tahunan
         </b-button>
-        <!-- ... -->
     </div>
 
     <hr class="pembatas-laporan">
@@ -73,12 +72,31 @@
     <!-- ============================================================== -->
     <div class="laporan-wrapper">
       <h4 class="title is-4">Terlaris</h4>
+    
+      <!-- Produk -->
+      <b-button
+        type="is-dark"
+        class="btn-laporan has-text-left"
+        size="is-medium"
+        icon-left="file"
+        @click="openModal(undefined, 'produk', 'tahunan')"
+        outlined
+      >
+        Produk Terlaris
+      </b-button>
+      <!-- Layanan -->
+      <b-button
+        type="is-dark"
+        class="btn-laporan has-text-left"
+        size="is-medium"
+        icon-left="file"
+        @click="openModal(undefined, 'layanan', 'tahunan')"
+        outlined
+      >
+        Layanan Terlaris
+      </b-button>
     </div>
-
-
-
-
-
+    
 
     <!-- ============================================================== -->
     <!-- =========================== MODAL ============================ -->
@@ -232,17 +250,10 @@ export default {
       tahun,
       laporan: {
         jenis: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
-        tipe: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
+        tipe: '', // tipe itu bisa produk atau layanan
         rentang: '', // rentang itu bisa bulanan/tahunan
         action: '', // action itu bisa show atau print
         disableBulan: false, // ini TRUE kalo mau print laporan yg TAHUNAN
-      },
-      laporanTerlaris: {
-        jenis: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
-        tentang: ' ', //produk atau layanan
-        tipe: '', // jenis itu bisa laporan pengadaan, laporan pendapatan, dll
-        action: '', // action itu bisa show atau print
-        disableBulan: true, // ini TRUE kalo mau print laporan yg TAHUNAN
       },
       selectedBulan: { namaBulan: 'Pilih bulan', noBulan: 0 },
       selectedTahun: 'Pilih tahun',
@@ -262,13 +273,6 @@ export default {
       this.laporan.disableBulan = rentang == 'tahunan' ? true : false
       this.modalActive = true
     },
-    openModalTerlaris(jenis, tentang, tipe) {
-      // scroll ke data() utk lihat penjelasan data ini
-      this.laporan.jenis = jenis
-      this.laporan.tentang = tentang
-      this.laporan.tipe = tipe
-      this.modalActive = true
-    },
     
     
     closeModal() {
@@ -282,24 +286,16 @@ export default {
     },
     
     
-    openLaporan(jenis, tipe, rentang, action) {
+    openLaporan(jenis = '', tipe, rentang, action) {
       if (this.cekData() == 0) {
         let waktu = rentang == "bulanan" ? `${this.selectedBulan.noBulan}/${this.selectedTahun}` : this.selectedTahun
-        
-        let link = `http://tugasbesarkami.com/api/${jenis}/${tipe}/${rentang}/${action}/${waktu}`
-        console.log(link)
-        
-        window.open(link)
-        this.closeModal()
-        this.modalActive = false
-      }
-    },
-    openLaporanTerlaris(jenis, tipe, rentang, action) {
-      if (this.cekData() == 0) {
-        let waktu = this.selectedTahun
-        
-        let link = `http://tugasbesarkami.com/api/${jenis}/${tipe}/${rentang}/${action}/${waktu}`
-        console.log(link)
+                                          // ^ concat string "bulan/tahun"     ^ cuma "tahun"
+        let link
+        if (jenis == '') { // kalo jenis bernilai default, brarti dia laporan terlaris 
+          link = `http://tugasbesarkami.com/api/laporan/${tipe}/terlaris/${action}/${waktu}`
+        } else {
+          link = `http://tugasbesarkami.com/api/${jenis}/${tipe}/${rentang}/${action}/${waktu}`
+        }
         
         window.open(link)
         this.closeModal()

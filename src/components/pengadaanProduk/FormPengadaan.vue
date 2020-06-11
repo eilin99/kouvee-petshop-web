@@ -1,8 +1,8 @@
 <template>
-  <section id="detail-penjualan-produk">
+  <section id="detail-pengadaan-produk">
     <div class="level">
       <div class="level-left">
-        <h4 class="title is-4">Detail Penjualan Produk</h4>
+        <h4 class="title is-4">Detail Pengadaan Produk</h4>
       </div>
       <div class="level-right">
         <b-button 
